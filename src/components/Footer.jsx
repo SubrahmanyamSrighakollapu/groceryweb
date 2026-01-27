@@ -14,7 +14,7 @@ import twitter from '../assets/footer/twitter.png';
 import logo from '../assets/total-needs-logo.png';
 
 const Footer = () => {
-    const quickLinks = ['About', 'Services', 'Meet the Farmer', 'Latest News', 'Contact'];
+    const quickLinks = ['About', 'Services', 'Agent Login', 'Contact'];
     const newsItems = [
         { title: 'Bringing Food Production Back To Cities', date: 'July 5, 2022' },
         { title: 'The Future of Farming, Smart Irrigation Solutions', date: 'July 5, 2022' }
@@ -24,11 +24,11 @@ const Footer = () => {
         <footer className="w-100" role="contentinfo">
             {/* Top section */}
             <div className="py-5" style={{ background: '#24231D' }}>
-                <div className="container">
-                    <div className="row justify-content-center" style={{ maxWidth: '70rem', margin: '0 auto' }}>
+                <div className="container-fluid">
+                    <div className="row w-100 mx-0">
 
                         {/* Column 1: Logo & Description */}
-                        <div className="col-lg-3 col-12 mb-4">
+                        <div className="col-lg-3 col-md-6 col-12 mb-4 px-4">
                             <img src={logo} alt="Total Needs" style={{ height: '8rem', marginBottom: '1rem' }} />
                             <p className="mb-4" style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500, fontSize: '0.9375rem', lineHeight: '1.875rem' }}>
                                 Fresh, naturally grown produce without chemicals or harmful additives.
@@ -43,7 +43,7 @@ const Footer = () => {
                         </div>
 
                         {/* Column 2: Explore */}
-                        <div className="col-lg-2 col-12 mb-4">
+                        <div className="col-lg-2 col-md-6 col-12 mb-4 px-4">
                             <h3 className="mb-2 text-white" style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.25rem' }}>Explore</h3>
                             <img src={divider} alt="" className="d-block mb-3 divider" />
 
@@ -51,6 +51,7 @@ const Footer = () => {
                                 {quickLinks.map((link, index) => {
                                     const linkPath = link === 'About' ? '/about' : 
                                                    link === 'Services' ? '/services' : 
+                                                   link === 'Agent Login' ? '/login' :
                                                    link === 'Contact' ? '/contact' : '#';
                                     
                                     return (
@@ -75,7 +76,7 @@ const Footer = () => {
                         </div>
 
                         {/* Column 3: News */}
-                        <div className="col-lg-3 col-12 mb-4">
+                        <div className="col-lg-3 col-md-6 col-12 mb-4 px-4">
                             <h3 className="mb-2 text-white" style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.25rem' }}>News</h3>
                             <img src={divider} alt="" className="d-block mb-3 divider" />
 
@@ -90,7 +91,7 @@ const Footer = () => {
                         </div>
 
                         {/* Column 4: Contact */}
-                        <div className="col-lg-3 col-12 mb-4">
+                        <div className="col-lg-4 col-md-6 col-12 mb-4 px-4">
                             <h3 className="mb-2 text-white" style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.25rem' }}>Contact</h3>
                             <img src={divider} alt="" className="d-block mb-3 divider" />
 

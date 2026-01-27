@@ -23,7 +23,12 @@ const OurPurpose = () => {
       padding: '4rem 8rem',
       backgroundColor: '#F8F7F0CC'
     }}>
-      <h2 className="mb-5" >
+      <h2 className="mb-5" style={{
+        color: '#1F1E17',
+        fontWeight: '700',
+        fontSize: '2.5rem',
+        letterSpacing: '1px'
+      }}>
         OUR PURPOSE
       </h2>
 
@@ -47,11 +52,21 @@ const OurPurpose = () => {
               />
             </div>
 
-            <h3 className="card-title mb-3">
+            <h3 className="card-title mb-3" style={{
+              color: '#1F1E17',
+              fontWeight: '600',
+              fontSize: '1.5rem',
+              marginBottom: '1rem'
+            }}>
               {purpose.title}
             </h3>
 
-            <p  className="card-text">
+            <p className="card-text" style={{
+              color: '#555',
+              fontSize: '1rem',
+              lineHeight: '1.7',
+              textAlign: 'left'
+            }}>
               {purpose.text}
             </p>
           </div>

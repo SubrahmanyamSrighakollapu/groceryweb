@@ -83,16 +83,16 @@ const Navbar = () => {
                   <Link
                     key={item.name}
                     to={item.path}
-                    className="text-decoration-none"
+                    className={`text-decoration-none nav-item-link ${isActive(item.path) ? 'active' : ''}`}
                     style={{
                       fontFamily: 'Manrope, sans-serif',
                       fontSize: '1rem',
                       color: isActive(item.path) ? '#1F1E17' : '#878680',
                       fontWeight: isActive(item.path) ? 600 : 500,
-                      transition: 'color 0.2s'
+                      transition: 'all 0.3s ease',
+                      position: 'relative',
+                      paddingBottom: '4px'
                     }}
-                    onMouseEnter={(e) => e.target.style.color = '#1F1E17'}
-                    onMouseLeave={(e) => e.target.style.color = isActive(item.path) ? '#1F1E17' : '#878680'}
                   >
                     {item.name}
                   </Link>
@@ -117,6 +117,7 @@ const Navbar = () => {
                   }}
                   onMouseEnter={(e) => e.target.style.opacity = '0.9'}
                   onMouseLeave={(e) => e.target.style.opacity = '1'}
+                  onClick={() => navigate('/signup')}
                 >
                   Join Our Network
                 </button>
@@ -251,8 +252,10 @@ const Navbar = () => {
                 fontFamily: 'Manrope, sans-serif',
                 fontSize: '1.25rem',
                 fontWeight: 500,
-                color: '#4BAF47'
+                color: '#4BAF47',
+                cursor: 'pointer'
               }}
+              onClick={() => navigate('/signup')}
             >
               Join Our Network
             </div>
@@ -264,6 +267,27 @@ const Navbar = () => {
         @keyframes slideIn {
           from { transform: translateX(-100%); }
           to { transform: translateX(0); }
+        }
+
+        .nav-item-link::after {
+          content: '';
+          position: absolute;
+          width: 0;
+          height: 2px;
+          bottom: 0;
+          left: 50%;
+          background-color: #4BAF47;
+          transition: all 0.3s ease;
+          transform: translateX(-50%);
+        }
+
+        .nav-item-link:hover::after,
+        .nav-item-link.active::after {
+          width: 100%;
+        }
+
+        .nav-item-link:hover {
+          color: #1F1E17 !important;
         }
 
         @media (max-width: 1023.98px) {

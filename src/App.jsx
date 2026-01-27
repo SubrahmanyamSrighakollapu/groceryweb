@@ -85,7 +85,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/otp-verification" element={<OtpVerification />} />
           <Route path="/verified-success" element={<VerifiedSuccess />} />
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/home" replace />} />
 
           {/* AGRICULTURE WEBSITE routes wrapped with Layout (agriculture navbar) */}
           <Route element={<Layout />}>
