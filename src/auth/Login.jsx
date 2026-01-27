@@ -1,7 +1,9 @@
 import { Lock, User } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { styles } from '../styles/authStyles';
+import api from '../services/api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,6 +13,7 @@ const Login = () => {
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+  const [loading, setLoading] = useState(false);
 
   // show only the first visible error to avoid multiple messages and scrollbars
   const visibleErrorKey = Object.keys(errors).find(k => errors[k] && touched[k]);
@@ -89,12 +92,40 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validateForm()) {
-      console.log('Login:', formData);
-      navigate('/home');
+      try {
+        setLoading(true);
+        const response = await api.post('/auth/login', {
+          email: formData.emailOrUsername,
+          password: formData.password
+        });
+
+        if (response.status === 1) {
+          // Store user data and token in session storage
+          sessionStorage.setItem('user', JSON.stringify(response.result.user));
+          sessionStorage.setItem('token', response.result.token);
+          sessionStorage.setItem('isAuthenticated', 'true');
+          
+          toast.success('Login successful!');
+          
+          // Navigate based on role
+          if (response.result.user.roleName === 'Super Admin') {
+            navigate('/admin');
+          } else {
+            navigate('/home');
+          }
+        } else {
+          toast.error(response.message || 'Login failed');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        toast.error('Login failed. Please check your credentials.');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -157,8 +188,8 @@ const Login = () => {
             <a href="#forgot">Forget Password?</a>
           </div>
           
-          <button type="submit" className={styles.button}>
-            Log In
+          <button type="submit" className={styles.button} disabled={loading}>
+            {loading ? 'Logging in...' : 'Log In'}
           </button>
         </form>
         

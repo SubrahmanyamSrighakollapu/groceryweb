@@ -34,7 +34,7 @@ const ContactUs = () => {
               style={{ background: "#4CAF50" }}
             >
               <h5 className="fw-bold">About</h5>
-              <p className="mb-0 small" >
+              <p className="mb-0 small">
                 Lorem ipsum is simply free text used by copytyping refreshing.
                 Neque porro est qui.
               </p>
@@ -47,7 +47,7 @@ const ContactUs = () => {
               style={{ background: "#C5D63C" }}
             >
               <h5 className="fw-bold">Contact</h5>
-              <p className="mb-1 small">+91 (245) 333-0099</p>
+              <p className="mb-1 small">+91 9581906060</p>
               <p className="mb-1 small">support@agripos.com</p>
               <p className="mb-0 small">Mon – Fri: 7:00 am – 6:00 pm</p>
             </div>
@@ -60,7 +60,9 @@ const ContactUs = () => {
             >
               <h5 className="fw-bold">Address</h5>
               <p className="mb-0 small">
-                Hyderabad, Telangana, India
+                #405, ALLURI TRADE CENTRE<br />
+                BHAGYANAGAR COLONY KUKATPALLY<br />
+                HYDERABAD 500072
               </p>
             </div>
           </div>

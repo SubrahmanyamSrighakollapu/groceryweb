@@ -122,9 +122,9 @@ const OrderPlaced = () => {
             <div className="border rounded p-3" style={{ borderRadius: '8px', background: '#F9F9F9' }}>
               <h6 className="fw-bold mb-2">Shipping Details</h6>
               <small className="text-muted d-block">
-                Agri Warehouse #4<br />
-                124 Harvest Lane, Industrial District,<br />
-                Hyderabad, Telangana
+                #405, ALLURI TRADE CENTRE<br />
+                BHAGYANAGAR COLONY KUKATPALLY<br />
+                HYDERABAD 500072
               </small>
             </div>
           </div>

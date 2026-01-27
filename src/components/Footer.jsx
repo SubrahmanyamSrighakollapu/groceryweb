@@ -11,6 +11,7 @@ import phone from '../assets/footer/Phone.png';
 import pinterest from '../assets/footer/pintrest.png';
 import send from '../assets/footer/send.png';
 import twitter from '../assets/footer/twitter.png';
+import logo from '../assets/total-needs-logo.png';
 
 const Footer = () => {
     const quickLinks = ['About', 'Services', 'Meet the Farmer', 'Latest News', 'Contact'];
@@ -28,7 +29,7 @@ const Footer = () => {
 
                         {/* Column 1: Logo & Description */}
                         <div className="col-lg-3 col-12 mb-4">
-                            <h3 className="mb-4 text-white" style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.25rem' }}>LOGO</h3>
+                            <img src={logo} alt="Total Needs" style={{ height: '8rem', marginBottom: '1rem' }} />
                             <p className="mb-4" style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500, fontSize: '0.9375rem', lineHeight: '1.875rem' }}>
                                 Fresh, naturally grown produce without chemicals or harmful additives.
                             </p>
@@ -95,15 +96,15 @@ const Footer = () => {
 
                             <div className="d-flex align-items-center gap-2 mb-2">
                                 <img src={phone} alt="" style={{ width: '0.9375rem', height: '0.9375rem' }} />
-                                <span style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500 }}>666 888 0000</span>
+                                <span style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500 }}>9581906060</span>
                             </div>
                             <div className="d-flex align-items-center gap-2 mb-2">
                                 <img src={mail} alt="" style={{ width: '0.9375rem', height: '0.9375rem' }} />
-                                <span style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500 }}>agri@company.com</span>
+                                <span style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500 }}>support@totalneeds.in</span>
                             </div>
                             <div className="d-flex align-items-center gap-2 mb-3">
                                 <img src={locationIcon} alt="" style={{ width: '0.9375rem', height: '0.9375rem' }} />
-                                <span style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500 }}>Hyderabad, Telangana</span>
+                                <span style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500 }}>#405, ALLURI TRADE CENTRE, BHAGYANAGAR COLONY KUKATPALLY HYDERABAD 500072</span>
                             </div>
 
                             <div className="position-relative" style={{ marginTop: '1rem', maxWidth: '21rem' }}>

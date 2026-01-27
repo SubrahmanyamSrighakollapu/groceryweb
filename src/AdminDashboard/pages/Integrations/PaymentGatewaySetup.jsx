@@ -1,7 +1,172 @@
 // PaymentGatewaySetup.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { CreditCard, Wallet, Building, Receipt, Edit, Trash2, X } from 'lucide-react';
+import { toast } from 'react-toastify';
+import paymentService from '../../../services/paymentService';
 
 const PaymentGatewaySetup = () => {
+  const [gateways, setGateways] = useState([]);
+  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [gatewayMappings, setGatewayMappings] = useState([]);
+  const [loading, setLoading] = useState(false);
+  
+  // Form states
+  const [selectedGateway, setSelectedGateway] = useState('');
+  const [selectedMethods, setSelectedMethods] = useState([]);
+  
+  // Modal states
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [editingMapping, setEditingMapping] = useState(null);
+  const [deletingMapping, setDeletingMapping] = useState(null);
+  const [editForm, setEditForm] = useState({ gatewayId: '', methodId: '' });
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [gatewaysRes, methodsRes, mappingsRes] = await Promise.all([
+        paymentService.getGateways(),
+        paymentService.getPaymentMethods(),
+        paymentService.getGatewayMethodMappings()
+      ]);
+      
+      if (gatewaysRes.status === 1) setGateways(gatewaysRes.result || []);
+      if (methodsRes.status === 1) setPaymentMethods(methodsRes.result || []);
+      if (mappingsRes.status === 1) setGatewayMappings(mappingsRes.result || []);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      toast.error('Failed to fetch data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getMethodIcon = (methodName) => {
+    const name = methodName.toLowerCase();
+    if (name.includes('card') || name.includes('credit') || name.includes('debit')) {
+      return <CreditCard size={32} color="#3b82f6" />;
+    }
+    if (name.includes('wallet') || name.includes('digital')) {
+      return <Wallet size={32} color="#10b981" />;
+    }
+    if (name.includes('bank') || name.includes('transfer') || name.includes('upi')) {
+      return <Building size={32} color="#f59e0b" />;
+    }
+    if (name.includes('invoice') || name.includes('pay')) {
+      return <Receipt size={32} color="#6b7280" />;
+    }
+    return <CreditCard size={32} color="#8b5cf6" />;
+  };
+
+  const handleMethodToggle = (methodId) => {
+    setSelectedMethods(prev => 
+      prev.includes(methodId) 
+        ? prev.filter(id => id !== methodId)
+        : [...prev, methodId]
+    );
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedGateway || selectedMethods.length === 0) {
+      toast.error('Please select gateway and at least one payment method');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const promises = selectedMethods.map(methodId => 
+        paymentService.manageGatewayMethodMapping({
+          gatewayMethodId: 0,
+          gatewayId: parseInt(selectedGateway),
+          methodId: parseInt(methodId),
+          isActive: true
+        })
+      );
+      
+      await Promise.all(promises);
+      toast.success('Gateway methods configured successfully!');
+      setSelectedGateway('');
+      setSelectedMethods([]);
+      fetchData();
+    } catch (error) {
+      console.error('Error saving gateway methods:', error);
+      toast.error('Failed to save gateway methods');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = (mapping) => {
+    setEditingMapping(mapping);
+    setEditForm({
+      gatewayId: mapping.gatewayId.toString(),
+      methodId: mapping.methodId.toString()
+    });
+    setShowEditModal(true);
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const response = await paymentService.manageGatewayMethodMapping({
+        gatewayMethodId: editingMapping.gatewayMethodId,
+        gatewayId: parseInt(editForm.gatewayId),
+        methodId: parseInt(editForm.methodId),
+        isActive: true
+      });
+      
+      if (response.status === 1) {
+        toast.success('Gateway method updated successfully!');
+        setShowEditModal(false);
+        setEditingMapping(null);
+        fetchData();
+      }
+    } catch (error) {
+      console.error('Error updating gateway method:', error);
+      toast.error('Failed to update gateway method');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = (mapping) => {
+    setDeletingMapping(mapping);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      setLoading(true);
+      const response = await paymentService.deleteGatewayMethodMapping(deletingMapping.gatewayMethodId);
+      if (response.status === 1) {
+        toast.success('Gateway method deleted successfully!');
+        fetchData();
+      }
+    } catch (error) {
+      console.error('Error deleting gateway method:', error);
+      toast.error('Failed to delete gateway method');
+    } finally {
+      setLoading(false);
+      setShowDeleteModal(false);
+      setDeletingMapping(null);
+    }
+  };
+
+  const getGatewayName = (gatewayId) => {
+    const gateway = gateways.find(g => g.gatewayId === gatewayId);
+    return gateway ? gateway.gatewayName : 'Unknown';
+  };
+
+  const getMethodName = (methodId) => {
+    const method = paymentMethods.find(m => m.methodId === methodId);
+    return method ? method.methodName : 'Unknown';
+  };
+
   return (
     <>
       <style>{`
@@ -52,58 +217,54 @@ const PaymentGatewaySetup = () => {
           display: block;
         }
 
-        .form-input {
+        .form-select {
           width: 100%;
           padding: 10px 14px;
           border: 1px solid #d1d9e0;
           border-radius: 8px;
           font-size: 15px;
           outline: none;
+          background: white;
         }
 
-        .form-input:focus {
+        .form-select:focus {
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        .form-input::placeholder {
-          color: #94a3b8;
-        }
-
-        /* Payment Methods Chips */
         .payment-methods-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 16px;
           margin-bottom: 32px;
         }
 
         .method-chip {
           background: white;
-          border: 1px solid #e2e8f0;
-          border-radius: 10px;
-          padding: 16px;
+          border: 2px solid #e2e8f0;
+          border-radius: 12px;
+          padding: 20px;
           text-align: center;
           transition: all 0.2s;
-          position: relative;
-          overflow: hidden;
           cursor: pointer;
+          position: relative;
         }
 
         .method-chip:hover {
-          background: #fef2f2;
-          border-color: #fca5a5;
-          box-shadow: 0 0 0 3px rgba(252, 165, 165, 0.15);
+          border-color: #cbd5e1;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .method-chip.selected {
           border-color: #10b981;
-          box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+          background: #f0fdf4;
+          box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
         }
 
         .method-chip .icon {
           margin-bottom: 12px;
-          display: block;
+          display: flex;
+          justify-content: center;
         }
 
         .method-chip .name {
@@ -113,40 +274,12 @@ const PaymentGatewaySetup = () => {
           margin-bottom: 4px;
         }
 
-        .method-chip .desc {
-          font-size: 13px;
+        .method-chip .code {
+          font-size: 12px;
           color: #64748b;
-          line-height: 1.4;
+          font-family: monospace;
         }
 
-        /* Payment Options Chips */
-        .payment-options-grid {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 12px;
-          margin-bottom: 32px;
-        }
-
-        .option-chip {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding: 10px 16px;
-          background: #f1f5f9;
-          border-radius: 999px;
-          font-size: 14px;
-          font-weight: 500;
-          color: #334155;
-          border: 1px solid #cbd5e1;
-        }
-
-        .option-chip img,
-        .option-chip .emoji {
-          width: 24px;
-          height: 24px;
-        }
-
-        /* Buttons */
         .buttons-row {
           display: flex;
           justify-content: flex-end;
@@ -160,12 +293,12 @@ const PaymentGatewaySetup = () => {
           font-weight: 600;
           cursor: pointer;
           transition: all 0.2s;
+          border: none;
         }
 
         .btn-cancel {
           background: #f1f5f9;
           color: #475569;
-          border: none;
         }
 
         .btn-cancel:hover {
@@ -175,14 +308,17 @@ const PaymentGatewaySetup = () => {
         .btn-save {
           background: rgba(75, 175, 71, 1);
           color: white;
-          border: none;
         }
 
         .btn-save:hover {
-          background: rgba(75, 175, 71, 1);
+          background: rgba(65, 155, 61, 1);
         }
 
-        /* Table / Existing Gateways */
+        .btn-save:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
         .list-card {
           background: white;
           border-radius: 12px;
@@ -239,135 +375,268 @@ const PaymentGatewaySetup = () => {
           margin: 0;
           font-size: 15px;
         }
+
+        .action-icons {
+          display: flex;
+          gap: 8px;
+        }
+
+        .action-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 6px;
+          border-radius: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .edit-btn {
+          color: #3b82f6;
+        }
+
+        .edit-btn:hover {
+          background: #eff6ff;
+        }
+
+        .delete-btn {
+          color: #ef4444;
+        }
+
+        .delete-btn:hover {
+          background: #fef2f2;
+        }
+
+        .status-badge {
+          padding: 4px 12px;
+          border-radius: 999px;
+          font-size: 13px;
+          font-weight: 600;
+          background: #d1fae5;
+          color: #065f46;
+        }
       `}</style>
 
       <div className="payment-gateway-page">
         <h1 className="page-title">Payment Gateway Setup</h1>
         <p className="page-subtitle">
-          Configure and manage your payment gateways
+          Configure payment methods for your gateways
         </p>
 
         <div className="form-card">
-          <h2 className="section-title">Gateway Information</h2>
+          <h2 className="section-title">Gateway Configuration</h2>
 
           <div className="form-group">
-            <label className="form-label">Gateway Name</label>
-            <input
-              type="text"
-              className="form-input"
-              placeholder="Enter Gateway Name"
-            />
+            <label className="form-label">Select Gateway</label>
+            <select
+              className="form-select"
+              value={selectedGateway}
+              onChange={(e) => setSelectedGateway(e.target.value)}
+            >
+              <option value="">Choose a gateway</option>
+              {gateways.map((gateway) => (
+                <option key={gateway.gatewayId} value={gateway.gatewayId}>
+                  {gateway.gatewayName}
+                </option>
+              ))}
+            </select>
           </div>
 
-          <h2 className="section-title">Payment Methods</h2>
+          <h2 className="section-title">Select Payment Methods</h2>
 
           <div className="payment-methods-grid">
-            <div className="method-chip">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="icon">
-                <rect x="2" y="5" width="20" height="14" rx="2" fill="#1f2937" stroke="#374151" strokeWidth="1"/>
-                <rect x="2" y="9" width="20" height="2" fill="#6b7280"/>
-                <rect x="4" y="12" width="4" height="1" fill="#9ca3af"/>
-              </svg>
-              <div className="name">Bank Transfer</div>
-              <div className="desc">Details shared via email/invoice</div>
-            </div>
-
-            <div className="method-chip">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="icon">
-                <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
-                <path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-              <div className="name">UPI / Net Banking</div>
-              <div className="desc">Instant payment for faster process</div>
-            </div>
-
-            <div className="method-chip">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="icon">
-                <rect x="3" y="4" width="18" height="16" rx="2" fill="#f3f4f6" stroke="#d1d5db"/>
-                <path d="M7 8h10M7 12h6" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-              <div className="name">Pay on Invoice</div>
-              <div className="desc">Credit terms apply (Net 30)</div>
-            </div>
-
-            <div className="method-chip">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="icon">
-                <rect x="4" y="6" width="16" height="12" rx="3" fill="#10b981"/>
-                <circle cx="12" cy="12" r="3" fill="white"/>
-                <path d="M10 12h4" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-              <div className="name">Wallet</div>
-              <div className="desc">You can pay with wallet</div>
-            </div>
-          </div>
-
-          <h2 className="section-title">Payment Options</h2>
-
-          <div className="payment-options-grid">
-            <div className="option-chip">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" fill="#4285F4"/>
-                <path d="M12 7v10M7 12h10" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-              Google Pay
-            </div>
-            <div className="option-chip">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect width="24" height="24" rx="4" fill="#5F259F"/>
-                <text x="12" y="16" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">Pe</text>
-              </svg>
-              PhonePe
-            </div>
-            <div className="option-chip">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect width="24" height="24" rx="4" fill="#00BAF2"/>
-                <text x="12" y="16" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">Paytm</text>
-              </svg>
-              Paytm
-            </div>
-            <div className="option-chip">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect width="24" height="24" rx="4" fill="#FF6600"/>
-                <text x="12" y="16" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">BHIM</text>
-              </svg>
-              BHIM UPI
-            </div>
+            {paymentMethods.map((method) => (
+              <div
+                key={method.methodId}
+                className={`method-chip ${
+                  selectedMethods.includes(method.methodId) ? 'selected' : ''
+                }`}
+                onClick={() => handleMethodToggle(method.methodId)}
+              >
+                <div className="icon">
+                  {getMethodIcon(method.methodName)}
+                </div>
+                <div className="name">{method.methodName}</div>
+                <div className="code">{method.methodCode}</div>
+              </div>
+            ))}
           </div>
 
           <div className="buttons-row">
-            <button className="btn btn-cancel">Cancel</button>
-            <button className="btn btn-save">Save gateway</button>
+            <button 
+              className="btn btn-cancel"
+              onClick={() => {
+                setSelectedGateway('');
+                setSelectedMethods([]);
+              }}
+            >
+              Cancel
+            </button>
+            <button 
+              className="btn btn-save" 
+              onClick={handleSubmit}
+              disabled={loading || !selectedGateway || selectedMethods.length === 0}
+            >
+              {loading ? 'Saving...' : 'Save Configuration'}
+            </button>
           </div>
         </div>
 
         <div className="list-card">
           <div className="list-header">
-            <h2 className="list-title">Configured Gateways</h2>
+            <h2 className="list-title">Configured Gateway Methods</h2>
           </div>
 
           <table className="table">
             <thead>
               <tr>
-                <th>Gateway Name</th>
-                <th>Payment Methods</th>
+                <th>Gateway</th>
+                <th>Payment Method</th>
                 <th>Status</th>
-                <th>Created</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td colSpan={4}>
-                  <div className="no-data">
-                    <h3 className="no-data-title">No Gateways Configured</h3>
-                    <p className="no-data-subtitle">
-                      Add your first payment gateway to start accepting payments
-                    </p>
-                  </div>
-                </td>
-              </tr>
+              {gatewayMappings.length === 0 ? (
+                <tr>
+                  <td colSpan={4}>
+                    <div className="no-data">
+                      <h3 className="no-data-title">No Configurations Found</h3>
+                      <p className="no-data-subtitle">
+                        Configure your first gateway method mapping above
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                gatewayMappings.map((mapping) => (
+                  <tr key={mapping.gatewayMethodId}>
+                    <td>{getGatewayName(mapping.gatewayId)}</td>
+                    <td>{getMethodName(mapping.methodId)}</td>
+                    <td>
+                      <span className="status-badge">
+                        {mapping.isActive ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="action-icons">
+                        <button 
+                          className="action-btn edit-btn"
+                          onClick={() => handleEdit(mapping)}
+                        >
+                          <Edit size={16} />
+                        </button>
+                        <button 
+                          className="action-btn delete-btn"
+                          onClick={() => handleDelete(mapping)}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
+
+        {/* Edit Modal */}
+        {showEditModal && (
+          <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1">
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Edit Gateway Method</h5>
+                  <button type="button" className="btn-close" onClick={() => setShowEditModal(false)}></button>
+                </div>
+                
+                <form onSubmit={handleEditSubmit}>
+                  <div className="modal-body">
+                    <div className="mb-3">
+                      <label className="form-label">Gateway</label>
+                      <select
+                        className="form-select"
+                        value={editForm.gatewayId}
+                        onChange={(e) => setEditForm({...editForm, gatewayId: e.target.value})}
+                        required
+                      >
+                        <option value="">Select Gateway</option>
+                        {gateways.map((gateway) => (
+                          <option key={gateway.gatewayId} value={gateway.gatewayId}>
+                            {gateway.gatewayName}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Payment Method</label>
+                      <select
+                        className="form-select"
+                        value={editForm.methodId}
+                        onChange={(e) => setEditForm({...editForm, methodId: e.target.value})}
+                        required
+                      >
+                        <option value="">Select Payment Method</option>
+                        {paymentMethods.map((method) => (
+                          <option key={method.methodId} value={method.methodId}>
+                            {method.methodName}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" onClick={() => setShowEditModal(false)}>
+                      Cancel
+                    </button>
+                    <button type="submit" className="btn btn-success" disabled={loading}>
+                      {loading ? 'Updating...' : 'Update'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+        {showEditModal && <div className="modal-backdrop fade show"></div>}
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteModal && deletingMapping && (
+          <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1">
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Confirm Delete</h5>
+                  <button type="button" className="btn-close" onClick={() => setShowDeleteModal(false)}></button>
+                </div>
+                <div className="modal-body text-center">
+                  <p>Are you sure you want to delete the mapping between <strong>{getGatewayName(deletingMapping.gatewayId)}</strong> and <strong>{getMethodName(deletingMapping.methodId)}</strong>?</p>
+                  {/* <p className="text-muted">This action cannot be undone.</p> */}
+                </div>
+                <div className="modal-footer justify-content-center">
+                  <button 
+                    className="btn btn-secondary" 
+                    onClick={() => setShowDeleteModal(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    className="btn btn-danger" 
+                    onClick={handleDeleteConfirm}
+                    disabled={loading}
+                  >
+                    {loading ? 'Deleting...' : 'Delete'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {showDeleteModal && <div className="modal-backdrop fade show"></div>}
       </div>
     </>
   );

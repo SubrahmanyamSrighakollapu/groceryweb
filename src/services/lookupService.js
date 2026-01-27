@@ -22,6 +22,16 @@ export const lookupService = {
     return await api.post('/lookup/getuserrolemaster', payload);
   },
 
+  // Get User Roles (helper method)
+  getUserRoles: async () => {
+    const payload = {
+      roleId: 0,
+      isEmployee: false,
+      isActive: true
+    };
+    return await api.post('/lookup/getuserrolemaster', payload);
+  },
+
   // Get Default Status Types
   getDefaultStatusTypes: async () => {
     return await api.get('/lookup/loadDefaultStatusTypes');

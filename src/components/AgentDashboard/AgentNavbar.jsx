@@ -2,6 +2,7 @@
 
 import Icon1 from '../../assets/AgentDashboard/Navbar/Icon1.png';
 import Icon2 from '../../assets/AgentDashboard/Navbar/Icon2.png';
+import logo from '../../assets/total-needs-logo.png';
 
 const AgentNavbar = () => {
   return (
@@ -10,7 +11,7 @@ const AgentNavbar = () => {
         <div className="row align-items-center py-2 px-3">
           {/* Left Side - Logo */}
           <div className="col-4 col-sm-4 col-md-4 col-lg-3">
-            <h1 className="mb-0">LOGO</h1>
+            <img src={logo} alt="Total Needs" style={{ height: '6rem' }} />
           </div>
 
           {/* Right Side - Icons and Wallet */}

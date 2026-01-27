@@ -1,31 +1,29 @@
 import api from './api';
 
-// Employee Management API Services
-export const employeeService = {
-  // Create Employee (Onboard Employee)
+const employeeService = {
+  // Create/Update employee
   onboardEmployee: async (employeeData) => {
     return await api.post('/employees/onboardEmployee', employeeData);
   },
 
-  // Get All Employees
-  getAllEmployees: async () => {
-    return await api.get('/employees');
+  // Get all employees
+  getAllEmployees: async (payload = {
+    empId: 0,
+    departmentId: 0,
+    roleId: 0,
+    statusId: 0,
+    isActive: null
+  }) => {
+    return await api.post('/employees/getEmployees', payload);
   },
 
-  // Get Employee by ID
-  getEmployeeById: async (employeeId) => {
-    return await api.get(`/employees/${employeeId}`);
-  },
-
-  // Update Employee
-  updateEmployee: async (employeeId, employeeData) => {
-    return await api.put(`/employees/${employeeId}`, employeeData);
-  },
-
-  // Delete Employee
-  deleteEmployee: async (employeeId) => {
-    return await api.delete(`/employees/${employeeId}`);
-  },
+  // Toggle employee active status
+  toggleEmployeeStatus: async (userId, isActive) => {
+    return await api.patch('/employees/toggleActive', {
+      userId,
+      isActive
+    });
+  }
 };
 
 export default employeeService;

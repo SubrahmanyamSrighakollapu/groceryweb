@@ -44,7 +44,8 @@ import CreateUser from './AdminDashboard/pages/UserManagement/CreateUser';
 import CreateAgent from './AdminDashboard/pages/AgentManagement/CreateAgent';
 import AgentKycVerification from './AdminDashboard/pages/Dashboard/AdminActions/AgentKycVerification';
 import AgentOnboarded from './AdminDashboard/pages/Dashboard/AdminActions/AgentOnboarded';
-import CreateEmployee from './AdminDashboard/pages/Dashboard/AdminActions/CreateEmployee';
+import CreateEmployee from './AdminDashboard/pages/EmployeeManagement/CreateEmployee';
+import EmployeesList from './AdminDashboard/pages/EmployeeManagement/EmployeesList';
 import AddChargeConfiguration from './AdminDashboard/pages/Integrations/AddChargeConfiguration';
 import PaymentGatewaySetup from './AdminDashboard/pages/Integrations/PaymentGatewaySetup';
 import AddPaymentGateway from './AdminDashboard/pages/Integrations/AddPaymentGateway';
@@ -134,13 +135,15 @@ function App() {
             <Route path="reports/transaction-reports" element={<AdminReports />} />
             <Route path="user-service-settings" element={<UserServiceSettings />} />
             <Route path="reports" element={<AdminReports />} />
-            <Route path="create-user" element={<CreateUser />} />
-            <Route path="create-agent" element={<CreateAgent />} />
+
             <Route path="agent-kyc-verification" element={<AgentKycVerification />} />
             <Route path="agent-onboarded" element={<AgentOnboarded />} />
-            <Route path="create-employee" element={<CreateEmployee />} />
+            <Route path="employee-management/add-employee" element={<CreateEmployee />} />
+            <Route path="employee-management/employees-list" element={<EmployeesList />} />
+            <Route path="create-employee" element={<Navigate to="/admin/employee-management/add-employee" replace />} />
 
-            <Route path="integration/gateway" element={<AddPaymentGateway />} />
+            <Route path="integration/add-payment-gateway" element={<AddPaymentGateway />} />
+            <Route path="integration/payment-gateway-setup" element={<PaymentGatewaySetup />} />
             <Route path="integration/charge" element={<AddChargeConfiguration />} />
             <Route path="admin-settings/roles-management" element={<RolesManagement />} />
             <Route path="admin-settings/plans-management" element={<PlansManagement />} />

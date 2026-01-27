@@ -31,7 +31,8 @@ import {
   MdUndo,
   MdKeyboardArrowRight,
   MdSupervisorAccount,
-  MdGroupAdd
+  MdGroupAdd,
+  MdWork
 } from 'react-icons/md';
 
 const AdminSidebar = () => {
@@ -63,7 +64,8 @@ const AdminSidebar = () => {
       title: 'Integration', 
       hasDropdown: true,
       subItems: [
-        { icon: MdPayment, title: 'Gateway', path: '/admin/integration/gateway' },
+        { icon: MdPayment, title: 'Add Payment Gateway', path: '/admin/integration/add-payment-gateway' },
+        { icon: MdPayment, title: 'Payment Gateway Setup', path: '/admin/integration/payment-gateway-setup' },
         { icon: MdAttachMoney, title: 'Charge', path: '/admin/integration/charge' }
       ]
     },
@@ -86,6 +88,15 @@ const AdminSidebar = () => {
       subItems: [
         { icon: MdGroupAdd, title: 'Add Agent', path: '/admin/agent-management/add-agent' },
         { icon: MdList, title: 'Agent List', path: '/admin/agent-management/agents-list' }
+      ]
+    },
+    { 
+      icon: MdWork, 
+      title: 'Employee Management', 
+      hasDropdown: true,
+      subItems: [
+        { icon: MdPersonAdd, title: 'Add Employee', path: '/admin/employee-management/add-employee' },
+        { icon: MdList, title: 'Employees List', path: '/admin/employee-management/employees-list' }
       ]
     },
     { 

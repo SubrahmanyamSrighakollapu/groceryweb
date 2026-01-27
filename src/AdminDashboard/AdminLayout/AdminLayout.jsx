@@ -18,7 +18,7 @@ const AdminLayout = () => {
         <div 
           className="position-fixed"
           style={{
-            width: '20%',
+            width: '24%',
             height: `calc(100vh - ${navbarHeight})`,
             overflowY: 'auto',
             top: navbarHeight,
@@ -32,8 +32,8 @@ const AdminLayout = () => {
         <div 
           className="flex-grow-1"
           style={{
-            marginLeft: '20%',
-            width: '80%',
+            marginLeft: '25%',
+            width: '75%',
             padding: '1.5rem',
             overflowY: 'auto',
             height: `calc(100vh - ${navbarHeight})`

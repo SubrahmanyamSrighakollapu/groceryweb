@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import navbarBg from '../assets/Navbar_bgImg.png';
+import logo from '../assets/total-needs-logo.png';
 import { useCart } from '../context/CartContext';
 
 const SearchIcon = () => (
@@ -70,12 +71,8 @@ const Navbar = () => {
             
             {/* Logo */}
             <div className="col-auto">
-              <Link to="/home" className="text-decoration-none fw-semibold" style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '3rem',
-                color: '#4BAF47'
-              }}>
-                Logo
+              <Link to="/home" className="text-decoration-none">
+                <img src={logo} alt="Total Needs" style={{ height: '5rem', marginBottom: '1rem' }} />
               </Link>
             </div>
 
