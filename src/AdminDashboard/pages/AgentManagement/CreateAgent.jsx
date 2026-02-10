@@ -1,6 +1,7 @@
 // src/AdminDashboard/pages/Dashboard/AdminActions/CreateAgent.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import lookupService from '../../../services/lookupService';
 import agentService from '../../../services/agentService';
 
@@ -110,6 +111,7 @@ const CreateAgent = () => {
       apiFormData.append('commission', formData.commission || '0');
       apiFormData.append('isAadharVerify', formData.isAadhaarVerified.toString());
       apiFormData.append('isPanNoVerify', formData.isPanVerified.toString());
+      apiFormData.append('IsActive', 'true');
       
       // Handle document files - create placeholder if not uploaded
       const createPlaceholderFile = (name) => {
@@ -118,56 +120,40 @@ const CreateAgent = () => {
       
       console.log('Uploaded files:', uploadedFiles);
       
-      let hasIdProof = false, hasAddressProof = false, hasBankProof = false, hasProfilePhoto = false;
-      
+      // Handle document files - map API document types to required parameters
       Object.entries(uploadedFiles).forEach(([docType, file]) => {
         console.log('Processing document:', docType, file);
-        if (docType.toLowerCase().includes('id proof')) {
+        if (docType === 'Adhaar ID') {
           apiFormData.append('idProofDoc', file);
-          hasIdProof = true;
-          console.log('Added ID proof document');
-        } else if (docType.toLowerCase().includes('address')) {
+          console.log('Added Adhaar ID as idProofDoc');
+        } else if (docType === 'VOTER ID') {
           apiFormData.append('addressProofDoc', file);
-          hasAddressProof = true;
-          console.log('Added address proof document');
-        } else if (docType.toLowerCase().includes('bank')) {
+          console.log('Added Voter ID as addressProofDoc');
+        } else if (docType === 'BANK ID') {
           apiFormData.append('bankProofDoc', file);
-          hasBankProof = true;
-          console.log('Added bank proof document');
-        } else if (docType.toLowerCase().includes('photo')) {
+          console.log('Added Bank ID as bankProofDoc');
+        } else if (docType === 'Profile Photo') {
           apiFormData.append('profilePhotoDoc', file);
-          hasProfilePhoto = true;
-          console.log('Added profile photo document');
+          console.log('Added Profile Photo as profilePhotoDoc');
         }
+        // Ignore PAN ID and VISA ID documents - don't add them to payload
       });
       
-      // Add placeholder files for required documents if not uploaded
-      if (!hasIdProof) {
-        apiFormData.append('idProofDoc', createPlaceholderFile('id_proof'));
-        console.log('Added placeholder ID proof');
-      }
-      if (!hasAddressProof) {
-        apiFormData.append('addressProofDoc', createPlaceholderFile('address_proof'));
-        console.log('Added placeholder address proof');
-      }
-      if (!hasBankProof) {
-        apiFormData.append('bankProofDoc', createPlaceholderFile('bank_proof'));
-        console.log('Added placeholder bank proof');
-      }
-      if (!hasProfilePhoto) {
-        apiFormData.append('profilePhotoDoc', createPlaceholderFile('profile_photo'));
-        console.log('Added placeholder profile photo');
-      }
-      
-      console.log('Final FormData entries:');
+      console.log("====== CREATE AGENT PAYLOAD (FormData) ======");
+
       for (let [key, value] of apiFormData.entries()) {
-        console.log(key, value);
+        console.log(`${key}:`, value);
       }
+
+      console.log("====== END PAYLOAD ======");
+
       
       const response = await agentService.onboardAgent(apiFormData);
       
+      console.log('API Response:', response);
+      
       if (response.status === 1) {
-        alert('Agent created successfully!');
+        toast.success('Agent created successfully!');
         setFormData({
           aadhaarNumber: '', panNumber: '', fullName: '', email: '', mobile: '',
           operatingArea: '', languagePreferred: '', businessType: '', businessName: '',
@@ -176,10 +162,16 @@ const CreateAgent = () => {
         });
         setUploadedFiles({});
         setStep(1);
+      } else {
+        console.error('API Error Response:', response);
+        toast.error(response.message || 'Failed to create agent');
       }
     } catch (error) {
       console.error('Full error:', error);
-      alert('Error creating agent. Please try again.');
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+      const errorMessage = error.response?.data?.message || error.message || 'Error creating agent. Please try again.';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -344,6 +336,23 @@ const CreateAgent = () => {
           background-color: #edf2f7;
         }
 
+        /* Form Validation Styles */
+        input:required:invalid:not(:placeholder-shown):not(:focus),
+        select:required:invalid:not(:focus) {
+          border-color: #ef4444;
+        }
+
+        input:valid:not(:placeholder-shown),
+        select:valid {
+          border-color: #10b981;
+        }
+
+        input:focus:invalid,
+        select:focus:invalid {
+          border-color: #ef4444;
+          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
         .upload-section {
           margin-bottom: 24px;
         }
@@ -435,16 +444,20 @@ const CreateAgent = () => {
             <div className="form-grid">
               {/* Aadhaar Number + Verify */}
               <div className="form-group full-width">
-                <label>Aadhaar Number</label>
+                <label>Aadhaar Number *</label>
                 <div className="input-wrapper">
                   <input 
                     type="text" 
                     name="aadhaarNumber"
                     value={formData.aadhaarNumber}
                     onChange={handleInputChange}
-                    placeholder="Enter Aadhaar Number" 
+                    placeholder="Enter 12-digit Aadhaar Number" 
+                    required
+                    pattern="[0-9]{12}"
+                    minLength="12"
+                    maxLength="12"
                   />
-                  <button className="verify-btn" onClick={handleVerifyAadhaar}>
+                  <button type="button" className="verify-btn" onClick={handleVerifyAadhaar}>
                     Verify →
                   </button>
                 </div>
@@ -452,62 +465,74 @@ const CreateAgent = () => {
 
               {/* PAN Number + Verify */}
               <div className="form-group full-width">
-                <label>PAN Number</label>
+                <label>PAN Number *</label>
                 <div className="input-wrapper">
                   <input 
                     type="text" 
                     name="panNumber"
                     value={formData.panNumber}
                     onChange={handleInputChange}
-                    placeholder="Enter Pan Number" 
+                    placeholder="Enter PAN (e.g., ABCDE1234F)" 
+                    required
+                    pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+                    maxLength="10"
+                    style={{ textTransform: 'uppercase' }}
                   />
-                  <button className="verify-btn" onClick={handleVerifyPan}>
+                  <button type="button" className="verify-btn" onClick={handleVerifyPan}>
                     Verify →
                   </button>
                 </div>
               </div>
 
               <div className="form-group">
-                <label>Full Name</label>
+                <label>Full Name *</label>
                 <input 
                   type="text" 
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleInputChange}
                   placeholder="Enter full name" 
+                  required
+                  minLength="2"
                 />
               </div>
 
               <div className="form-group">
-                <label>Email ID</label>
+                <label>Email ID *</label>
                 <input 
                   type="email" 
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="Enter email ID" 
+                  required
                 />
               </div>
 
               <div className="form-group">
-                <label>Mobile Number</label>
+                <label>Mobile Number *</label>
                 <input 
-                  type="text" 
+                  type="tel" 
                   name="mobile"
                   value={formData.mobile}
                   onChange={handleInputChange}
-                  placeholder="Enter mobile number" 
+                  placeholder="Enter 10-digit mobile" 
+                  required
+                  pattern="[0-9]{10}"
+                  minLength="10"
+                  maxLength="10"
                 />
               </div>
 
               <div className="form-group">
-                <label>Operating Area</label>
+                <label>Operating Area *</label>
                 <input 
                   type="text" 
                   name="operatingArea"
                   value={formData.operatingArea}
                   onChange={handleInputChange}
                   placeholder="Enter Operating Area" 
+                  required
                 />
               </div>
 
@@ -518,7 +543,7 @@ const CreateAgent = () => {
                   name="languagePreferred"
                   value={formData.languagePreferred}
                   onChange={handleInputChange}
-                  placeholder="Enter Language Preferred" 
+                  placeholder="Enter Language (optional)" 
                 />
               </div>
             </div>
@@ -539,12 +564,13 @@ const CreateAgent = () => {
 
             <div className="form-grid">
               <div className="form-group">
-                <label>Business Type</label>
+                <label>Business Type *</label>
                 <select 
                   name="businessType"
                   value={formData.businessType}
                   onChange={handleInputChange}
                   disabled={loading}
+                  required
                 >
                   <option value="">Select Business Type</option>
                   {businessTypes.map((type) => (
@@ -556,46 +582,54 @@ const CreateAgent = () => {
               </div>
 
               <div className="form-group">
-                <label>Business Name</label>
+                <label>Business Name *</label>
                 <input 
                   type="text" 
                   name="businessName"
                   value={formData.businessName}
                   onChange={handleInputChange}
                   placeholder="Enter Business Name" 
+                  required
+                  minLength="2"
                 />
               </div>
 
               <div className="form-group full-width">
-                <label>Business Address</label>
+                <label>Business Address *</label>
                 <input 
                   type="text" 
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
                   placeholder="Enter Business Address" 
+                  required
                 />
               </div>
 
               <div className="form-group">
                 <label>Service Radius (km)</label>
                 <input 
-                  type="text" 
+                  type="number" 
                   name="serviceRadius"
                   value={formData.serviceRadius}
                   onChange={handleInputChange}
-                  placeholder="Enter Service Radius (km)" 
+                  placeholder="Enter Service Radius (optional)" 
+                  min="0"
+                  step="0.1"
                 />
               </div>
 
               <div className="form-group">
                 <label>Commission %</label>
                 <input 
-                  type="text" 
+                  type="number" 
                   name="commission"
                   value={formData.commission}
                   onChange={handleInputChange}
-                  placeholder="Enter Commission %" 
+                  placeholder="Enter Commission % (optional)" 
+                  min="0"
+                  max="100"
+                  step="0.01"
                 />
               </div>
             </div>

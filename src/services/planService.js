@@ -24,6 +24,16 @@ const planService = {
   // Get Plans
   getPlans: async () => {
     return await api.get('/plan/getAllPlans/0/true');
+  },
+
+  // Get Plan Role Gateway Commissions
+  getPlanRoleGatewayCommissions: async (payload) => {
+    return await api.post('/plan/getPlanRoleGatewayCommissions', payload);
+  },
+
+  // Manage Plan Gateway Role Commission Mapping
+  managePlanGatewayRoleCommission: async (commissionData) => {
+    return await api.post('/plan/planGatewayRoleCommissionMapp', commissionData);
   }
 };
 

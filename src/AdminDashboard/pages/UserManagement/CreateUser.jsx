@@ -1,5 +1,6 @@
 // src/AdminDashboard/pages/Dashboard/AdminActions/CreateUser.jsx
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import userService from '../../../services/userService';
 import lookupService from '../../../services/lookupService';
 
@@ -99,7 +100,7 @@ const CreateUser = () => {
       const response = await userService.createUser(userData);
       
       if (response.status === 1) {
-        showToast('User created successfully!', 'success');
+        toast.success('User created successfully!');
         
         // Reset form
         setFormData({
@@ -118,11 +119,12 @@ const CreateUser = () => {
         setAutoGeneratePassword(true);
         setStatus(true);
       } else {
-        showToast('Failed to create user. Please try again.', 'error');
+        toast.error(response.message || 'Failed to create user. Please try again.');
       }
     } catch (error) {
       console.error('Error creating user:', error);
-      showToast('Failed to create user. Please try again.', 'error');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to create user. Please try again.';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -132,47 +134,19 @@ const CreateUser = () => {
     console.log('Verifying Aadhaar:', formData.aadhaarNumber);
     // Simulate verification success
     setVerificationStatus(prev => ({ ...prev, isAadharVerify: true }));
-    showToast('Aadhaar verified successfully!', 'success');
+    toast.success('Aadhaar verified successfully!');
   };
 
   const handleVerifyPan = () => {
     console.log('Verifying PAN:', formData.panNumber);
     // Simulate verification success
     setVerificationStatus(prev => ({ ...prev, panNoVerify: true }));
-    showToast('PAN verified successfully!', 'success');
+    toast.success('PAN verified successfully!');
   };
 
   const handleSendCredentials = async () => {
     console.log('Sending login credentials...');
-    showToast('Login credentials sent!', 'success');
-  };
-
-  const showToast = (message, type) => {
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.textContent = message;
-    
-    toast.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 12px 20px;
-      border-radius: 8px;
-      color: white;
-      font-weight: 600;
-      z-index: 10000;
-      animation: slideIn 0.3s ease-out;
-      ${type === 'success' ? 'background: #10b981;' : 
-        type === 'error' ? 'background: #ef4444;' : 
-        'background: #3b82f6;'}
-    `;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-      toast.style.animation = 'slideOut 0.3s ease-out';
-      setTimeout(() => document.body.removeChild(toast), 300);
-    }, 3000);
+    toast.success('Login credentials sent!');
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import lookupService from '../../../services/lookupService';
+import agentService from '../../../services/agentService';
 
 const RegisterBankForm = () => {
   const [accountTypes, setAccountTypes] = useState([]);
@@ -12,7 +13,8 @@ const RegisterBankForm = () => {
     bankAccountNo: '',
     confirmBankAccountNo: '',
     bankName: '',
-    ifscCode: ''
+    ifscCode: '',
+    panNo: ''
   });
 
   useEffect(() => {
@@ -50,30 +52,45 @@ const RegisterBankForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate bank account numbers match
     if (formData.bankAccountNo !== formData.confirmBankAccountNo) {
       toast.error('Bank account numbers do not match');
       return;
     }
     
     try {
-      // Simulate API call
-      console.log('Registering bank with data:', formData);
-      toast.success('Bank registered successfully!');
+      const payload = {
+        bankId: 0,
+        bankNameId: parseInt(formData.bankName),
+        holderName: formData.accountHolderName,
+        accountNo: formData.bankAccountNo,
+        ifscCode: formData.ifscCode,
+        acTypeId: parseInt(formData.accountType),
+        isVerified: false,
+        panNo: formData.panNo,
+        contactNo: formData.contactNo
+      };
       
-      // Reset form
-      setFormData({
-        accountType: '',
-        contactNo: '',
-        accountHolderName: '',
-        bankAccountNo: '',
-        confirmBankAccountNo: '',
-        bankName: '',
-        ifscCode: ''
-      });
+      const response = await agentService.submitUpdateBankDetails(payload);
+      
+      if (response && response.status === 1) {
+        toast.success(response.message || 'Bank registered successfully!');
+        setFormData({
+          accountType: '',
+          contactNo: '',
+          accountHolderName: '',
+          bankAccountNo: '',
+          confirmBankAccountNo: '',
+          bankName: '',
+          ifscCode: '',
+          panNo: ''
+        });
+      } else {
+        toast.error(response.message || 'Failed to register bank');
+      }
     } catch (error) {
       console.error('Error registering bank:', error);
-      toast.error('Failed to register bank');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to register bank';
+      toast.error(errorMessage);
     }
   };
 
@@ -93,7 +110,8 @@ const RegisterBankForm = () => {
       bankAccountNo: '',
       confirmBankAccountNo: '',
       bankName: '',
-      ifscCode: ''
+      ifscCode: '',
+      panNo: ''
     });
     toast.info('Form cancelled');
   };
@@ -157,6 +175,14 @@ const RegisterBankForm = () => {
           value={formData.ifscCode}
           onChange={handleInputChange}
           placeholder="Enter IFSC code"
+          required
+        />
+        <Input 
+          label="PAN Number" 
+          name="panNo"
+          value={formData.panNo}
+          onChange={handleInputChange}
+          placeholder="Enter PAN number"
           required
         />
 

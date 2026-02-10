@@ -107,6 +107,7 @@ const AdminSidebar = () => {
         { icon: MdPerson, title: 'Role', path: '/admin/admin-settings/roles-management' },
         { icon: MdDescription, title: 'Plans', path: '/admin/admin-settings/plans-management' },
         { icon: MdBusiness, title: 'Plan Commission', path: '/admin/admin-settings/plan-commission-manager' },
+        { icon: MdBusiness, title: 'Plan Commission Config', path: '/admin/admin-settings/plan-commission-configuration' },
         { icon: MdTextFields, title: 'Scroll Text', path: '/admin/admin-settings/scroll-text-manager' },
         { icon: MdAnnouncement, title: 'Notice Board', path: '/admin/admin-settings/notice-board-manager' },
         { icon: MdMonetizationOn, title: 'Payout Charges', path: '/admin/admin-settings/payout-charges-manager' },

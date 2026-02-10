@@ -1,65 +1,188 @@
 // AgentProducts.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Download, Search, X, Trash2 } from 'lucide-react';
-
-const sampleOrders = [
-  {
-    orderId: 'ORD-0278',
-    agentName: 'Sarah Johnson',
-    totalProducts: 3,
-    totalQuantity: '15 Kg',
-    totalPrice: '₹80,000',
-    status: 'Pending',
-    products: [
-      { name: 'Premium Wheat', qty: '2 Kg', unitPrice: '₹1000', total: '₹2000', image: 'https://images.unsplash.com/photo-1590092808465-6a7a8c3e8c3f?w=400' },
-      { name: 'Organic Long Grain Brown', qty: '1 Kg', unitPrice: '₹1000', total: '₹1000', image: 'https://images.unsplash.com/photo-1590092808465-6a7a8c3e8c3f?w=400' },
-      { name: 'Toor Dal', qty: '2 Kg', unitPrice: '₹1000', total: '₹2000', image: 'https://images.unsplash.com/photo-1590092808465-6a7a8c3e8c3f?w=400' }
-    ]
-  },
-  {
-    orderId: 'ORD-0278',
-    agentName: 'Sarah Johnson',
-    totalProducts: 5,
-    totalQuantity: '15 Kg',
-    totalPrice: '₹80,000',
-    status: 'Approved',
-    products: [
-      { name: 'Premium Wheat', qty: '2 Kg', unitPrice: '₹1000', total: '₹2000', image: 'https://images.unsplash.com/photo-1590092808465-6a7a8c3e8c3f?w=400' }
-    ]
-  },
-  {
-    orderId: 'ORD-0278',
-    agentName: 'Sarah Johnson',
-    totalProducts: 4,
-    totalQuantity: '15 Kg',
-    totalPrice: '₹80,000',
-    status: 'Rejected',
-    products: [
-      { name: 'Toor Dal', qty: '2 Kg', unitPrice: '₹1000', total: '₹2000', image: 'https://images.unsplash.com/photo-1590092808465-6a7a8c3e8c3f?w=400' }
-    ]
-  },
-  {
-    orderId: 'ORD-0278',
-    agentName: 'Sarah Johnson',
-    totalProducts: 1,
-    totalQuantity: '15 Kg',
-    totalPrice: '₹80,000',
-    status: 'Pending',
-    products: [
-      { name: 'Premium Wheat', qty: '2 Kg', unitPrice: '₹1000', total: '₹2000', image: 'https://images.unsplash.com/photo-1590092808465-6a7a8c3e8c3f?w=400' }
-    ]
-  }
-];
+import { toast } from 'react-toastify';
+import * as XLSX from 'xlsx';
+import productService from '../../../services/productService';
+import lookupService from '../../../services/lookupService';
+import usePagination from '../../../hooks/usePagination';
+import Pagination from '../../../components/Pagination/Pagination';
 
 const AgentProducts = () => {
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [productStatuses, setProductStatuses] = useState([]);
+  const [statusIds, setStatusIds] = useState({ pending: null, approved: null, rejected: null });
 
-  const openModal = (order) => {
-    setSelectedOrder(order);
+  useEffect(() => {
+    fetchProductStatuses();
+    fetchProducts();
+  }, []);
+
+  const fetchProductStatuses = async () => {
+    try {
+      const response = await lookupService.getProductStatusTypes();
+      if (response && response.status === 1 && response.result) {
+        setProductStatuses(response.result);
+        const ids = {};
+        response.result.forEach(status => {
+          if (status.statusValue === 'Pending') ids.pending = status.statusId;
+          if (status.statusValue === 'Approved') ids.approved = status.statusId;
+          if (status.statusValue === 'Rejected') ids.rejected = status.statusId;
+        });
+        setStatusIds(ids);
+      }
+    } catch (error) {
+      console.error('Error fetching product statuses:', error);
+    }
+  };
+
+  const fetchProducts = async (statusId = null) => {
+    try {
+      setLoading(true);
+      const response = await productService.getProducts();
+      if (response && response.status === 1 && response.result) {
+        let filteredProducts = response.result;
+        if (statusId) {
+          filteredProducts = response.result.filter(p => p.statusId === statusId);
+        }
+        setProducts(filteredProducts);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to fetch products';
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStatusFilter = (filter) => {
+    setStatusFilter(filter);
+    if (filter === 'all') {
+      fetchProducts();
+    } else if (filter === 'pending') {
+      fetchProducts(statusIds.pending);
+    } else if (filter === 'approved') {
+      fetchProducts(statusIds.approved);
+    } else if (filter === 'rejected') {
+      fetchProducts(statusIds.rejected);
+    }
+  };
+
+  const handleApproveReject = async (productId, statusId) => {
+    try {
+      setLoading(true);
+      const response = await productService.approveRejectProduct(productId, statusId);
+      if (response && response.status === 1) {
+        toast.success(response.message || 'Product status updated successfully');
+        fetchProducts(statusFilter === 'all' ? null : statusIds[statusFilter]);
+      } else {
+        toast.error(response.message || 'Failed to update product status');
+      }
+    } catch (error) {
+      console.error('Error updating product status:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to update product status';
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Group products by createdBy (agent)
+  const groupedByAgent = products.reduce((acc, product) => {
+    const agentId = product.createdBy;
+    if (!acc[agentId]) {
+      acc[agentId] = {
+        agentId: agentId,
+        agentName: `Agent ${agentId}`,
+        products: [],
+        totalProducts: 0,
+        totalPrice: 0
+      };
+    }
+    acc[agentId].products.push(product);
+    acc[agentId].totalProducts += 1;
+    acc[agentId].totalPrice += parseFloat(product.finalPrice || 0);
+    return acc;
+  }, {});
+
+  const agentRecords = Object.values(groupedByAgent);
+
+  const openModal = (agent) => {
+    setSelectedAgent(agent);
   };
 
   const closeModal = () => {
-    setSelectedOrder(null);
+    setSelectedAgent(null);
+  };
+
+  const filteredRecords = agentRecords.filter(agent => {
+    const matchesSearch = agent.agentName.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesSearch;
+  });
+
+  const { currentPage, totalPages, currentRecords, handlePageChange } = usePagination(filteredRecords, 5);
+
+  const handleExportToExcel = () => {
+    try {
+      const exportData = [];
+      
+      agentRecords.forEach(agent => {
+        exportData.push({
+          'Agent ID': agent.agentId,
+          'Agent Name': agent.agentName,
+          'Total Products': agent.totalProducts,
+          'Total Price': `₹${agent.totalPrice.toFixed(2)}`,
+          'Product Name': '',
+          'Category': '',
+          'Price': '',
+          'Final Price': '',
+          'Status': ''
+        });
+        
+        agent.products.forEach(product => {
+          exportData.push({
+            'Agent ID': '',
+            'Agent Name': '',
+            'Total Products': '',
+            'Total Price': '',
+            'Product Name': product.productName,
+            'Category': product.categoryName || 'N/A',
+            'Price': `₹${product.price}`,
+            'Final Price': `₹${product.finalPrice}`,
+            'Status': product.statusName || 'Pending'
+          });
+        });
+        
+        exportData.push({
+          'Agent ID': '',
+          'Agent Name': '',
+          'Total Products': '',
+          'Total Price': '',
+          'Product Name': '',
+          'Category': '',
+          'Price': '',
+          'Final Price': '',
+          'Status': ''
+        });
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(exportData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Agent Products');
+      
+      const fileName = `Agent_Products_${new Date().toISOString().split('T')[0]}.xlsx`;
+      XLSX.writeFile(workbook, fileName);
+      
+      toast.success('Excel file downloaded successfully');
+    } catch (error) {
+      console.error('Error exporting to Excel:', error);
+      toast.error('Failed to export data');
+    }
   };
 
   return (
@@ -203,17 +326,29 @@ const AgentProducts = () => {
         }
 
         .action-btn {
-          padding: 6px 12px;
+          padding: 6px 16px;
           border-radius: 6px;
           font-size: 13px;
           font-weight: 600;
           border: none;
           cursor: pointer;
-          margin-left: 8px;
+          margin-right: 6px;
+          white-space: nowrap;
+        }
+
+        .action-btn:last-child {
+          margin-right: 0;
+        }
+
+        .actions-row {
+          display: flex;
+          gap: 6px;
+          align-items: center;
         }
 
         .approve-btn { background: #10b981; color: white; }
         .reject-btn  { background: #ef4444; color: white; }
+        .pending-btn { background: #f59e0b; color: white; }
         .view-only   { background: #6b7280; color: white; cursor: default; }
         .view-reason { background: #f59e0b; color: white; }
 
@@ -307,24 +442,46 @@ const AgentProducts = () => {
             </p>
           </div>
 
-          <button className="export-btn">
+          <button className="export-btn" onClick={handleExportToExcel}>
             <Download size={18} />
             Export
           </button>
         </div>
 
         <div className="filter-bar">
-          <button className="status-btn all active">All</button>
-          <button className="status-btn pending">Pending</button>
-          <button className="status-btn rejected">Rejected</button>
-          <button className="status-btn approved">Approved</button>
+          <button 
+            className={`status-btn all ${statusFilter === 'all' ? 'active' : ''}`}
+            onClick={() => handleStatusFilter('all')}
+          >
+            All
+          </button>
+          <button 
+            className={`status-btn pending ${statusFilter === 'pending' ? 'active' : ''}`}
+            onClick={() => handleStatusFilter('pending')}
+          >
+            Pending
+          </button>
+          <button 
+            className={`status-btn rejected ${statusFilter === 'rejected' ? 'active' : ''}`}
+            onClick={() => handleStatusFilter('rejected')}
+          >
+            Rejected
+          </button>
+          <button 
+            className={`status-btn approved ${statusFilter === 'approved' ? 'active' : ''}`}
+            onClick={() => handleStatusFilter('approved')}
+          >
+            Approved
+          </button>
 
           <div className="search-wrapper">
             <Search size={18} className="search-icon" />
             <input
               type="text"
               className="search-input"
-              placeholder="Search Agent / Order ID"
+              placeholder="Search Agent Name"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -333,64 +490,61 @@ const AgentProducts = () => {
           <table className="table">
             <thead>
               <tr>
-                <th>Order ID</th>
+                <th>Agent ID</th>
                 <th>Agent Name</th>
                 <th>Total Products</th>
-                <th>Total Quantity</th>
                 <th>Total Price</th>
-                <th>Status</th>
                 <th>Access</th>
-                <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {sampleOrders.map((order, index) => (
-                <tr key={index}>
-                  <td>{order.orderId}</td>
-                  <td>{order.agentName}</td>
-                  <td>{order.totalProducts}</td>
-                  <td>{order.totalQuantity}</td>
-                  <td>{order.totalPrice}</td>
-                  <td>
-                    <span className={`status-badge status-${order.status.toLowerCase()}`}>
-                      {order.status}
-                    </span>
-                  </td>
-                  <td>
-                    <button 
-                      className="view-btn"
-                      onClick={() => openModal(order)}
-                    >
-                      View Product
-                    </button>
-                  </td>
-                  <td>
-                    {order.status === 'Pending' && (
-                      <>
-                        <button className="action-btn approve-btn">Approve</button>
-                        <button className="action-btn reject-btn">Reject</button>
-                      </>
-                    )}
-                    {order.status === 'Approved' && (
-                      <button className="action-btn view-only">View Only</button>
-                    )}
-                    {order.status === 'Rejected' && (
-                      <button className="action-btn view-reason">View Reason</button>
-                    )}
+              {loading ? (
+                <tr>
+                  <td colSpan="5" style={{ textAlign: 'center', padding: '40px' }}>
+                    Loading products...
                   </td>
                 </tr>
-              ))}
+              ) : filteredRecords.length === 0 ? (
+                <tr>
+                  <td colSpan="5" style={{ textAlign: 'center', padding: '40px' }}>
+                    No products found
+                  </td>
+                </tr>
+              ) : (
+                currentRecords.map((agent, index) => (
+                  <tr key={index}>
+                    <td>{agent.agentId}</td>
+                    <td>{agent.agentName}</td>
+                    <td>{agent.totalProducts}</td>
+                    <td>₹{agent.totalPrice.toFixed(2)}</td>
+                    <td>
+                      <button 
+                        className="view-btn"
+                        onClick={() => openModal(agent)}
+                      >
+                        View Products
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
 
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+
         {/* Modal */}
-        {selectedOrder && (
+        {selectedAgent && (
           <div className="modal-overlay" onClick={closeModal}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <div className="modal-header">
                 <h2 className="modal-title">
-                  Order Details - {selectedOrder.orderId} : {selectedOrder.agentName}
+                  {selectedAgent.agentName} - Products ({selectedAgent.totalProducts})
                 </h2>
                 <button className="close-btn" onClick={closeModal}>
                   <X size={24} />
@@ -401,32 +555,50 @@ const AgentProducts = () => {
                 <table className="modal-table">
                   <thead>
                     <tr>
-                      <th>Image</th>
                       <th>Product Name</th>
-                      <th>Quantity</th>
-                      <th>Unit Price</th>
-                      <th>Total</th>
-                      <th>Remove</th>
+                      <th>Category</th>
+                      <th>Price</th>
+                      <th>Final Price</th>
+                      <th>Status</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedOrder.products.map((product, idx) => (
+                    {selectedAgent.products.map((product, idx) => (
                       <tr key={idx}>
+                        <td>{product.productName}</td>
+                        <td>{product.categoryName || 'N/A'}</td>
+                        <td>₹{product.price}</td>
+                        <td>₹{product.finalPrice}</td>
                         <td>
-                          <img 
-                            src={product.image} 
-                            alt={product.name} 
-                            className="product-image"
-                          />
+                          <span className={`status-badge status-${product.statusName?.toLowerCase() || 'pending'}`}>
+                            {product.statusName || 'Pending'}
+                          </span>
                         </td>
-                        <td>{product.name}</td>
-                        <td>{product.qty}</td>
-                        <td>{product.unitPrice}</td>
-                        <td>{product.total}</td>
                         <td>
-                          <button className="remove-btn">
-                            <Trash2 size={18} />
-                          </button>
+                          <div className="actions-row">
+                            <button 
+                              className="action-btn approve-btn"
+                              onClick={() => handleApproveReject(product.productId, statusIds.approved)}
+                              disabled={loading}
+                            >
+                              Approve
+                            </button>
+                            <button 
+                              className="action-btn pending-btn"
+                              onClick={() => handleApproveReject(product.productId, statusIds.pending)}
+                              disabled={loading}
+                            >
+                              Pending
+                            </button>
+                            <button 
+                              className="action-btn reject-btn"
+                              onClick={() => handleApproveReject(product.productId, statusIds.rejected)}
+                              disabled={loading}
+                            >
+                              Reject
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}

@@ -1,5 +1,6 @@
 // src/AdminDashboard/pages/CreateEmployee/CreateEmployee.jsx
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import lookupService from '../../../services/lookupService';
 import employeeService from '../../../services/employeeService';
 
@@ -150,7 +151,7 @@ const CreateEmployee = () => {
       const response = await employeeService.onboardEmployee(employeeData);
       
       if (response.status === 1) {
-        showToast('Employee created successfully!', 'success');
+        toast.success('Employee created successfully!');
         
         if (saveAndAddAnother) {
           resetForm();
@@ -158,45 +159,18 @@ const CreateEmployee = () => {
           resetForm();
         }
       } else {
-        showToast('Failed to create employee. Please try again.', 'error');
+        toast.error(response.message || 'Failed to create employee. Please try again.');
       }
     } catch (error) {
       console.error('Error creating employee:', error);
-      showToast('Failed to create employee. Please try again.', 'error');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to create employee. Please try again.';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
 
-
-  const showToast = (message, type) => {
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.textContent = message;
-    
-    toast.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 12px 20px;
-      border-radius: 8px;
-      color: white;
-      font-weight: 600;
-      z-index: 10000;
-      animation: slideIn 0.3s ease-out;
-      ${type === 'success' ? 'background: #10b981;' : 'background: #ef4444;'}
-    `;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-      toast.style.animation = 'slideOut 0.3s ease-out';
-      setTimeout(() => {
-        document.body.removeChild(toast);
-      }, 300);
-    }, 3000);
-  };
 
   const nextStep = () => setStep(2);
 

@@ -5,6 +5,8 @@ import { Search, Plus, Edit, Trash2, X, Power, PowerOff } from 'lucide-react';
 import { toast } from 'react-toastify';
 import userService from '../../../services/userService';
 import lookupService from '../../../services/lookupService';
+import usePagination from '../../../hooks/usePagination';
+import Pagination from '../../../components/Pagination/Pagination';
 
 const UsersList = () => {
   const navigate = useNavigate();
@@ -206,6 +208,8 @@ const UsersList = () => {
 
   const uniqueRoles = [...new Set(users.map(user => user.roleName).filter(Boolean))];
   const uniqueStatuses = [...new Set(users.map(user => user.statusName).filter(Boolean))];
+
+  const { currentPage, totalPages, currentRecords, handlePageChange } = usePagination(filteredUsers, 5);
   return (
     <>
       <style>{`
@@ -629,7 +633,7 @@ const UsersList = () => {
                   </td>
                 </tr>
               ) : (
-                filteredUsers.map((user) => (
+                currentRecords.map((user) => (
                   <tr key={user.userManagementId}>
                     <td>USER-{user.userId}</td>
                     <td>{user.userFullName}</td>
@@ -661,12 +665,11 @@ const UsersList = () => {
           </table>
         </div>
 
-        <div className="pagination">
-          <div>Showing {filteredUsers.length} of {users.length} users</div>
-          <div className="pagination-numbers">
-            <div className="page-number active">1</div>
-          </div>
-        </div>
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
 
         {showUpdatePopup && (
           <div className="popup-overlay" onClick={closePopup}>

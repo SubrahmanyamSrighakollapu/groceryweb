@@ -75,6 +75,20 @@ const productService = {
       console.error('Error updating product:', error);
       throw error;
     }
+  },
+
+  // Approve or Reject product
+  approveRejectProduct: async (productId, statusId) => {
+    try {
+      const response = await api.post('/products/approveRejectProduct', {
+        productId,
+        statusId
+      });
+      return response;
+    } catch (error) {
+      console.error('Error approving/rejecting product:', error);
+      throw error;
+    }
   }
 };
 

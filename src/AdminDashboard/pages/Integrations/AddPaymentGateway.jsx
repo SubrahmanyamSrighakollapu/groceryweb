@@ -26,7 +26,8 @@ const AddPaymentGateway = () => {
       }
     } catch (error) {
       console.error('Error fetching gateways:', error);
-      toast.error('Failed to fetch gateways');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to fetch gateways';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -55,7 +56,8 @@ const AddPaymentGateway = () => {
       }
     } catch (error) {
       console.error('Error saving gateway:', error);
-      toast.error('Failed to save gateway');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to save gateway';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -85,7 +87,8 @@ const AddPaymentGateway = () => {
       }
     } catch (error) {
       console.error('Error deleting gateway:', error);
-      toast.error('Failed to delete gateway');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to delete gateway';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
       setShowDeleteConfirm(false);
@@ -329,14 +332,15 @@ const AddPaymentGateway = () => {
                 <form onSubmit={handleSubmit}>
                   <div className="modal-body">
                     <div className="mb-3">
-                      <label className="form-label">Gateway Name</label>
+                      <label className="form-label">Gateway Name *</label>
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="Enter Gateway Name"
+                        placeholder="Enter Gateway Name (e.g., Razorpay, PayU)"
                         value={gatewayName}
                         onChange={(e) => setGatewayName(e.target.value)}
                         required
+                        minLength="2"
                       />
                     </div>
                   </div>

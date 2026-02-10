@@ -5,6 +5,8 @@ import { Search, Plus, Edit, Trash2, X, Power, PowerOff } from 'lucide-react';
 import { toast } from 'react-toastify';
 import employeeService from '../../../services/employeeService';
 import lookupService from '../../../services/lookupService';
+import usePagination from '../../../hooks/usePagination';
+import Pagination from '../../../components/Pagination/Pagination';
 
 const EmployeesList = () => {
   const navigate = useNavigate();
@@ -50,7 +52,8 @@ const EmployeesList = () => {
       }
     } catch (error) {
       console.error('Error fetching employees:', error);
-      toast.error('Failed to fetch employees');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to fetch employees';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -143,7 +146,8 @@ const EmployeesList = () => {
       }
     } catch (error) {
       console.error('Error updating employee:', error);
-      toast.error('Failed to update employee');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to update employee';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -191,7 +195,8 @@ const EmployeesList = () => {
       }
     } catch (error) {
       console.error('Error updating employee status:', error);
-      toast.error('Failed to update employee status');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to update employee status';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -226,6 +231,8 @@ const EmployeesList = () => {
   });
 
   const uniqueStatuses = [...new Set(employees.map(employee => employee.statusName).filter(Boolean))];
+
+  const { currentPage, totalPages, currentRecords, handlePageChange } = usePagination(filteredEmployees, 5);
 
   return (
     <>
@@ -670,7 +677,7 @@ const EmployeesList = () => {
                   </td>
                 </tr>
               ) : (
-                filteredEmployees.map((employee) => (
+                currentRecords.map((employee) => (
                   <tr key={employee.empId}>
                     <td>{employee.employeeCode}</td>
                     <td>{employee.employeeName || 'N/A'}</td>
@@ -702,12 +709,11 @@ const EmployeesList = () => {
           </table>
         </div>
 
-        <div className="pagination">
-          <div>Showing {filteredEmployees.length} of {employees.length} employees</div>
-          <div className="pagination-numbers">
-            <div className="page-number active">1</div>
-          </div>
-        </div>
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
 
         {showUpdatePopup && (
           <div className="popup-overlay" onClick={closePopup}>

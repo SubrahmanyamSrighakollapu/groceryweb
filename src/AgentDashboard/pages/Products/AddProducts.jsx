@@ -10,7 +10,7 @@ const AddProducts = () => {
   const [loading, setLoading] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [quantities, setQuantities] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
     title: '',
@@ -28,7 +28,7 @@ const AddProducts = () => {
   useEffect(() => {
     fetchProducts();
     fetchQuantities();
-    fetchCategories();
+    fetchSubCategories();
   }, []);
 
   const fetchProducts = async () => {
@@ -56,14 +56,15 @@ const AddProducts = () => {
     }
   };
 
-  const fetchCategories = async () => {
+  const fetchSubCategories = async () => {
     try {
       const response = await productService.getAllProductCategories();
       if (response && response.status === 1 && response.result) {
-        setCategories(response.result);
+        const subCats = response.result.filter(cat => cat.isParent === 0);
+        setSubCategories(subCats);
       }
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error('Error fetching sub-categories:', error);
     }
   };
 
@@ -149,7 +150,8 @@ const AddProducts = () => {
       }
     } catch (error) {
       console.error('Error saving product:', error);
-      toast.error('Error saving product');
+      const errorMessage = error.response?.data?.message || error.message || 'Error saving product';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -467,6 +469,26 @@ const AddProducts = () => {
           color: #059669;
           font-weight: 600;
         }
+
+        /* Form Validation Styles */
+        input:required:invalid:not(:placeholder-shown):not(:focus),
+        select:required:invalid:not(:focus),
+        textarea:required:invalid:not(:placeholder-shown):not(:focus) {
+          border-color: #ef4444;
+        }
+
+        input:valid:not(:placeholder-shown),
+        select:valid,
+        textarea:valid:not(:placeholder-shown) {
+          border-color: #10b981;
+        }
+
+        input:focus:invalid,
+        select:focus:invalid,
+        textarea:focus:invalid {
+          border-color: #ef4444;
+          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
       `}</style>
 
       <div className="page-container">
@@ -558,14 +580,13 @@ const AddProducts = () => {
                     </div>
                   </div>
                   <div className="form-group">
-                    <label>Product Description *</label>
+                    <label>Product Description</label>
                     <textarea
                       name="description"
                       value={formData.description}
                       onChange={handleInputChange}
-                      placeholder="Enter detailed product description"
+                      placeholder="Enter detailed product description (optional)"
                       rows="4"
-                      required
                     />
                   </div>
                 </div>
@@ -575,15 +596,15 @@ const AddProducts = () => {
                   <h3 className="section-title">Category & Specifications</h3>
                   <div className="form-grid">
                     <div className="form-group">
-                      <label>Category *</label>
+                      <label>Sub-Category *</label>
                       <select
                         name="categoryId"
                         value={formData.categoryId}
                         onChange={handleInputChange}
                         required
                       >
-                        <option value="">Select Category</option>
-                        {categories.map((cat) => (
+                        <option value="">Select Sub-Category</option>
+                        {subCategories.map((cat) => (
                           <option key={cat.categoryId} value={cat.categoryId}>
                             {cat.categoryName}
                           </option>
@@ -667,7 +688,7 @@ const AddProducts = () => {
 
                 {/* Images Section */}
                 <div className="form-section">
-                  <h3 className="section-title">Product Images</h3>
+                  <h3 className="section-title">Product Images *</h3>
                   <div className="form-group">
                     <div className="file-input" onClick={() => document.getElementById('images').click()}>
                       <input
@@ -676,6 +697,7 @@ const AddProducts = () => {
                         multiple
                         accept="image/*"
                         onChange={handleFileChange}
+                        required={!editingProduct}
                       />
                       <p className="file-input-text">📁 Click to upload images or drag and drop</p>
                       {formData.images.length > 0 && (

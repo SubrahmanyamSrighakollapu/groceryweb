@@ -428,11 +428,12 @@ const PaymentGatewaySetup = () => {
           <h2 className="section-title">Gateway Configuration</h2>
 
           <div className="form-group">
-            <label className="form-label">Select Gateway</label>
+            <label className="form-label">Select Gateway *</label>
             <select
               className="form-select"
               value={selectedGateway}
               onChange={(e) => setSelectedGateway(e.target.value)}
+              required
             >
               <option value="">Choose a gateway</option>
               {gateways.map((gateway) => (
@@ -555,7 +556,7 @@ const PaymentGatewaySetup = () => {
                 <form onSubmit={handleEditSubmit}>
                   <div className="modal-body">
                     <div className="mb-3">
-                      <label className="form-label">Gateway</label>
+                      <label className="form-label">Gateway *</label>
                       <select
                         className="form-select"
                         value={editForm.gatewayId}
@@ -572,7 +573,7 @@ const PaymentGatewaySetup = () => {
                     </div>
 
                     <div className="mb-3">
-                      <label className="form-label">Payment Method</label>
+                      <label className="form-label">Payment Method *</label>
                       <select
                         className="form-select"
                         value={editForm.methodId}

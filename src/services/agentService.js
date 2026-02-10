@@ -12,14 +12,24 @@ export const agentService = {
     return await api.post('/agents/create', agentData);
   },
 
+  // Onboard Agent (with file uploads)
+  onboardAgent: async (formData) => {
+    return await api.post('/agents/onboardAgent', formData);
+  },
+
   // Update Agent
   updateAgent: async (agentId, agentData) => {
     return await api.put(`/agents/update/${agentId}`, agentData);
   },
 
   // Update Agent Status
-  updateAgentStatus: async (agentId, payload) => {
-    return await api.put(`/agents/updateStatus/${agentId}`, payload);
+  updateAgentStatus: async (userId, payload) => {
+    return await api.post(`/auth/users/updateUserStatus/${userId}`, payload);
+  },
+
+  // Submit/Update Bank Details
+  submitUpdateBankDetails: async (bankData) => {
+    return await api.post('/agents/submitUpdateBankDetails', bankData);
   },
 
   // Delete Agent

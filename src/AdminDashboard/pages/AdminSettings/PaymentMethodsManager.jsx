@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Edit, Trash2, X } from 'lucide-react';
 import { toast } from 'react-toastify';
 import paymentService from '../../../services/paymentService';
+import usePagination from '../../../hooks/usePagination';
+import Pagination from '../../../components/Pagination/Pagination';
 
 const PaymentMethodsManager = () => {
   const [paymentMethods, setPaymentMethods] = useState([]);
@@ -203,6 +205,9 @@ const PaymentMethodsManager = () => {
       day: 'numeric'
     });
   };
+
+  const { currentPage: methodsPage, totalPages: methodsTotalPages, currentRecords: currentMethods, handlePageChange: handleMethodsPageChange } = usePagination(paymentMethods, 5);
+  const { currentPage: optionsPage, totalPages: optionsTotalPages, currentRecords: currentOptions, handlePageChange: handleOptionsPageChange } = usePagination(paymentOptions, 5);
 
   return (
     <>
@@ -466,11 +471,11 @@ const PaymentMethodsManager = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Option Name</label>
+              <label className="form-label">Payment Method Option</label>
               <input
                 type="text"
                 className="form-input"
-                placeholder="Enter Option Name"
+                placeholder="Enter Payment Method Option"
                 value={optionForm.optionName}
                 onChange={(e) => setOptionForm({...optionForm, optionName: e.target.value})}
               />
@@ -511,7 +516,6 @@ const PaymentMethodsManager = () => {
             <table className="table">
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>Method</th>
                   <th>Created At</th>
                   <th>Action</th>
@@ -525,9 +529,8 @@ const PaymentMethodsManager = () => {
                     </td>
                   </tr>
                 ) : (
-                  paymentMethods.map((method) => (
+                  currentMethods.map((method) => (
                     <tr key={method.methodId}>
-                      <td>{method.methodId}</td>
                       <td>{method.methodName}</td>
                       <td>{formatDate(method.createdAt)}</td>
                       <td>
@@ -551,6 +554,11 @@ const PaymentMethodsManager = () => {
                 )}
               </tbody>
             </table>
+            <Pagination 
+              currentPage={methodsPage}
+              totalPages={methodsTotalPages}
+              onPageChange={handleMethodsPageChange}
+            />
           </div>
 
           {/* All Payment Options Table */}
@@ -562,9 +570,8 @@ const PaymentMethodsManager = () => {
             <table className="table">
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>Method</th>
-                  <th>Option Name</th>
+                  <th>Payment Method Option</th>
                   <th>Created At</th>
                   <th>Action</th>
                 </tr>
@@ -577,11 +584,10 @@ const PaymentMethodsManager = () => {
                     </td>
                   </tr>
                 ) : (
-                  paymentOptions.map((option) => {
+                  currentOptions.map((option) => {
                     const method = paymentMethods.find(m => m.methodId === option.methodId);
                     return (
                       <tr key={option.methodOptionId}>
-                        <td>{option.methodOptionId}</td>
                         <td>{method ? method.methodName : 'N/A'}</td>
                         <td>{option.optionName}</td>
                         <td>{formatDate(option.createdAt)}</td>
@@ -607,6 +613,11 @@ const PaymentMethodsManager = () => {
                 )}
               </tbody>
             </table>
+            <Pagination 
+              currentPage={optionsPage}
+              totalPages={optionsTotalPages}
+              onPageChange={handleOptionsPageChange}
+            />
           </div>
         </div>
 
@@ -697,11 +708,11 @@ const PaymentMethodsManager = () => {
                     </div>
 
                     <div className="mb-3">
-                      <label className="form-label">Option Name</label>
+                      <label className="form-label">Payment Method Option</label>
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="Enter Option Name"
+                        placeholder="Enter Payment Method Option"
                         value={optionForm.optionName}
                         onChange={(e) => setOptionForm({...optionForm, optionName: e.target.value})}
                         required

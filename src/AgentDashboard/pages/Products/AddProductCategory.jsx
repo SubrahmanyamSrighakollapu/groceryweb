@@ -5,12 +5,21 @@ import productService from '../../../services/productService';
 
 const AddProductCategory = () => {
   const [showPopup, setShowPopup] = useState(false);
+  const [showSubCategoryPopup, setShowSubCategoryPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
+  const [editingSubCategory, setEditingSubCategory] = useState(null);
   const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    status: true
+  });
+  const [subCategoryFormData, setSubCategoryFormData] = useState({
+    categoryId: '',
     name: '',
     description: '',
     status: true
@@ -18,6 +27,7 @@ const AddProductCategory = () => {
 
   useEffect(() => {
     fetchCategories();
+    fetchSubCategories();
   }, []);
 
   const fetchCategories = async () => {
@@ -25,12 +35,25 @@ const AddProductCategory = () => {
       setLoading(true);
       const response = await productService.getAllProductCategories();
       if (response && response.status === 1 && response.result) {
-        setCategories(response.result);
+        const parentCategories = response.result.filter(cat => cat.isParent === 1);
+        setCategories(parentCategories);
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchSubCategories = async () => {
+    try {
+      const response = await productService.getAllProductCategories();
+      if (response && response.status === 1 && response.result) {
+        const subCats = response.result.filter(cat => cat.isParent === 0);
+        setSubCategories(subCats);
+      }
+    } catch (error) {
+      console.error('Error fetching sub-categories:', error);
     }
   };
 
@@ -62,11 +85,46 @@ const AddProductCategory = () => {
         setEditingCategory(null);
         setShowPopup(false);
       } else {
-        toast.error('Failed to save category');
+        toast.error(response.message || 'Failed to save category');
       }
     } catch (error) {
       console.error('Error saving category:', error);
-      toast.error('Error saving category');
+      const errorMessage = error.response?.data?.message || error.message || 'Error saving category';
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubCategorySubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      
+      const subCategoryData = {
+        categoryId: editingSubCategory ? editingSubCategory.categoryId : 0,
+        parentId: parseInt(subCategoryFormData.categoryId),
+        categoryName: subCategoryFormData.name,
+        categoryDescription: subCategoryFormData.description,
+        isParent: false,
+        isActive: subCategoryFormData.status
+      };
+      
+      const response = await productService.manageProductCategory(subCategoryData);
+      
+      if (response && response.status === 1) {
+        await fetchSubCategories();
+        toast.success(editingSubCategory ? 'Sub-category updated successfully!' : 'Sub-category added successfully!');
+        setSubCategoryFormData({ categoryId: '', name: '', description: '', status: true });
+        setEditingSubCategory(null);
+        setShowSubCategoryPopup(false);
+      } else {
+        toast.error(response.message || 'Failed to save sub-category');
+      }
+    } catch (error) {
+      console.error('Error saving sub-category:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Error saving sub-category';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -82,6 +140,17 @@ const AddProductCategory = () => {
     setShowPopup(true);
   };
 
+  const handleEditSubCategory = (subCategory) => {
+    setEditingSubCategory(subCategory);
+    setSubCategoryFormData({
+      categoryId: subCategory.parentId.toString(),
+      name: subCategory.categoryName,
+      description: subCategory.categoryDescription,
+      status: subCategory.isActive === 1
+    });
+    setShowSubCategoryPopup(true);
+  };
+
   const handleDelete = (categoryId) => {
     setDeleteId(categoryId);
     setShowDeletePopup(true);
@@ -93,13 +162,15 @@ const AddProductCategory = () => {
       const response = await productService.deleteProductCategory(deleteId);
       if (response && response.status === 1) {
         await fetchCategories();
+        await fetchSubCategories();
         toast.success('Category deleted successfully!');
       } else {
-        toast.error('Failed to delete category');
+        toast.error(response.message || 'Failed to delete category');
       }
     } catch (error) {
       console.error('Error deleting category:', error);
-      toast.error('Error deleting category');
+      const errorMessage = error.response?.data?.message || error.message || 'Error deleting category';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
       setShowDeletePopup(false);
@@ -111,6 +182,17 @@ const AddProductCategory = () => {
     setShowPopup(false);
     setEditingCategory(null);
     setFormData({ name: '', description: '', status: true });
+  };
+
+  const handleCloseSubCategoryPopup = () => {
+    setShowSubCategoryPopup(false);
+    setEditingSubCategory(null);
+    setSubCategoryFormData({ categoryId: '', name: '', description: '', status: true });
+  };
+
+  const getCategoryName = (parentId) => {
+    const category = categories.find(cat => cat.categoryId === parentId);
+    return category ? category.categoryName : 'N/A';
   };
 
   return (
@@ -358,6 +440,26 @@ const AddProductCategory = () => {
           font-weight: 600;
           cursor: pointer;
         }
+
+        /* Form Validation Styles */
+        input:required:invalid:not(:placeholder-shown):not(:focus),
+        select:required:invalid:not(:focus),
+        textarea:required:invalid:not(:placeholder-shown):not(:focus) {
+          border-color: #ef4444;
+        }
+
+        input:valid:not(:placeholder-shown),
+        select:valid,
+        textarea:valid:not(:placeholder-shown) {
+          border-color: #10b981;
+        }
+
+        input:focus:invalid,
+        select:focus:invalid,
+        textarea:focus:invalid {
+          border-color: #ef4444;
+          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
       `}</style>
 
       <div className="page-container">
@@ -412,19 +514,74 @@ const AddProductCategory = () => {
           </table>
         </div>
 
+        <div className="page-header" style={{ marginTop: '40px' }}>
+          <h1 className="page-title">Product Sub-Categories</h1>
+          <button className="add-btn" onClick={() => setShowSubCategoryPopup(true)}>
+            + Add Sub-Category
+          </button>
+        </div>
+
+        <div className="table-container">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Sub-Category Name</th>
+                <th>Parent Category</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan="5" style={{ textAlign: 'center', padding: '20px' }}>Loading...</td>
+                </tr>
+              ) : subCategories.length === 0 ? (
+                <tr>
+                  <td colSpan="5" style={{ textAlign: 'center', padding: '20px' }}>No sub-categories found</td>
+                </tr>
+              ) : (
+                subCategories.map((subCategory) => (
+                  <tr key={subCategory.categoryId}>
+                    <td>{subCategory.categoryName || 'Unnamed Sub-Category'}</td>
+                    <td>{getCategoryName(subCategory.parentId)}</td>
+                    <td>{subCategory.categoryDescription || 'No description'}</td>
+                    <td>
+                      <span className={`status-badge ${subCategory.isActive === 1 ? 'status-active' : 'status-inactive'}`}>
+                        {subCategory.isActive === 1 ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
+                    <td>
+                      <button className="action-btn edit-btn" onClick={() => handleEditSubCategory(subCategory)}>
+                        <Edit size={18} />
+                      </button>
+                      <button className="action-btn delete-btn" onClick={() => handleDelete(subCategory.categoryId)}>
+                        <Trash2 size={18} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
         {showPopup && (
           <div className="popup-overlay" onClick={handleClosePopup}>
             <div className="popup" onClick={(e) => e.stopPropagation()}>
               <h2 className="popup-title">{editingCategory ? 'Edit Product Category' : 'Add Product Category'}</h2>
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label>Category Name</label>
+                  <label>Category Name *</label>
                   <input
                     type="text"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
+                    placeholder="Enter category name"
                     required
+                    minLength="2"
                   />
                 </div>
                 <div className="form-group">
@@ -433,7 +590,7 @@ const AddProductCategory = () => {
                     name="description"
                     value={formData.description}
                     onChange={handleInputChange}
-                    required
+                    placeholder="Enter category description (optional)"
                   />
                 </div>
                 <div className="form-group">
@@ -476,6 +633,80 @@ const AddProductCategory = () => {
                   {loading ? 'Deleting...' : 'Yes'}
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {showSubCategoryPopup && (
+          <div className="popup-overlay" onClick={handleCloseSubCategoryPopup}>
+            <div className="popup" onClick={(e) => e.stopPropagation()}>
+              <h2 className="popup-title">{editingSubCategory ? 'Edit Sub-Category' : 'Add Sub-Category'}</h2>
+              <form onSubmit={handleSubCategorySubmit}>
+                <div className="form-group">
+                  <label>Parent Category *</label>
+                  <select
+                    value={subCategoryFormData.categoryId}
+                    onChange={(e) => setSubCategoryFormData(prev => ({ ...prev, categoryId: e.target.value }))}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '12px 16px',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '8px',
+                      fontSize: '15px',
+                      boxSizing: 'border-box'
+                    }}
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map(cat => (
+                      <option key={cat.categoryId} value={cat.categoryId}>
+                        {cat.categoryName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Sub-Category Name *</label>
+                  <input
+                    type="text"
+                    value={subCategoryFormData.name}
+                    onChange={(e) => setSubCategoryFormData(prev => ({ ...prev, name: e.target.value }))}
+                    placeholder="Enter sub-category name"
+                    required
+                    minLength="2"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Description</label>
+                  <textarea
+                    value={subCategoryFormData.description}
+                    onChange={(e) => setSubCategoryFormData(prev => ({ ...prev, description: e.target.value }))}
+                    placeholder="Enter description (optional)"
+                  />
+                </div>
+                <div className="form-group">
+                  <div className="toggle-group">
+                    <label>Status</label>
+                    <label className="toggle-switch">
+                      <input
+                        type="checkbox"
+                        checked={subCategoryFormData.status}
+                        onChange={(e) => setSubCategoryFormData(prev => ({ ...prev, status: e.target.checked }))}
+                      />
+                      <span className="slider"></span>
+                    </label>
+                    <span>{subCategoryFormData.status ? 'Active' : 'Inactive'}</span>
+                  </div>
+                </div>
+                <div className="popup-actions">
+                  <button type="button" className="btn-cancel" onClick={handleCloseSubCategoryPopup}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn-submit" disabled={loading}>
+                    {loading ? 'Saving...' : editingSubCategory ? 'Update Sub-Category' : 'Add Sub-Category'}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}

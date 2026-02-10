@@ -1,17 +1,20 @@
 // API Configuration and Base Setup
 const API_BASE_URL = 'http://113.11.231.249:89/api';
 
-const API_TOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiYWRtaW5AdG90YWxuZWVkcy5pbiIsInJvbGUiOiJTdXBlciBBZG1pbiIsImlhdCI6MTc2OTIyOTU5NywiZXhwIjoxNzY5ODM0Mzk3fQ.c9pA9hYo0PXfoImvpqACJ39XWHIaP2Eu5r4yeOcCtGc';
+// Get dynamic token from session storage
+const getAuthToken = () => {
+  return sessionStorage.getItem('token') || '';
+};
 
 // Base API function
 const apiCall = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
 
   const isFormData = options.body instanceof FormData;
+  const token = getAuthToken();
 
   const headers = {
-    Authorization: `Bearer ${API_TOKEN}`,
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
     ...options.headers,
   };
@@ -23,13 +26,16 @@ const apiCall = async (endpoint, options = {}) => {
 
   try {
     const response = await fetch(url, config);
+    const data = await response.json();
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText || `HTTP error! status: ${response.status}`);
+      // Throw the parsed JSON error so we can access error.message
+      const error = new Error(data.message || `HTTP error! status: ${response.status}`);
+      error.response = { data };
+      throw error;
     }
 
-    return await response.json();
+    return data;
   } catch (error) {
     console.error('API call failed:', error);
     throw error;

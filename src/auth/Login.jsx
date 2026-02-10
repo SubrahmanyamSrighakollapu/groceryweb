@@ -1,19 +1,21 @@
-import { Lock, User } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { styles } from '../styles/authStyles';
 import api from '../services/api';
+import userService from '../services/userService';
 
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    emailOrUsername: '',
+    email: '',
     password: ''
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // show only the first visible error to avoid multiple messages and scrollbars
   const visibleErrorKey = Object.keys(errors).find(k => errors[k] && touched[k]);
@@ -22,11 +24,14 @@ const Login = () => {
     let error = '';
 
     switch (name) {
-      case 'emailOrUsername':
+      case 'email':
         if (!value.trim()) {
-          error = 'Email or Username is required';
-        } else if (value.length < 3) {
-          error = 'Must be at least 3 characters';
+          error = 'Email is required';
+        } else {
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          if (!emailRegex.test(value)) {
+            error = 'Please enter a valid email address';
+          }
         }
         break;
 
@@ -85,7 +90,7 @@ const Login = () => {
 
     setErrors(newErrors);
     setTouched({
-      emailOrUsername: true,
+      email: true,
       password: true
     });
 
@@ -99,30 +104,48 @@ const Login = () => {
       try {
         setLoading(true);
         const response = await api.post('/auth/login', {
-          email: formData.emailOrUsername,
+          email: formData.email,
           password: formData.password
         });
 
-        if (response.status === 1) {
-          // Store user data and token in session storage
-          sessionStorage.setItem('user', JSON.stringify(response.result.user));
-          sessionStorage.setItem('token', response.result.token);
+        if (response.status === 1 && response.result) {
+          const { user, token } = response.result;
+          
+          // Store basic user data and token
+          sessionStorage.setItem('user', JSON.stringify(user));
+          sessionStorage.setItem('token', token);
           sessionStorage.setItem('isAuthenticated', 'true');
           
           toast.success('Login successful!');
           
-          // Navigate based on role
-          if (response.result.user.roleName === 'Super Admin') {
-            navigate('/admin');
-          } else {
-            navigate('/home');
+          // Navigate based on user role
+          let redirectRoute = '/home';
+          
+          if (user.roleName === 'Super Admin' || user.roleName === 'Admin') {
+            redirectRoute = '/admin';
+          } else if (user.roleName === 'Agent' || user.roleName === 'Supervisor') {
+            redirectRoute = '/agent';
           }
+          
+          navigate(redirectRoute);
+          
+          // Fetch full user details in background (non-blocking)
+          userService.getUserById(user.userId)
+            .then(userDetailsResponse => {
+              if (userDetailsResponse.status === 1 && userDetailsResponse.result) {
+                sessionStorage.setItem('userDetails', JSON.stringify(userDetailsResponse.result));
+              }
+            })
+            .catch(error => {
+              console.error('Failed to fetch user details:', error);
+            });
         } else {
           toast.error(response.message || 'Login failed');
         }
       } catch (error) {
         console.error('Login error:', error);
-        toast.error('Login failed. Please check your credentials.');
+        const errorMessage = error.response?.data?.message || error.message || 'Login failed. Please check your credentials.';
+        toast.error(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -142,42 +165,59 @@ const Login = () => {
         <form onSubmit={handleSubmit} noValidate>
           <div>
             <div className={styles.inputWrapper} style={{ 
-              border: errors.emailOrUsername && touched.emailOrUsername ? '1px solid #d32f2f' : 'none' 
+              border: errors.email && touched.email ? '1px solid #d32f2f' : 'none' 
             }}>
               <div className={styles.inputIcon}>
-                <User />
+                <Mail />
               </div>
               <input
-                type="text"
-                name="emailOrUsername"
+                type="email"
+                name="email"
                 className={styles.inputField}
-                placeholder="Email or Username"
-                value={formData.emailOrUsername}
+                placeholder="Enter your email"
+                value={formData.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
             </div>
-            {visibleErrorKey === 'emailOrUsername' && (
-              <p className="error-text">{errors.emailOrUsername}</p>
+            {visibleErrorKey === 'email' && (
+              <p className="error-text">{errors.email}</p>
             )} 
           </div>
           
           <div>
             <div className={styles.inputWrapper} style={{ 
-              border: errors.password && touched.password ? '1px solid #d32f2f' : 'none' 
+              border: errors.password && touched.password ? '1px solid #d32f2f' : 'none',
+              position: 'relative'
             }}>
               <div className={styles.inputIcon}>
                 <Lock />
               </div>
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 name="password"
                 className={styles.inputField}
-                placeholder="Password"
+                placeholder="Enter your password"
                 value={formData.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: 'absolute',
+                  right: '12px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#64748b'
+                }}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
             {visibleErrorKey === 'password' && (
               <p className="error-text">{errors.password}</p>

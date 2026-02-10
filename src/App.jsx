@@ -6,6 +6,7 @@ import Login from './auth/Login';
 import OtpVerification from './auth/OtpVerification';
 import Signup from './auth/Signup';
 import VerifiedSuccess from './auth/VerifiedSuccess';
+import RouteGuard from './components/RouteGuard';
 import { CartProvider } from './context/CartContext';
 import Layout from './layout/Layout'; // This is your AGRICULTURE website layout
 import About from './pages/about/About';
@@ -74,18 +75,20 @@ import PaymentInvoice from './AgentDashboard/pages/PaymentInvoice';
 import AddProducts from './AgentDashboard/pages/Products/AddProducts';
 import AddProductCategory from './AgentDashboard/pages/Products/AddProductCategory';
 import WalletRequest from './AgentDashboard/pages/WalletRequest';
+import PlanCommissionConfiguration from './AdminDashboard/pages/AdminSettings/PlanComissionConfiguration';
 
 function App() {
   return (
     <Router>
       <CartProvider>
-        <Routes>
+        <RouteGuard>
+          <Routes>
           {/* Public/auth routes without any Layout (no navbar) */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/otp-verification" element={<OtpVerification />} />
           <Route path="/verified-success" element={<VerifiedSuccess />} />
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/home" replace />} />
 
           {/* AGRICULTURE WEBSITE routes wrapped with Layout (agriculture navbar) */}
           <Route element={<Layout />}>
@@ -148,6 +151,7 @@ function App() {
             <Route path="admin-settings/roles-management" element={<RolesManagement />} />
             <Route path="admin-settings/plans-management" element={<PlansManagement />} />
             <Route path="admin-settings/plan-commission-manager" element={<PlanCommissionManager />} />
+            <Route path="admin-settings/plan-commission-configuration" element={<PlanCommissionConfiguration />} />
             <Route path="admin-settings/scroll-text-manager" element={<ScrollTextManager />} />
             <Route path="admin-settings/notice-board-manager" element={<NoticeBoardManager />} />
             <Route path="admin-settings/payout-charges-manager" element={<PayoutChargesManager />} />
@@ -188,7 +192,8 @@ function App() {
             <Route path="add-wallet" element={<AddWallet />} />
             <Route path="confirm-wallet-credit" element={<ConfirmWalletCredit />} />
           </Route>
-        </Routes>
+          </Routes>
+        </RouteGuard>
         
         {/* Toast Container for notifications */}
         <ToastContainer

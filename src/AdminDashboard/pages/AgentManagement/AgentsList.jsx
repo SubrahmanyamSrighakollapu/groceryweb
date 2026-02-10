@@ -5,6 +5,8 @@ import { Search, Plus, Edit, Trash2, X, Power, PowerOff } from 'lucide-react';
 import { toast } from 'react-toastify';
 import agentService from '../../../services/agentService';
 import lookupService from '../../../services/lookupService';
+import usePagination from '../../../hooks/usePagination';
+import Pagination from '../../../components/Pagination/Pagination';
 
 const AgentsList = () => {
   const navigate = useNavigate();
@@ -41,7 +43,8 @@ const AgentsList = () => {
       }
     } catch (error) {
       console.error('Error fetching agents:', error);
-      toast.error('Failed to fetch agents');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to fetch agents';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -61,11 +64,11 @@ const AgentsList = () => {
   const handleEditAgent = (agent) => {
     setEditingAgent(agent);
     setFormData({
-      agentName: agent.agentName || '',
-      email: agent.email || '',
-      mobile: agent.mobile || '',
+      agentName: agent.userFullName || '',
+      email: agent.emailAddress || '',
+      mobile: agent.contactNo || '',
       businessName: agent.businessName || '',
-      address: agent.address || '',
+      address: agent.agentAddress || '',
       statusType: agent.statusName || ''
     });
     setShowUpdatePopup(true);
@@ -101,11 +104,12 @@ const AgentsList = () => {
         setEditingAgent(null);
         fetchAgents();
       } else {
-        toast.error('Failed to update agent');
+        toast.error(response.message || 'Failed to update agent');
       }
     } catch (error) {
       console.error('Error updating agent:', error);
-      toast.error('Failed to update agent');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to update agent';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -133,7 +137,7 @@ const AgentsList = () => {
     try {
       setLoading(true);
       const newStatus = selectedAgent.isActive === 1 ? false : true;
-      const response = await agentService.updateAgentStatus(selectedAgent.agentId, { status: newStatus });
+      const response = await agentService.updateAgentStatus(selectedAgent.userId, { status: newStatus });
       
       if (response.status === 1) {
         const action = selectedAgent.isActive === 1 ? 'deactivated' : 'activated';
@@ -142,11 +146,12 @@ const AgentsList = () => {
         setSelectedAgent(null);
         fetchAgents();
       } else {
-        toast.error('Failed to update agent status');
+        toast.error(response.message || 'Failed to update agent status');
       }
     } catch (error) {
       console.error('Error updating agent status:', error);
-      toast.error('Failed to update agent status');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to update agent status';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -169,9 +174,9 @@ const AgentsList = () => {
   };
 
   const filteredAgents = agents.filter(agent => {
-    const matchesSearch = agent.agentName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         agent.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         agent.mobile?.includes(searchTerm) ||
+    const matchesSearch = agent.userFullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         agent.emailAddress?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         agent.contactNo?.includes(searchTerm) ||
                          agent.businessName?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = !statusFilter || agent.statusName === statusFilter;
     const matchesActive = !activeFilter || 
@@ -181,6 +186,8 @@ const AgentsList = () => {
   });
 
   const uniqueStatuses = [...new Set(agents.map(agent => agent.statusName).filter(Boolean))];
+
+  const { currentPage, totalPages, currentRecords, handlePageChange } = usePagination(filteredAgents, 5);
 
   return (
     <>
@@ -605,13 +612,13 @@ const AgentsList = () => {
                   </td>
                 </tr>
               ) : (
-                filteredAgents.map((agent) => (
+                currentRecords.map((agent) => (
                   <tr key={agent.agentId}>
-                    <td>AGENT-{agent.agentId}</td>
-                    <td>{agent.agentName || 'N/A'}</td>
+                    <td>{agent.agentCode}</td>
+                    <td>{agent.userFullName || 'N/A'}</td>
                     <td>{agent.businessName || 'N/A'}</td>
-                    <td>+91 {agent.mobile || 'N/A'}</td>
-                    <td>{agent.address || 'N/A'}</td>
+                    <td>{agent.contactNo || 'N/A'}</td>
+                    <td>{agent.agentAddress || 'N/A'}</td>
                     <td>
                       <span className={`status-badge ${getStatusBadgeClass(agent.statusName)}`}>
                         {agent.statusName || 'N/A'}
@@ -637,12 +644,11 @@ const AgentsList = () => {
           </table>
         </div>
 
-        <div className="pagination">
-          <div>Showing {filteredAgents.length} of {agents.length} agents</div>
-          <div className="pagination-numbers">
-            <div className="page-number active">1</div>
-          </div>
-        </div>
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
 
         {showUpdatePopup && (
           <div className="popup-overlay" onClick={closePopup}>
@@ -749,7 +755,7 @@ const AgentsList = () => {
                 {selectedAgent.isActive === 1 ? 'Deactivate Agent' : 'Activate Agent'}
               </h3>
               <p className="confirm-message">
-                Are you sure you want to {selectedAgent.isActive === 1 ? 'deactivate' : 'activate'} agent <strong>{selectedAgent.agentName}</strong>?
+                Are you sure you want to {selectedAgent.isActive === 1 ? 'deactivate' : 'activate'} agent <strong>{selectedAgent.userFullName}</strong>?
               </p>
               <div className="confirm-actions">
                 <button className="btn-yes" onClick={confirmToggleStatus} disabled={loading}>

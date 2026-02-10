@@ -117,6 +117,7 @@ const Navbar = () => {
                   }}
                   onMouseEnter={(e) => e.target.style.opacity = '0.9'}
                   onMouseLeave={(e) => e.target.style.opacity = '1'}
+                  onClick={() => navigate('/login')}
                 >
                   Join Our Network
                 </button>
@@ -251,7 +252,12 @@ const Navbar = () => {
                 fontFamily: 'Manrope, sans-serif',
                 fontSize: '1.25rem',
                 fontWeight: 500,
-                color: '#4BAF47'
+                color: '#4BAF47',
+                cursor: 'pointer'
+              }}
+              onClick={() => {
+                navigate('/login');
+                setIsMobileMenuOpen(false);
               }}
             >
               Join Our Network

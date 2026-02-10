@@ -14,7 +14,7 @@ export const userService = {
 
   // Get User by ID
   getUserById: async (userId) => {
-    return await api.get(`/users/${userId}`);
+    return await api.get(`/auth/users/getUserById/${userId}`);
   },
 
   // Update User

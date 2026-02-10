@@ -459,8 +459,8 @@ const Dashboard = () => {
         <div className="header">
           <h1 className="section-title">Platform Overview</h1>
           <div className="action-buttons">
-            <button className="btn btn-agent" onClick={() => navigate('/admin/create-agent')}>+ Add Agent</button>
-            <button className="btn btn-user" onClick={() => navigate('/admin/create-user')}>+ Add User</button>
+            <button className="btn btn-agent" onClick={() => navigate('/admin/agent-management/add-agent')}>+ Add Agent</button>
+            <button className="btn btn-user" onClick={() => navigate('/admin/user-management/create-user')}>+ Add User</button>
             <button className="btn btn-employee" onClick={() => navigate('/admin/create-employee')}>+ Add Employee</button>
           </div>
         </div>

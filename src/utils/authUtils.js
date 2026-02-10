@@ -11,6 +11,17 @@ export const authUtils = {
     }
   },
 
+  // Get full user details from session storage
+  getUserDetails: () => {
+    try {
+      const userDetails = sessionStorage.getItem('userDetails');
+      return userDetails ? JSON.parse(userDetails) : null;
+    } catch (error) {
+      console.error('Error parsing user details:', error);
+      return null;
+    }
+  },
+
   // Get token from session storage
   getToken: () => {
     return sessionStorage.getItem('token');
@@ -42,6 +53,7 @@ export const authUtils = {
   // Clear all auth data (logout)
   clearAuth: () => {
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('userDetails');
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('isAuthenticated');
   },

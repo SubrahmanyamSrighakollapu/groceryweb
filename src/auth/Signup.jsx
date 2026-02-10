@@ -1,4 +1,4 @@
-import { CreditCard, Lock, User } from 'lucide-react';
+import { CreditCard, Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styles } from '../styles/authStyles';
@@ -6,14 +6,15 @@ import { styles } from '../styles/authStyles';
 const Signup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    emailOrUsername: '',
+    email: '',
     password: '',
     confirmPassword: '',
-    aadhaarNumber: '',
-    // panNumber: ''
+    aadhaarNumber: ''
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // only display the first visible error to avoid multiple stacked messages
   const visibleErrorKey = Object.keys(errors).find(k => errors[k] && touched[k]);
@@ -22,16 +23,13 @@ const Signup = () => {
     let error = '';
 
     switch (name) {
-      case 'emailOrUsername':
+      case 'email':
         if (!value.trim()) {
-          error = 'Email or Username is required';
-        } else if (value.length < 3) {
-          error = 'Must be at least 3 characters';
-        } else if (value.includes('@')) {
-          // Email validation
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          error = 'Email is required';
+        } else {
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
           if (!emailRegex.test(value)) {
-            error = 'Invalid email format';
+            error = 'Please enter a valid email address';
           }
         }
         break;
@@ -47,6 +45,8 @@ const Signup = () => {
           error = 'Password must contain at least one uppercase letter';
         } else if (!/(?=.*\d)/.test(value)) {
           error = 'Password must contain at least one number';
+        } else if (!/(?=.*[!@#$%^&*(),.?":{}|<>])/.test(value)) {
+          error = 'Password must contain at least one special character';
         }
         break;
 
@@ -66,14 +66,6 @@ const Signup = () => {
         }
         break;
 
-    //   case 'panNumber':
-    //     if (!value) {
-    //       error = 'PAN number is required';
-    //     } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value.toUpperCase())) {
-    //       error = 'Invalid PAN format (e.g., ABCDE1234F)';
-    //     }
-    //     break;
-
       default:
         break;
     }
@@ -83,11 +75,6 @@ const Signup = () => {
 
   const handleChange = (e) => {
     let { name, value } = e.target;
-
-    // Format PAN to uppercase
-    // if (name === 'panNumber') {
-    //   value = value.toUpperCase();
-    // }
 
     // Only allow digits for Aadhaar
     if (name === 'aadhaarNumber') {
@@ -141,11 +128,10 @@ const Signup = () => {
 
     setErrors(newErrors);
     setTouched({
-      emailOrUsername: true,
+      email: true,
       password: true,
       confirmPassword: true,
-      aadhaarNumber: true,
-      panNumber: true
+      aadhaarNumber: true
     });
 
     return Object.keys(newErrors).length === 0;
@@ -173,42 +159,59 @@ const Signup = () => {
         <form onSubmit={handleSubmit} noValidate>
           <div>
             <div className={styles.inputWrapper} style={{ 
-              border: errors.emailOrUsername && touched.emailOrUsername ? '1px solid #d32f2f' : 'none' 
+              border: errors.email && touched.email ? '1px solid #d32f2f' : 'none' 
             }}>
               <div className={styles.inputIcon}>
-                <User />
+                <Mail />
               </div>
               <input
-                type="text"
-                name="emailOrUsername"
+                type="email"
+                name="email"
                 className={styles.inputField}
-                placeholder="Email or Username"
-                value={formData.emailOrUsername}
+                placeholder="Enter your email"
+                value={formData.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
             </div>
-            {visibleErrorKey === 'emailOrUsername' && (
-              <p className="error-text">{errors.emailOrUsername}</p>
+            {visibleErrorKey === 'email' && (
+              <p className="error-text">{errors.email}</p>
             )} 
           </div>
           
           <div>
             <div className={styles.inputWrapper} style={{ 
-              border: errors.password && touched.password ? '1px solid #d32f2f' : 'none' 
+              border: errors.password && touched.password ? '1px solid #d32f2f' : 'none',
+              position: 'relative'
             }}>
               <div className={styles.inputIcon}>
                 <Lock />
               </div>
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 name="password"
                 className={styles.inputField}
-                placeholder="Password"
+                placeholder="Create password"
                 value={formData.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: 'absolute',
+                  right: '12px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#64748b'
+                }}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
             {visibleErrorKey === 'password' && (
               <p className="error-text">{errors.password}</p>
@@ -217,20 +220,37 @@ const Signup = () => {
           
           <div>
             <div className={styles.inputWrapper} style={{ 
-              border: errors.confirmPassword && touched.confirmPassword ? '1px solid #d32f2f' : 'none' 
+              border: errors.confirmPassword && touched.confirmPassword ? '1px solid #d32f2f' : 'none',
+              position: 'relative'
             }}>
               <div className={styles.inputIcon}>
                 <Lock />
               </div>
               <input
-                type="password"
+                type={showConfirmPassword ? 'text' : 'password'}
                 name="confirmPassword"
                 className={styles.inputField}
-                placeholder="Confirm Password"
+                placeholder="Confirm password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                style={{
+                  position: 'absolute',
+                  right: '12px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#64748b'
+                }}
+              >
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
             {visibleErrorKey === 'confirmPassword' && (
               <p className="error-text">{errors.confirmPassword}</p>

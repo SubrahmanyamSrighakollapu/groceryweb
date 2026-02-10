@@ -51,6 +51,11 @@ export const lookupService = {
   getBankNames: async () => {
     return await api.get('/lookup/loadBankNames');
   },
+
+  // Get Product Status Types
+  getProductStatusTypes: async () => {
+    return await api.get('/lookup/loadProductStatusTypes');
+  },
 };
 
 export default lookupService;

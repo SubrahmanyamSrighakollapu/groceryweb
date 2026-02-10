@@ -3,8 +3,19 @@
 import Icon1 from '../../assets/AgentDashboard/Navbar/Icon1.png';
 import Icon2 from '../../assets/AgentDashboard/Navbar/Icon2.png';
 import logo from '../../assets/total-needs-logo.png';
+import authService from '../../services/authService';
+import { useNavigate } from 'react-router-dom';
 
 const AdminNavbar = () => {
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    const logoutRoute = authService.logout();
+    navigate(logoutRoute);
+  };
+
+  const user = authService.getUserRole();
+
   return (
     <div className="border" style={{ borderColor: '#929292', backgroundColor: '#FFFFFF' }}>
       <div className="container-fluid">
@@ -89,10 +100,13 @@ const AdminNavbar = () => {
                   <p 
                     className="mb-0 text-gray-20"
                     style={{
-                      fontSize: '0.875rem'
+                      fontSize: '0.875rem',
+                      cursor: 'pointer',
+                      color: '#dc2626'
                     }}
+                    onClick={handleLogout}
                   >
-                    Administrator
+                    Logout
                   </p>
                 </div>
               </div>
