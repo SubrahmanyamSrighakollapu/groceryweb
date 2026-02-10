@@ -30,36 +30,53 @@ const ContactUs = () => {
         <div className="row g-4 justify-content-center">
           <div className="col-md-4">
             <div
-              className="p-4 text-white rounded text-center h-100"
-              style={{ background: "#4CAF50" }}
+              className="p-4 text-white rounded text-center h-100 d-flex flex-column justify-content-center"
+              style={{ background: "#4CAF50", minHeight: "200px" }}
             >
-              <h5 className="fw-bold">About</h5>
-              <p className="mb-0 small">
-                Lorem ipsum is simply free text used by copytyping refreshing.
-                Neque porro est qui.
+              <h4 className="fw-bold mb-3" style={{ fontSize: "1.5rem", letterSpacing: "0.5px", color: "black" }}>About</h4>
+              <p className="mb-0" style={{ 
+                fontSize: "1rem", 
+                lineHeight: "1.6", 
+                fontWeight: "400",
+                color: "black"
+              }}>
+                Fresh, naturally grown produce without chemicals or harmful additives. 
+                Connecting farmers directly with consumers for sustainable agriculture.
               </p>
             </div>
           </div>
 
           <div className="col-md-4">
             <div
-              className="p-4 text-white rounded text-center h-100"
-              style={{ background: "#C5D63C" }}
+              className="p-4 text-white rounded text-center h-100 d-flex flex-column justify-content-center"
+              style={{ background: "#C5D63C", minHeight: "200px" }}
             >
-              <h5 className="fw-bold">Contact</h5>
-              <p className="mb-1 small">+91 9581906060</p>
-              <p className="mb-1 small">support@agripos.com</p>
-              <p className="mb-0 small">Mon – Fri: 7:00 am – 6:00 pm</p>
+              <h4 className="fw-bold mb-3" style={{ fontSize: "1.5rem", letterSpacing: "0.5px", color: "black" }}>Contact</h4>
+              <div className="d-flex flex-column gap-2">
+                <p className="mb-0" style={{ fontSize: "1.1rem", fontWeight: "500", color: "black" }}>+91 9581906060</p>
+                <p className="mb-0" style={{ fontSize: "1rem", fontWeight: "400", color: "black" }}>support@totalneeds.in</p>
+                <p className="mb-0" style={{ 
+                  fontSize: "0.95rem", 
+                  fontWeight: "400",
+                  color: "black",
+                  marginTop: "8px"
+                }}>Mon – Fri: 7:00 am – 6:00 pm</p>
+              </div>
             </div>
           </div>
 
           <div className="col-md-4">
             <div
-              className="p-4 text-white rounded text-center h-100"
-              style={{ background: "#F2C94C" }}
+              className="p-4 text-white rounded text-center h-100 d-flex flex-column justify-content-center"
+              style={{ background: "#F2C94C", minHeight: "200px" }}
             >
-              <h5 className="fw-bold">Address</h5>
-              <p className="mb-0 small">
+              <h4 className="fw-bold mb-3" style={{ fontSize: "1.5rem", letterSpacing: "0.5px", color: "black" }}>Address</h4>
+              <p className="mb-0" style={{ 
+                fontSize: "1rem", 
+                lineHeight: "1.5", 
+                fontWeight: "400",
+                color: "black"
+              }}>
                 #405, ALLURI TRADE CENTRE<br />
                 BHAGYANAGAR COLONY KUKATPALLY<br />
                 HYDERABAD 500072
@@ -74,7 +91,7 @@ const ContactUs = () => {
           <div className="col-lg-6">
             <iframe
               title="Hyderabad Map"
-              src=" "
+              src="https://www.google.com/maps?q=ALLURI+TRADE+CENTRE+BHAGYANAGAR+COLONY+KUKATPALLY+HYDERABAD&output=embed"
               width="100%"
               height="100%"
               style={{

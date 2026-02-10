@@ -28,15 +28,31 @@ const GetToKnowUs = () => {
         </div>
 
         {/* Right Section - Content */}
-        <div className="col-lg-5 d-flex flex-column gap-2">
-          <p className="subtitle">
+        <div className="col-lg-5 d-flex flex-column gap-3">
+          <p className="subtitle" style={{
+            color: '#4BAF47',
+            fontWeight: '600',
+            fontSize: '1.1rem',
+            marginBottom: '0.5rem'
+          }}>
             Get to Know Us
           </p>
 
-          <h2>Bridging the gap between rural roots and global markets</h2>
+          <h2 style={{
+            color: '#1F1E17',
+            fontWeight: '700',
+            fontSize: '2.2rem',
+            lineHeight: '1.3',
+            marginBottom: '1rem'
+          }}>Bridging the gap between rural roots and global markets</h2>
 
-          <p>
-            Originating from a desire to solve inefficiencies in the traditional supply chain, Organic Agri B2B was founded to empower stakeholders through transparency. We saw that farmers weren't getting fair value, and buyers struggled with authenticity verification.
+          <p style={{
+            color: '#666',
+            fontSize: '1.1rem',
+            lineHeight: '1.7',
+            marginBottom: '1.5rem'
+          }}>
+            Originating from a desire to solve inefficiencies in the traditional supply chain, Organic Agri B2B was founded to empower stakeholders through transparency. We saw that farmers weren't getting fair value, and buyers struggled with authenticity verification. Backed by 9+ years of industry experience, our journey is built on deep domain expertise, strong farmer relationships, and a commitment to creating a fair, efficient, and trustworthy agri-commerce ecosystem.
           </p>
 
           {/* Benefit Item */}
@@ -45,12 +61,18 @@ const GetToKnowUs = () => {
               src={pointImg}
               alt="Point"
               className="point-icon"
+              style={{ width: '24px', height: '24px', marginTop: '4px' }}
             />
-            <p className="text-dark">Today, our platform serves as a digital bridge—ensuring fair trade practices and full traceability from seed to shelf.</p>
+            <p style={{
+              color: '#333',
+              fontSize: '1.05rem',
+              lineHeight: '1.6',
+              margin: 0
+            }}>Today, our platform serves as a digital bridge—ensuring fair trade practices and full traceability from seed to shelf.</p>
           </div>
 
           {/* Button */}
-          <div className="mt-2">
+          <div className="mt-3">
             <DiscoverMoreButton
               text="Discover More"
               href="/about"
