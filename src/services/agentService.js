@@ -23,13 +23,18 @@ export const agentService = {
   },
 
   // Update Agent Status
-  updateAgentStatus: async (userId, payload) => {
-    return await api.post(`/auth/users/updateUserStatus/${userId}`, payload);
+  updateAgentStatus: async (payload) => {
+    return await api.post('/agents/updateAgentStatus', payload);
+  },
+
+  // Get Agent Products
+  getAgentProducts: async () => {
+    return await api.get('/agents/getAgentProducts');
   },
 
   // Submit/Update Bank Details
-  submitUpdateBankDetails: async (bankData) => {
-    return await api.post('/agents/submitUpdateBankDetails', bankData);
+  submitUpdateBankDetails: async (payload) => {
+    return await api.post('/agents/submitUpdateBankDetails', payload);
   },
 
   // Delete Agent

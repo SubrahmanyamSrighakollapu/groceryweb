@@ -83,212 +83,182 @@ const UpgradeLimit = () => {
     toast.info('Form cancelled');
   };
   return (
-    <div className="container-fluid mt-4">
-      <div className="row justify-content-center">
-        <div className="col-auto">
-          <div className="upgrade-card">
-            <form onSubmit={handleSubmit}>
-              <div className="field">
-                <label>Settlement Account Type</label>
-                <select 
-                  className="input select"
-                  name="accountType"
-                  value={formData.accountType}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select Account Type</option>
-                  {accountTypes.map((type) => (
-                    <option key={type.statusId} value={type.statusId}>
-                      {type.statusValue}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="field">
-                <label>Bank A/C No.</label>
-                <input 
-                  className="input"
-                  name="bankAccountNo"
-                  value={formData.bankAccountNo}
-                  onChange={handleInputChange}
-                  placeholder="Enter bank account number"
-                  required
-                />
-              </div>
-
-              <div className="field">
-                <label>Contact No.</label>
-                <input 
-                  className="input"
-                  name="contactNo"
-                  value={formData.contactNo}
-                  onChange={handleInputChange}
-                  placeholder="Enter contact number"
-                  required
-                />
-              </div>
-
-              <div className="field">
-                <label>Bank Name</label>
-                <select 
-                  className="input select"
-                  name="bankName"
-                  value={formData.bankName}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select Bank Name</option>
-                  {bankNames.map((bank) => (
-                    <option key={bank.statusId} value={bank.statusId}>
-                      {bank.statusValue}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="field">
-                <label>IFSC Code</label>
-                <input 
-                  className="input"
-                  name="ifscCode"
-                  value={formData.ifscCode}
-                  onChange={handleInputChange}
-                  placeholder="Enter IFSC code"
-                  required
-                />
-              </div>
-
-              <div className="field">
-                <label>A/C Holder Name</label>
-                <input 
-                  className="input"
-                  name="accountHolderName"
-                  value={formData.accountHolderName}
-                  onChange={handleInputChange}
-                  placeholder="Enter account holder name"
-                  required
-                />
-              </div>
-
-              <div className="field">
-                <label>PAN Number</label>
-                <input 
-                  className="input"
-                  name="panNumber"
-                  value={formData.panNumber}
-                  onChange={handleInputChange}
-                  placeholder="Enter PAN number"
-                  required
-                />
-              </div>
-
-              <div className="note">
-                Note: Enter 10 digit PAN Number as per your Bank Account
-              </div>
-
-              <div className="button-row">
-                <button type="button" className="cancel-btn" onClick={handleCancel}>
-                  Cancel
-                </button>
-                <button type="submit" className="submit-btn">
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
+    <div style={styles.card}>
+      <form onSubmit={handleSubmit}>
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Settlement Account Type</label>
+          <select 
+            style={styles.input}
+            name="accountType"
+            value={formData.accountType}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Select Account Type</option>
+            {accountTypes.map((type) => (
+              <option key={type.statusId} value={type.statusId}>
+                {type.statusValue}
+              </option>
+            ))}
+          </select>
         </div>
-      </div>
 
-      <style jsx>{`
-        .upgrade-card {
-          width: 685px;
-          height: 805px;
-          padding: 32px;
-          border: 1px solid #4D4D4D;
-          box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.25);
-          border-radius: 8px;
-          background: #ffffff;
-        }
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Bank A/C No.</label>
+          <input 
+            style={styles.input}
+            name="bankAccountNo"
+            value={formData.bankAccountNo}
+            onChange={handleInputChange}
+            placeholder="Enter bank account number"
+            required
+          />
+        </div>
 
-        .field {
-          margin-bottom: 20px;
-        }
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Contact No.</label>
+          <input 
+            style={styles.input}
+            name="contactNo"
+            value={formData.contactNo}
+            onChange={handleInputChange}
+            placeholder="Enter contact number"
+            required
+          />
+        </div>
 
-        .field label {
-          font-size: 14px;
-          margin-bottom: 6px;
-          display: block;
-          font-family: Poppins;
-        }
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Bank Name</label>
+          <select 
+            style={styles.input}
+            name="bankName"
+            value={formData.bankName}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Select Bank Name</option>
+            {bankNames.map((bank) => (
+              <option key={bank.statusId} value={bank.statusId}>
+                {bank.statusValue}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        .input {
-          width: 590px;
-          height: 50px;
-          border: 1px solid #4D4D4D;
-          border-radius: 8px;
-          padding: 10px 14px;
-          font-size: 14px;
-          outline: none;
-        }
+        <div style={styles.formGroup}>
+          <label style={styles.label}>IFSC Code</label>
+          <input 
+            style={styles.input}
+            name="ifscCode"
+            value={formData.ifscCode}
+            onChange={handleInputChange}
+            placeholder="Enter IFSC code"
+            required
+          />
+        </div>
 
-        .input:focus {
-          border-color: #4D4D4D;
-        }
+        <div style={styles.formGroup}>
+          <label style={styles.label}>A/C Holder Name</label>
+          <input 
+            style={styles.input}
+            name="accountHolderName"
+            value={formData.accountHolderName}
+            onChange={handleInputChange}
+            placeholder="Enter account holder name"
+            required
+          />
+        </div>
 
-        .select {
-          appearance: none;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='45' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-position: right 14px center;
-          background-size: 15px 45px;
-          padding-right: 42px;
-        }
+        <div style={styles.formGroup}>
+          <label style={styles.label}>PAN Number</label>
+          <input 
+            style={styles.input}
+            name="panNumber"
+            value={formData.panNumber}
+            onChange={handleInputChange}
+            placeholder="Enter PAN number"
+            required
+          />
+        </div>
 
-        .note {
-          width: 464px;
-          height: 24px;
-          font-family: "Poppins", sans-serif;
-          font-weight: 500;
-          font-size: 16px;
-          line-height: 100%;
-          letter-spacing: 0%;
-          opacity: 1;
-          margin-top: 6px;
-          margin-bottom: 20px;
-        }
+        <div style={styles.note}>
+          Note: Enter 10 digit PAN Number as per your Bank Account
+        </div>
 
-        .button-row {
-          width: 590px;
-          display: flex;
-          justify-content: space-between;
-          margin-top: 20px;
-        }
-
-        .cancel-btn {
-          width: 148px;
-          height: 40px;
-          border-radius: 8px;
-          border: 1px solid #7A7A7A;
-          background: #ffffff;
-          font-weight: 500;
-        }
-
-        .submit-btn {
-          width: 148px;
-          height: 40px;
-          border-radius: 8px;
-          border: none;
-          background: #4BAF47;
-          color: #ffffff;
-          font-weight: 500;
-        }
-      `}</style>
+        <div style={styles.buttonRow}>
+          <button type="button" style={styles.cancelBtn} onClick={handleCancel}>
+            Cancel
+          </button>
+          <button type="submit" style={styles.submitBtn}>
+            Submit
+          </button>
+        </div>
+      </form>
     </div>
   );
+};
+
+const styles = {
+  card: {
+    background: 'white',
+    borderRadius: '12px',
+    padding: '24px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+    maxWidth: '700px'
+  },
+  formGroup: {
+    marginBottom: '16px'
+  },
+  label: {
+    display: 'block',
+    fontSize: '13px',
+    fontWeight: '600',
+    marginBottom: '6px',
+    color: '#495057'
+  },
+  input: {
+    width: '100%',
+    padding: '10px 12px',
+    border: '1px solid #e2e8f0',
+    borderRadius: '8px',
+    fontSize: '14px',
+    transition: 'all 0.2s',
+    outline: 'none'
+  },
+  note: {
+    fontSize: '13px',
+    color: '#6b7280',
+    marginTop: '12px',
+    marginBottom: '20px',
+    fontWeight: '500'
+  },
+  buttonRow: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '16px',
+    marginTop: '24px',
+    paddingTop: '24px',
+    borderTop: '1px solid #e2e8f0'
+  },
+  cancelBtn: {
+    padding: '10px 24px',
+    borderRadius: '8px',
+    border: '1px solid #e2e8f0',
+    background: 'white',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.2s'
+  },
+  submitBtn: {
+    padding: '10px 24px',
+    borderRadius: '8px',
+    border: 'none',
+    background: '#10b981',
+    color: 'white',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.2s'
+  }
 };
 
 export default UpgradeLimit;

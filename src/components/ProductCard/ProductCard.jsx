@@ -1,13 +1,16 @@
 // src/components/ProductCard/ProductCard.jsx
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import WishlistIcon from '../../assets/shop/wishlist.png';
+import { toast } from 'react-toastify';
 import { useCart } from '../../context/CartContext';
 import { getImageUrl } from '../../utils/imageLoader';
+import productService from '../../services/productService';
 
 const ProductCard = ({ product, isAgentView = false }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
   const handleCardClick = () => {
     // Navigate based on context
@@ -30,14 +33,28 @@ const ProductCard = ({ product, isAgentView = false }) => {
     }
   };
 
-  const handleWishlistClick = (e) => {
+  const handleWishlistClick = async (e) => {
     e.stopPropagation();
-    // TODO: wire up wishlist behavior
-    console.log('Added to wishlist:', product.id);
+    try {
+      const response = await productService.addToWishlist(product.id);
+      if (response && response.status === 1) {
+        setIsWishlisted(true);
+        toast.success('Added to wishlist');
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to add to wishlist';
+      toast.error(errorMessage);
+    }
   };
 
   const getImagePath = (imgName) => {
+    console.log('ProductCard received img:', imgName);
+    if (imgName && (imgName.startsWith('http://') || imgName.startsWith('https://'))) {
+      console.log('Using direct URL:', imgName);
+      return imgName;
+    }
     const url = getImageUrl(imgName);
+    console.log('Using local asset:', url);
     return url || '';
   }; 
 
@@ -82,9 +99,8 @@ const ProductCard = ({ product, isAgentView = false }) => {
           />
         )}
 
-        <img
-          src={WishlistIcon}
-          alt="Wishlist"
+        {/* Wishlist Heart */}
+        <div
           onClick={handleWishlistClick}
           style={{
             position: 'absolute',
@@ -93,14 +109,20 @@ const ProductCard = ({ product, isAgentView = false }) => {
             width: '46px',
             height: '46px',
             background: 'white',
-            padding: '6px',
             borderRadius: '50%',
             boxShadow: '0px 2px 6px rgba(0,0,0,0.12)',
             zIndex: 9999,
             cursor: 'pointer',
-            pointerEvents: 'auto'
+            pointerEvents: 'auto',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
-        />
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill={isWishlisted ? '#FF0000' : 'none'} stroke={isWishlisted ? '#FF0000' : '#000000'} strokeWidth="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </div>
       </div>
       <div className="card-body px-3 pt-2 pb-4 d-flex flex-column">
         <p className="text-dark mb-1 fw-normal">{product.title}</p>

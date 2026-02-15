@@ -110,13 +110,13 @@ const Settlement = () => {
     toast.info('Form cancelled');
   };
   return (
-    <div className="card shadow-sm p-4 rounded-3">
+    <div style={styles.card}>
       <form onSubmit={handleSubmit}>
-        <div className="row mb-3">
-          <div className="col-md-6">
-            <label className="form-label">Settlement Account Type</label>
+        <div style={styles.row}>
+          <div style={styles.col}>
+            <label style={styles.label}>Settlement Account Type</label>
             <select 
-              className="form-select"
+              style={styles.input}
               name="accountType"
               value={formData.accountType}
               onChange={handleInputChange}
@@ -130,10 +130,10 @@ const Settlement = () => {
               ))}
             </select>
           </div>
-          <div className="col-md-6">
-            <label className="form-label">Bank A/C No.</label>
+          <div style={styles.col}>
+            <label style={styles.label}>Bank A/C No.</label>
             <input 
-              className="form-control"
+              style={styles.input}
               name="bankAccountNo"
               value={formData.bankAccountNo}
               onChange={handleInputChange}
@@ -143,11 +143,11 @@ const Settlement = () => {
           </div>
         </div>
 
-        <div className="row mb-3">
-          <div className="col-md-6">
-            <label className="form-label">Contact No.</label>
+        <div style={styles.row}>
+          <div style={styles.col}>
+            <label style={styles.label}>Contact No.</label>
             <input 
-              className="form-control"
+              style={styles.input}
               name="contactNo"
               value={formData.contactNo}
               onChange={handleInputChange}
@@ -155,10 +155,10 @@ const Settlement = () => {
               required
             />
           </div>
-          <div className="col-md-6">
-            <label className="form-label">Bank Name</label>
+          <div style={styles.col}>
+            <label style={styles.label}>Bank Name</label>
             <select 
-              className="form-select"
+              style={styles.input}
               name="bankName"
               value={formData.bankName}
               onChange={handleInputChange}
@@ -174,11 +174,11 @@ const Settlement = () => {
           </div>
         </div>
 
-        <div className="row mb-3">
-          <div className="col-md-6">
-            <label className="form-label">IFSC Code</label>
+        <div style={styles.row}>
+          <div style={styles.col}>
+            <label style={styles.label}>IFSC Code</label>
             <input 
-              className="form-control"
+              style={styles.input}
               name="ifscCode"
               value={formData.ifscCode}
               onChange={handleInputChange}
@@ -186,10 +186,10 @@ const Settlement = () => {
               required
             />
           </div>
-          <div className="col-md-6">
-            <label className="form-label">A/C Holder Name</label>
+          <div style={styles.col}>
+            <label style={styles.label}>A/C Holder Name</label>
             <input 
-              className="form-control"
+              style={styles.input}
               name="accountHolderName"
               value={formData.accountHolderName}
               onChange={handleInputChange}
@@ -199,13 +199,11 @@ const Settlement = () => {
           </div>
         </div>
 
-        <div className="row mb-3">
-          <div className="col-md-6">
-            <label className="form-label">
-              Bankit Fee <span className="text-danger">*</span>
-            </label>
+        <div style={styles.row}>
+          <div style={styles.col}>
+            <label style={styles.label}>Bankit Fee <span style={{color: '#ef4444'}}>*</span></label>
             <input 
-              className="form-control"
+              style={styles.input}
               name="bankitFee"
               value={formData.bankitFee}
               onChange={handleInputChange}
@@ -213,10 +211,10 @@ const Settlement = () => {
               required
             />
           </div>
-          <div className="col-md-6">
-            <label className="form-label">Total Settlement Balance</label>
+          <div style={styles.col}>
+            <label style={styles.label}>Total Settlement Balance</label>
             <input 
-              className="form-control"
+              style={styles.input}
               name="totalSettlementBalance"
               value={formData.totalSettlementBalance}
               onChange={handleInputChange}
@@ -225,12 +223,10 @@ const Settlement = () => {
           </div>
         </div>
 
-        <div className="mb-1">
-          <label className="form-label">
-            Amount <span className="text-danger">*</span>
-          </label>
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Amount <span style={{color: '#ef4444'}}>*</span></label>
           <input 
-            className="form-control w-100"
+            style={styles.input}
             name="amount"
             value={formData.amount}
             onChange={handleInputChange}
@@ -239,36 +235,29 @@ const Settlement = () => {
           />
         </div>
 
-        <p className="text-danger small mb-4">
-          You can not make any settlement exceeding your Total Settlement Balance /
-          Allowed Settlement Limit / Wallet Balance
+        <p style={styles.warning}>
+          You can not make any settlement exceeding your Total Settlement Balance / Allowed Settlement Limit / Wallet Balance
         </p>
 
-        <div className="row align-items-start mb-4">
-          <div className="col-md-6">
-            <label className="form-label">
-              Transaction Pin <span className="text-danger">*</span>
-            </label>
+        <div style={styles.row}>
+          <div style={styles.col}>
+            <label style={styles.label}>Transaction Pin <span style={{color: '#ef4444'}}>*</span></label>
             <input 
               type="password" 
-              className="form-control"
+              style={styles.input}
               name="transactionPin"
               value={formData.transactionPin}
               onChange={handleInputChange}
               placeholder="Enter transaction pin"
               required
             />
-            <div className="text-center mt-1">
-              <small className="text-muted">Change Transaction Pin</small>
-            </div>
+            <div style={styles.linkText}>Change Transaction Pin</div>
           </div>
 
-          <div className="col-md-6">
-            <label className="form-label">
-              Transfer Mode <span className="text-danger">*</span>
-            </label>
+          <div style={styles.col}>
+            <label style={styles.label}>Transfer Mode <span style={{color: '#ef4444'}}>*</span></label>
             <select 
-              className="form-select"
+              style={styles.input}
               name="transferMode"
               value={formData.transferMode}
               onChange={handleInputChange}
@@ -279,38 +268,37 @@ const Settlement = () => {
           </div>
         </div>
 
-        <div className="form-check mb-2">
+        <div style={styles.checkbox}>
           <input 
-            className="form-check-input" 
             type="checkbox"
             name="securePlusAssurance"
             checked={formData.securePlusAssurance}
             onChange={handleInputChange}
+            style={{marginRight: '8px'}}
           />
-          <label className="form-check-label text-danger small">
+          <label style={styles.checkboxLabel}>
             Rs. 0 will be charged for opting SecurePlus assurance plan on this transaction
           </label>
         </div>
 
-        <div className="form-check mb-4">
+        <div style={styles.checkbox}>
           <input 
-            className="form-check-input" 
             type="checkbox"
             name="agreeTerms"
             checked={formData.agreeTerms}
             onChange={handleInputChange}
             required
+            style={{marginRight: '8px'}}
           />
-          <label className="form-check-label small">
+          <label style={styles.checkboxLabel}>
             I hereby agree to the terms & Conditions of this settlement transaction.
           </label>
         </div>
 
-        <div className="d-flex justify-content-between px-5">
+        <div style={styles.buttonRow}>
           <button type="button" style={styles.cancelBtn} onClick={handleCancel}>
             Cancel
           </button>
-
           <button type="submit" style={styles.submitBtn}>
             Submit
           </button>
@@ -321,26 +309,87 @@ const Settlement = () => {
 };
 
 const styles = {
+  card: {
+    background: 'white',
+    borderRadius: '12px',
+    padding: '24px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)'
+  },
+  row: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '16px',
+    marginBottom: '16px'
+  },
+  col: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  formGroup: {
+    marginBottom: '16px'
+  },
+  label: {
+    fontSize: '13px',
+    fontWeight: '600',
+    marginBottom: '6px',
+    color: '#495057'
+  },
+  input: {
+    width: '100%',
+    padding: '10px 12px',
+    border: '1px solid #e2e8f0',
+    borderRadius: '8px',
+    fontSize: '14px',
+    transition: 'all 0.2s',
+    outline: 'none'
+  },
+  warning: {
+    color: '#ef4444',
+    fontSize: '13px',
+    marginBottom: '20px'
+  },
+  linkText: {
+    textAlign: 'center',
+    fontSize: '12px',
+    color: '#6b7280',
+    marginTop: '6px'
+  },
+  checkbox: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '12px'
+  },
+  checkboxLabel: {
+    fontSize: '13px',
+    color: '#4a5568'
+  },
+  buttonRow: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '16px',
+    marginTop: '24px',
+    paddingTop: '24px',
+    borderTop: '1px solid #e2e8f0'
+  },
   cancelBtn: {
-    width: "148px",
-    height: "40px",
-    borderRadius: "8px",
-    border: "1px solid #57B846",
-    backgroundColor: "#57B846",
-    color: "#FFFFFF",
-    fontSize: "14px",
-    fontWeight: "500",
+    padding: '10px 24px',
+    borderRadius: '8px',
+    border: '1px solid #e2e8f0',
+    background: 'white',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.2s'
   },
   submitBtn: {
-    width: "148px",
-    height: "40px",
-    borderRadius: "8px",
-    border: "1px solid #7A7A7A",
-    backgroundColor: "#FFFFFF",
-    color: "#000000",
-    fontSize: "14px",
-    fontWeight: "500",
-  },
+    padding: '10px 24px',
+    borderRadius: '8px',
+    border: 'none',
+    background: '#10b981',
+    color: 'white',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.2s'
+  }
 };
 
 export default Settlement;

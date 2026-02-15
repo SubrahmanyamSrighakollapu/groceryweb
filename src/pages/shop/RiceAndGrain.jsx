@@ -1,12 +1,59 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import ProductCard from '../../components/ProductCard/ProductCard';
-import productsData from '../../data/products.json';
 
-const RiceAndGrain = () => {
+const RiceAndGrain = ({ filters, products = [], loading = false }) => {
   const [visibleCount, setVisibleCount] = useState(6);
-  const products = productsData.products;
 
-  const loadMore = () => setVisibleCount(prev => Math.min(prev + 6, products.length));
+  // Filter products based on applied filters
+  const filteredProducts = useMemo(() => {
+    console.log('Filtering with:', filters);
+    console.log('All products:', products);
+    
+    return products.filter(product => {
+      // Search filter
+      if (filters.searchQuery && filters.searchQuery.trim() !== '') {
+        const query = filters.searchQuery.toLowerCase();
+        const matchesSearch = 
+          (product.title && product.title.toLowerCase().includes(query)) ||
+          (product.name && product.name.toLowerCase().includes(query)) ||
+          (product.categoryName && product.categoryName.toLowerCase().includes(query));
+        
+        if (!matchesSearch) {
+          console.log('Product filtered out by search:', product.title);
+          return false;
+        }
+      }
+
+      // Category filter
+      if (filters.selectedCategories && filters.selectedCategories.length > 0) {
+        if (!filters.selectedCategories.includes(product.categoryName)) {
+          console.log('Product filtered out by category:', product.title, product.categoryName);
+          return false;
+        }
+      }
+
+      // Price filter
+      const productPrice = parseFloat(product.price);
+      if (filters.minPrice && filters.minPrice !== '') {
+        const minPrice = parseFloat(filters.minPrice);
+        if (productPrice < minPrice) {
+          console.log('Product filtered out by min price:', product.title, productPrice, '<', minPrice);
+          return false;
+        }
+      }
+      if (filters.maxPrice && filters.maxPrice !== '') {
+        const maxPrice = parseFloat(filters.maxPrice);
+        if (productPrice > maxPrice) {
+          console.log('Product filtered out by max price:', product.title, productPrice, '>', maxPrice);
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [products, filters]);
+
+  const loadMore = () => setVisibleCount(prev => Math.min(prev + 6, filteredProducts.length));
   const showLess = () => setVisibleCount(6);
 
   return (
@@ -22,30 +69,42 @@ const RiceAndGrain = () => {
       </div>
 
       {/* Products Found */}
-      <div className="mb-4">
-        <h3 
+      <div className="mb-3">
+        <h5 
           className="fw-semibold"
           style={{
-            fontSize: '24px',
+            fontSize: '16px',
             color: '#000000'
           }}
         >
-          {products.length} Products Found
-        </h3>
+          {loading ? 'Loading...' : `${filteredProducts.length} Products Found`}
+        </h5>
       </div>
 
       {/* Product Grid */}
-      <div className="row g-4 justify-content-center">
-        {products.slice(0, visibleCount).map(product => (
-          <div key={product.id} className="col-12 col-sm-6 col-lg-4">
-            <ProductCard product={product} />
+      {loading ? (
+        <div className="text-center py-5">
+          <div className="spinner-border text-success" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
-        ))}
-      </div>
+        </div>
+      ) : filteredProducts.length === 0 ? (
+        <div className="text-center py-5">
+          <p className="text-muted">No products found matching your filters</p>
+        </div>
+      ) : (
+        <div className="row g-4 justify-content-center">
+          {filteredProducts.slice(0, visibleCount).map(product => (
+            <div key={product.id} className="col-12 col-sm-6 col-lg-4">
+              <ProductCard product={product} />
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Load More / Show Less Button */}
       <div className="text-center mt-5">
-        {visibleCount < products.length ? (
+        {visibleCount < filteredProducts.length ? (
           <button 
             className="btn load-more-btn"
             onClick={loadMore}

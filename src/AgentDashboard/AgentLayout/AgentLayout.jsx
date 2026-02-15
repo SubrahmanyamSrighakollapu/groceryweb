@@ -56,7 +56,7 @@ const AgentLayout = () => {
             boxShadow: isSidebarOpen ? '4px 0 12px rgba(0,0,0,0.1)' : 'none'
           }}
         >
-          <AgentSidebar isOpen={isSidebarOpen} />
+          <AgentSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
         </div>
 
         {/* Overlay */}

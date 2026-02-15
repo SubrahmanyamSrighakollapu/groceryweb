@@ -27,6 +27,7 @@ import AgentLayout from './AgentDashboard/AgentLayout/AgentLayout'; // Agent Das
 import AgentCart from "./AgentDashboard/pages/BuyFromFarmers/AgentCart";
 import AgentItemDetails from "./AgentDashboard/pages/BuyFromFarmers/AgentItemDetails";
 import BuyFromFarmers from './AgentDashboard/pages/BuyFromFarmers/BuyFromFarmers';
+import AgentWishlist from './AgentDashboard/pages/Wishlist/AgentWishlist';
 import AgentCheckout from './AgentDashboard/pages/Checkout/AgentCheckout';
 import AgentOrderPlaced from './AgentDashboard/pages/Checkout/AgentOrderPlaced';
 import Dashboard from './AgentDashboard/pages/Dashboard/Dashboard';
@@ -112,6 +113,7 @@ function App() {
             <Route path="buy-from-farmers" element={<BuyFromFarmers />} />
             <Route path="agent-item-details/:id" element={<AgentItemDetails />} />
             <Route path="cart" element={<AgentCart />} />
+            <Route path="wishlist" element={<AgentWishlist />} />
             <Route path="checkout" element={<AgentCheckout />} />
             <Route path="order-placed" element={<AgentOrderPlaced />} />
             <Route path="place-orders" element={<PlaceOrders />} />

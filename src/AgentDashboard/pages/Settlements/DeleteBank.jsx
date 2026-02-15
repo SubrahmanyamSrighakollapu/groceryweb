@@ -77,160 +77,148 @@ const DeleteBank = () => {
     toast.info('Form cancelled');
   };
   return (
-    <div className="container-fluid mt-4">
-      <div className="row justify-content-center">
-        <div className="col-auto">
-          <div className="delete-card">
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className="form-label">Settlement Account Type</label>
-                <select 
-                  className="custom-input custom-select"
-                  name="accountType"
-                  value={formData.accountType}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select Account Type</option>
-                  {accountTypes.map((type) => (
-                    <option key={type.statusId} value={type.statusId}>
-                      {type.statusValue}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label">Bank A/C No.</label>
-                <select 
-                  className="custom-input custom-select"
-                  name="bankAccountNo"
-                  value={formData.bankAccountNo}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select Account Number</option>
-                </select>
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label">Bank Name</label>
-                <select 
-                  className="custom-input custom-select"
-                  name="bankName"
-                  value={formData.bankName}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select Bank Name</option>
-                  {bankNames.map((bank) => (
-                    <option key={bank.statusId} value={bank.statusId}>
-                      {bank.statusValue}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label">IFSC Code</label>
-                <input 
-                  className="custom-input"
-                  name="ifscCode"
-                  value={formData.ifscCode}
-                  onChange={handleInputChange}
-                  placeholder="Enter IFSC code"
-                  required
-                />
-              </div>
-
-              <div className="mb-5">
-                <label className="form-label">A/C Holder Name</label>
-                <input 
-                  className="custom-input"
-                  name="accountHolderName"
-                  value={formData.accountHolderName}
-                  onChange={handleInputChange}
-                  placeholder="Enter account holder name"
-                  required
-                />
-              </div>
-              
-              <div className="button-row">
-                <button type="button" className="cancel-btn" onClick={handleCancel}>
-                  Cancel
-                </button>
-
-                <button type="submit" className="submit-btn">
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
+    <div style={styles.card}>
+      <form onSubmit={handleSubmit}>
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Settlement Account Type</label>
+          <select 
+            style={styles.input}
+            name="accountType"
+            value={formData.accountType}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Select Account Type</option>
+            {accountTypes.map((type) => (
+              <option key={type.statusId} value={type.statusId}>
+                {type.statusValue}
+              </option>
+            ))}
+          </select>
         </div>
-      </div>
 
-      <style jsx>{`
-        .delete-card {
-          width: 685px;
-          padding: 32px;
-          border: 1px solid #D98FD9;
-          border-radius: 8px;
-          background: #ffffff;
-        }
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Bank A/C No.</label>
+          <select 
+            style={styles.input}
+            name="bankAccountNo"
+            value={formData.bankAccountNo}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Select Account Number</option>
+          </select>
+        </div>
 
-        .custom-input {
-          width: 590px;
-          height: 50px;
-          border: 1px solid #D98FD9;
-          border-radius: 8px;
-          padding: 10px 14px;
-          font-size: 14px;
-          outline: none;
-        }
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Bank Name</label>
+          <select 
+            style={styles.input}
+            name="bankName"
+            value={formData.bankName}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Select Bank Name</option>
+            {bankNames.map((bank) => (
+              <option key={bank.statusId} value={bank.statusId}>
+                {bank.statusValue}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        .custom-input:focus {
-          border-color: #C94AC9;
-        }
+        <div style={styles.formGroup}>
+          <label style={styles.label}>IFSC Code</label>
+          <input 
+            style={styles.input}
+            name="ifscCode"
+            value={formData.ifscCode}
+            onChange={handleInputChange}
+            placeholder="Enter IFSC code"
+            required
+          />
+        </div>
 
-        .custom-select {
-          appearance: none;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-position: right 14px center;
-          background-size: 14px;
-          padding-right: 40px;
-        }
-
-        .button-row {
-          width: 590px;
-          display: flex;
-          justify-content: space-between;
-          margin: 20px auto 0;
-        }
-
-        .cancel-btn {
-          width: 148px;
-          height: 40px;
-          border-radius: 8px;
-          border: 1px solid #7A7A7A;
-          background: #ffffff;
-          font-weight: 500;
-        }
-
-        .submit-btn {
-          width: 148px;
-          height: 40px;
-          border-radius: 8px;
-          border: none;
-          background: #4BAF47;
-          color: #ffffff;
-          font-weight: 500;
-        }
-      `}</style>
+        <div style={styles.formGroup}>
+          <label style={styles.label}>A/C Holder Name</label>
+          <input 
+            style={styles.input}
+            name="accountHolderName"
+            value={formData.accountHolderName}
+            onChange={handleInputChange}
+            placeholder="Enter account holder name"
+            required
+          />
+        </div>
+        
+        <div style={styles.buttonRow}>
+          <button type="button" style={styles.cancelBtn} onClick={handleCancel}>
+            Cancel
+          </button>
+          <button type="submit" style={styles.submitBtn}>
+            Submit
+          </button>
+        </div>
+      </form>
     </div>
   );
+};
+
+const styles = {
+  card: {
+    background: 'white',
+    borderRadius: '12px',
+    padding: '24px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+    maxWidth: '700px'
+  },
+  formGroup: {
+    marginBottom: '16px'
+  },
+  label: {
+    display: 'block',
+    fontSize: '13px',
+    fontWeight: '600',
+    marginBottom: '6px',
+    color: '#495057'
+  },
+  input: {
+    width: '100%',
+    padding: '10px 12px',
+    border: '1px solid #e2e8f0',
+    borderRadius: '8px',
+    fontSize: '14px',
+    transition: 'all 0.2s',
+    outline: 'none'
+  },
+  buttonRow: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '16px',
+    marginTop: '24px',
+    paddingTop: '24px',
+    borderTop: '1px solid #e2e8f0'
+  },
+  cancelBtn: {
+    padding: '10px 24px',
+    borderRadius: '8px',
+    border: '1px solid #e2e8f0',
+    background: 'white',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.2s'
+  },
+  submitBtn: {
+    padding: '10px 24px',
+    borderRadius: '8px',
+    border: 'none',
+    background: '#10b981',
+    color: 'white',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.2s'
+  }
 };
 
 export default DeleteBank;

@@ -3,7 +3,6 @@
     {
       "id": 1,
       "img": "Img1.jpg",
-      "agent": "Agent1.jpg",
       "title": "Golden Sella Basmati Rice",
       "type": "Basmati",
       "quantity": "50kg Jute Bag",
@@ -25,7 +24,6 @@
     {
       "id": 2,
       "img": "Img2.jpg",
-      "agent": "Agent2.jpg",
       "title": "Thai Jasmine Rice",
       "type": "Jasmine",
       "quantity": "25kg PP Bag",
@@ -47,7 +45,6 @@
     {
       "id": 3,
       "img": "Img3.jpg",
-      "agent": "Agent3.jpg",
       "title": "Organic Long Grain Brown",
       "type": "Long Grain",
       "quantity": "1 Ton Bulk",
@@ -69,7 +66,6 @@
     {
       "id": 4,
       "img": "Img4.jpg",
-      "agent": "Agent4.jpg",
       "title": "Premium Wheat Grain",
       "type": "Wheat",
       "quantity": "50kg Jute Bag",
@@ -91,7 +87,6 @@
     {
       "id": 5,
       "img": "Img5.jpg",
-      "agent": "Agent5.jpg",
       "title": "Parboiled Rice (Non-Sticky)",
       "type": "Parboiled",
       "quantity": "50kg PP Bag",
@@ -113,7 +108,6 @@
     {
       "id": 6,
       "img": "Img6.jpg",
-      "agent": "Agent6.jpg",
       "title": "Golden Sella Basmati Rice",
       "type": "Basmati",
       "quantity": "50kg PP Bag",
@@ -135,7 +129,6 @@
     {
       "id": 7,
       "img": "Img1.jpg",
-      "agent": "Agent1.jpg",
       "title": "Extra Long Basmati Rice",
       "type": "Basmati",
       "quantity": "40kg Bag",
@@ -157,7 +150,6 @@
     {
       "id": 8,
       "img": "Img2.jpg",
-      "agent": "Agent2.jpg",
       "title": "Red Rice Premium",
       "type": "Red Rice",
       "quantity": "25kg Bag",
@@ -179,7 +171,6 @@
     {
       "id": 9,
       "img": "Img3.jpg",
-      "agent": "Agent3.jpg",
       "title": "Brown Jasmine Rice",
       "type": "Jasmine",
       "quantity": "50kg Bag",

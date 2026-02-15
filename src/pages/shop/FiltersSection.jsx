@@ -1,58 +1,71 @@
 // src/shop/FiltersSection.jsx
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import icon from '../../assets/shop/Icon.png';
 
-const FiltersSection = () => {
-  // State for checkboxes
-  const [selectedGrains, setSelectedGrains] = useState([]);
-  const [selectedPulses, setSelectedPulses] = useState([]);
-
-  // Price & slider state
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
+const FiltersSection = ({ filters = { searchQuery: '', selectedCategories: [], minPrice: '', maxPrice: '' }, setFilters, products = [], onApplyFilters }) => {
   const [sliderVal, setSliderVal] = useState(10000);
-  const [bagSize, setBagSize] = useState(1);
 
   const sliderMin = 0;
   const sliderMax = 100000;
   const sliderStep = 1000;
 
-  // Arrays for grain and pulse types
-  const grainTypes = ['Basmati Rice', 'Jasmine Rice', 'Long Grain White', 'Parboiled'];
-  const pulseTypes = ['Toor Dal', 'Chana Dal (Farm Fresh)', 'Moong Dal'];
+  // Extract unique categories from products
+  const availableCategories = useMemo(() => {
+    if (!products || products.length === 0) return [];
+    const categoryMap = new Map();
+    products.forEach(p => {
+      if (p.categoryId && p.categoryName) {
+        categoryMap.set(p.categoryId, { id: p.categoryId, name: p.categoryName });
+      }
+    });
+    return Array.from(categoryMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }, [products]);
+
+  console.log('Available Categories:', availableCategories);
+  console.log('Products:', products);
 
   const handleSliderChange = (value) => {
     setSliderVal(Number(value));
-    
-    setMinPrice(Number(value));
-    setMaxPrice(prev => (prev ? Number(prev) : Number(value) + sliderStep * 5));
+    setFilters(prev => ({
+      ...prev,
+      minPrice: Number(value),
+      maxPrice: prev.maxPrice || Number(value) + sliderStep * 5
+    }));
   };
 
-  const handleGrainChange = (value) => {
-    setSelectedGrains(prev =>
-      prev.includes(value)
-        ? prev.filter(item => item !== value)
-        : [...prev, value]
-    );
+  const handleCategoryChange = (categoryName) => {
+    setFilters(prev => ({
+      ...prev,
+      selectedCategories: prev.selectedCategories.includes(categoryName)
+        ? prev.selectedCategories.filter(c => c !== categoryName)
+        : [...prev.selectedCategories, categoryName]
+    }));
   };
 
-  const handlePulseChange = (value) => {
-    setSelectedPulses(prev =>
-      prev.includes(value)
-        ? prev.filter(item => item !== value)
-        : [...prev, value]
-    );
+  const handleSearchChange = (value) => {
+    setFilters(prev => ({ ...prev, searchQuery: value }));
   };
 
-  // Reset all filters
+  const handleMinPriceChange = (value) => {
+    setFilters(prev => ({ ...prev, minPrice: value }));
+  };
+
+  const handleMaxPriceChange = (value) => {
+    setFilters(prev => ({ ...prev, maxPrice: value }));
+  };
+
   const handleReset = () => {
-    setSelectedGrains([]);
-    setSelectedPulses([]);
-    setMinPrice('');
-    setMaxPrice('');
+    const resetFilters = {
+      searchQuery: '',
+      selectedCategories: [],
+      minPrice: '',
+      maxPrice: ''
+    };
+    setFilters(resetFilters);
     setSliderVal(10000);
-    setBagSize(1);
+    // Trigger immediate apply on reset
+    setTimeout(() => onApplyFilters(), 0);
   };
 
   return (
@@ -61,11 +74,13 @@ const FiltersSection = () => {
       style={{ width: '25%', padding: '1rem 0.5rem 2rem 2.5rem' }}
     >
       {/* Search Bar */}
-      <div className=" mb-4">
+      <div className="mb-4">
         <input
           type="text"
           className="form-control search-input"
-          placeholder="Search for rice, dal......"
+          placeholder="Search for products......"
+          value={filters.searchQuery}
+          onChange={(e) => handleSearchChange(e.target.value)}
         />
       </div>
 
@@ -85,42 +100,26 @@ const FiltersSection = () => {
         </div>
       </div>
 
-      {/* Grain Type & Pulses Type */}
-      <div className="filter-group mb-4">
-        {/* Grain Type */}
-        <p className="text-dark">Grain Type</p>
-        {grainTypes.map(item => (
-          <div className="form-check mb-2 d-flex align-items-center" key={item}>
-            <input
-              className="form-check-input custom-radio"
-              type="checkbox"
-              id={`grain-${item}`}
-              checked={selectedGrains.includes(item)}
-              onChange={() => handleGrainChange(item)}
-            />
-            <label className="filter-option" htmlFor={`grain-${item}`}>
-              {item}
-            </label>
-          </div>
-        ))}
-
-        {/* Pulses Type */}
-        <p className="text-dark mt-4">Pulses Type</p>
-        {pulseTypes.map(item => (
-          <div className="form-check mb-2 d-flex align-items-center" key={item}>
-            <input
-              className="form-check-input custom-radio"
-              type="checkbox"
-              id={`pulse-${item}`}
-              checked={selectedPulses.includes(item)}
-              onChange={() => handlePulseChange(item)}
-            />
-            <label className="filter-option" htmlFor={`pulse-${item}`}>
-              {item}
-            </label>
-          </div>
-        ))}
-      </div>
+      {/* Product Categories */}
+      {availableCategories.length > 0 && (
+        <div className="filter-group mb-4">
+          <p className="text-dark">Product Category</p>
+          {availableCategories.map(category => (
+            <div className="form-check mb-2 d-flex align-items-center" key={category.id}>
+              <input
+                className="form-check-input custom-radio"
+                type="checkbox"
+                id={`category-${category.id}`}
+                checked={filters.selectedCategories.includes(category.name)}
+                onChange={() => handleCategoryChange(category.name)}
+              />
+              <label className="filter-option" htmlFor={`category-${category.id}`}>
+                {category.name}
+              </label>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Price Range */}
       <div className="filter-group mb-4">
@@ -135,8 +134,8 @@ const FiltersSection = () => {
               type="number"
               className="form-control currency-input"
               placeholder="Min"
-              value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
+              value={filters.minPrice}
+              onChange={(e) => handleMinPriceChange(e.target.value)}
             />
           </div>
 
@@ -148,8 +147,8 @@ const FiltersSection = () => {
               type="number"
               className="form-control currency-input"
               placeholder="Max"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
+              value={filters.maxPrice}
+              onChange={(e) => handleMaxPriceChange(e.target.value)}
             />
           </div>
         </div>
@@ -165,18 +164,24 @@ const FiltersSection = () => {
             onChange={(e) => handleSliderChange(e.target.value)}
           />
         </div>
-
       </div>
 
-      {/* Bag Size */}
-      <div className="filter-group">
-        <p className="text-dark">Bag Size</p>
-        <div className="d-flex justify-content-between text-muted small mb-2">
-          <span>{bagSize}kg</span>
-          <span>20kg</span>
-        </div>
-        <input type="range" className="form-range bag-range" min="1" max="20" step="1" value={bagSize} onChange={(e) => setBagSize(Number(e.target.value))} />
-      </div>
+      {/* Apply Filters Button */}
+      <button 
+        className="btn apply-filters-btn w-100"
+        onClick={onApplyFilters}
+        style={{
+          background: '#4BAF47',
+          color: 'white',
+          fontWeight: '600',
+          fontSize: '18px',
+          borderRadius: '8px',
+          padding: '0.75rem',
+          border: 'none'
+        }}
+      >
+        Apply Filters
+      </button>
 
       {/* Internal CSS for non-Bootstrap styles */}
       <style jsx>{`
@@ -265,7 +270,6 @@ const FiltersSection = () => {
           border: 0.2px solid #000000;
         }
 
-        /* Currency input wrapper places the ₹ inside the input */
         .currency-input-wrapper { 
           position: relative; 
           flex: 1;
@@ -291,7 +295,6 @@ const FiltersSection = () => {
           background: transparent;
         }
 
-        /* Price Range Slider with progress fill */
         .form-range {
           width: 100%;
           height: 0.5rem;
@@ -328,37 +331,10 @@ const FiltersSection = () => {
           border-radius: 50%;
         }
 
-        /* Bag Size Range Slider with progress fill */
-        .bag-range::-webkit-slider-runnable-track {
-          height: 0.5rem;
-          background: linear-gradient(to right, #4BAF47 0%, #4BAF47 ${(bagSize - 1) / (20 - 1) * 100}%, #E5E5E5 ${(bagSize - 1) / (20 - 1) * 100}%, #E5E5E5 100%);
-          border-radius: 0.25rem;
-        }
-        .bag-range::-moz-range-track {
-          height: 0.5rem;
-          background: linear-gradient(to right, #4BAF47 0%, #4BAF47 ${(bagSize - 1) / (20 - 1) * 100}%, #E5E5E5 ${(bagSize - 1) / (20 - 1) * 100}%, #E5E5E5 100%);
-          border-radius: 0.25rem;
+        .apply-filters-btn:hover {
+          background: #3d9639 !important;
         }
 
-        .bag-range::-webkit-slider-thumb {
-          background: #4BAF47;
-          border: 2px solid #4BAF47;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          margin-top: -6px;
-        }
-        .bag-range::-moz-range-thumb {
-          background: #4BAF47;
-          border: 2px solid #4BAF47;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-        }
-
-        /* Responsive tweaks */
         @media (max-width: 992px) {
           .filters-section { width: 100% !important; padding-left: 1rem !important; padding-right: 1rem !important; }
           .filter-group, .filter-results { width: 100% !important; }

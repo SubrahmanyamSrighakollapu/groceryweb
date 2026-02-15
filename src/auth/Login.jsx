@@ -125,6 +125,17 @@ const Login = () => {
             redirectRoute = '/admin';
           } else if (user.roleName === 'Agent' || user.roleName === 'Supervisor') {
             redirectRoute = '/agent';
+            
+            // Fetch agent details for agents
+            api.get(`/auth/users/getAgentById/${user.userId}`)
+              .then(agentDetailsResponse => {
+                if (agentDetailsResponse.status === 1 && agentDetailsResponse.result) {
+                  sessionStorage.setItem('agentDetails', JSON.stringify(agentDetailsResponse.result));
+                }
+              })
+              .catch(error => {
+                console.error('Failed to fetch agent details:', error);
+              });
           }
           
           navigate(redirectRoute);

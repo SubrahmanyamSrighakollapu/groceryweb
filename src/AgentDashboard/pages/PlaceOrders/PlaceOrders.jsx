@@ -24,7 +24,7 @@ const PlaceOrders = () => {
             <span>Customer</span>
             <span>Product</span>
             <span>QTY</span>
-            <span>status</span>
+            <span className="text-center">status</span>
             <span>Action</span>
           </div>
 
@@ -33,7 +33,7 @@ const PlaceOrders = () => {
             <span>Ramesh</span>
             <span>Wheat</span>
             <span>2.5 Tons</span>
-            <span className="awaiting">Awaiting Purchase</span>
+            <span className="awaiting text-center">Awaiting Purchase</span>
             <span><img src={del} alt="" /></span>
           </div>
 
@@ -42,7 +42,7 @@ const PlaceOrders = () => {
             <span>Raju</span>
             <span>Toor Dal</span>
             <span>500 Kg</span>
-            <span className="transit">In Transit</span>
+            <span className="transit text-center">In Transit</span>
             <span><img src={del} alt="" /></span>
           </div>
           
@@ -51,7 +51,7 @@ const PlaceOrders = () => {
             <span>Ramesh</span>
             <span>Basmati Rice</span>
             <span>1 Ton</span>
-            <span className="delivered">Delivered</span>
+            <span className="delivered text-center">Delivered</span>
             <span><img src={del} alt="" /></span>
           </div>
         </div>
@@ -114,141 +114,209 @@ const PlaceOrders = () => {
       <style jsx>{`
         * {
           box-sizing: border-box;
-          font-family: Poppins;
+          font-family: 'Segoe UI', sans-serif;
         }
 
         .place-page {
           display: flex;
-          gap: 28px;
+          gap: 24px;
           padding: 24px;
-          background: #f7f9f4;
+          background-color: #f7f9fc;
+          min-height: 100vh;
         }
 
         .left-section {
-          width: 720px;
+          flex: 1;
+          max-width: 1000px;
         }
 
         .title {
-          font-size: 20px;
-          font-weight: 500;
-          margin-bottom: 4px;
+          font-size: 24px;
+          font-weight: 600;
+          color: #2d3748;
+          margin: 0 0 8px 0;
         }
 
         .subtitle {
-          font-size: 13px;
-          color: #6f6f6f;
-          margin-bottom: 14px;
+          font-size: 12px;
+          color: #6b7280;
+          margin-bottom: 20px;
         }
 
         .search {
-          width: 720px;
-          height: 40px;
-          border-radius: 20px;
-          border: 1px solid #ddd;
+          width: 100%;
+          height: 44px;
+          border-radius: 8px;
+          border: 1px solid #e2e8f0;
           padding: 0 16px;
-          margin-bottom: 16px;
+          margin-bottom: 20px;
+          font-size: 14px;
+          transition: all 0.2s;
+        }
+
+        .search:focus {
+          outline: none;
+          border-color: #10b981;
+          box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
         }
 
         .orders-box {
-          background: #fff;
-          border: 1px solid #9e9e9e;
-          border-radius: 8px;
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
           overflow: hidden;
         }
 
         .orders-header {
-          padding: 12px 16px;
-          font-weight: 500;
-          border-bottom: 1px solid #ddd;
+          padding: 16px 20px;
+          font-weight: 600;
+          font-size: 16px;
+          color: #2d3748;
+          background: #f8fafc;
+          border-bottom: 1px solid #e2e8f0;
         }
 
         .orders-thead {
           display: grid;
           grid-template-columns: 1.2fr 1fr 1.2fr 0.8fr 1.2fr 0.6fr;
-          padding: 10px 16px;
-          font-size: 13px;
-          font-weight: 500;
-          color: #0b7a0b;
-          background: #f7fbf4;
-          border-bottom: 1px solid #e0e0e0;
+          padding: 12px 20px;
+          font-size: 14px;
+          font-weight: 600;
+          color: #4a5568;
+          background: #f8fafc;
+          border-bottom: 1px solid #e2e8f0;
         }
 
         .orders-row {
           display: grid;
           grid-template-columns: 1.2fr 1fr 1.2fr 0.8fr 1.2fr 0.6fr;
-          padding: 12px 16px;
-          font-size: 13px;
+          padding: 12px 20px;
+          font-size: 14px;
           align-items: center;
+          border-bottom: 1px solid #e2e8f0;
+          transition: background-color 0.2s;
+        }
+
+        .orders-row:hover {
+          background-color: #f8fafc;
         }
 
         .orders-row img {
-          width: 18px;
-          height: 18px;
+          width: 20px;
+          height: 20px;
+          cursor: pointer;
+          transition: transform 0.2s;
         }
 
-        .awaiting { color: #ff7a00; }
-        .transit { color: #a000c8; }
-        .delivered { color: #2aa32a; }
+        .orders-row img:hover {
+          transform: scale(1.1);
+        }
+
+        .awaiting { 
+          color: #f59e0b;
+          font-weight: 500;
+          padding: 4px 8px;
+          border-radius: 4px;
+          display: inline-block;
+        }
+        .transit { 
+          color: #8b5cf6;
+          font-weight: 500;
+          padding: 4px 12px;
+          border-radius: 12px;
+          display: inline-block;
+        }
+        .delivered { 
+          color: #10b981;
+          font-weight: 500;
+          padding: 4px 12px;
+          border-radius: 12px;
+          display: inline-block;
+        }
 
         .orders-footer {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-top: 10px;
-          font-size: 13px;
+          margin-top: 16px;
+          font-size: 14px;
+          color: #4a5568;
         }
 
         .orders-footer button {
-          width: 80px;
-          height: 32px;
-          border-radius: 6px;
-          border: 1px solid #ccc;
-          background: #fff;
+          padding: 8px 20px;
+          border-radius: 8px;
+          border: 1px solid #e2e8f0;
+          background: white;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .orders-footer button:hover {
+          background-color: #10b981;
+          color: white;
+          border-color: #10b981;
+          transform: translateY(-1px);
         }
 
         .right-section {
-          width: 360px;
+          width: 400px;
+          flex-shrink: 0;
         }
 
         .create-card {
-          background: #fff;
-          border: 1px solid #dcdcdc;
-          border-radius: 8px;
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+          overflow: hidden;
         }
 
         .create-header {
-          height: 56px;
-          background: #f3ffe6;
+          height: 64px;
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding: 0 16px;
-          font-weight: 500;
+          gap: 12px;
+          padding: 0 20px;
+          font-weight: 600;
+          font-size: 16px;
+          color: white;
         }
 
         .plus {
-          width: 28px;
-          height: 28px;
+          width: 35px;
+          height: 35px;
           border-radius: 50%;
-          background: #4CAF50;
-          color: #fff;
+          background: white;
+          color: #10b981;
           display: flex;
           align-items: center;
           justify-content: center;
+          font-size: 20px;
+          font-weight: 600;
+          padding-bottom:5px;
         }
 
         .form-body {
-          padding: 16px;
+          padding: 20px;
         }
 
         .form-body input {
           width: 100%;
-          height: 36px;
-          margin-bottom: 10px;
+          height: 40px;
+          margin-bottom: 12px;
           padding: 0 12px;
-          border-radius: 4px;
-          border: 1px solid #ccc;
-          font-size: 13px;
+          border-radius: 8px;
+          border: 1px solid #e2e8f0;
+          font-size: 14px;
+          transition: all 0.2s;
+        }
+
+        .form-body input:focus {
+          outline: none;
+          border-color: #10b981;
+          box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
         }
 
         .row2 {
@@ -259,25 +327,36 @@ const PlaceOrders = () => {
         .section {
           display: flex;
           align-items: center;
-          gap: 6px;
-          font-weight: 500;
-          font-size: 13px;
-          margin: 12px 0 6px;
+          gap: 8px;
+          font-weight: 600;
+          font-size: 14px;
+          color: #2d3748;
+          margin: 20px 0 12px;
         }
 
         .section img {
-          width: 16px;
+          width: 18px;
+          height: 18px;
         }
 
         .submit {
           width: 100%;
-          height: 36px;
-          background: #4CAF50;
+          height: 44px;
+          background: #10b981;
           border: none;
-          border-radius: 6px;
-          color: #fff;
-          margin-top: 12px;
-          font-size: 13px;
+          border-radius: 8px;
+          color: white;
+          margin-top: 20px;
+          font-size: 15px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .submit:hover {
+          background: #059669;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
         @media (max-width: 1200px) {
@@ -287,10 +366,13 @@ const PlaceOrders = () => {
           
           .left-section, .right-section {
             width: 100%;
+            max-width: 100%;
           }
-          
-          .search {
-            width: 100%;
+
+          .orders-thead,
+          .orders-row {
+            font-size: 12px;
+            padding: 10px 12px;
           }
         }
       `}</style>

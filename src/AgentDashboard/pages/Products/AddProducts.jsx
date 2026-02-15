@@ -24,6 +24,7 @@ const AddProducts = () => {
     statusId: '',
     images: []
   });
+  const [imageInputs, setImageInputs] = useState([{ id: 1 }]);
 
   useEffect(() => {
     fetchProducts();
@@ -84,9 +85,35 @@ const AddProducts = () => {
     });
   };
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    setFormData(prev => ({ ...prev, images: files }));
+  const handleFileChange = (e, inputId) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData(prev => {
+        const newImages = [...prev.images];
+        const existingIndex = newImages.findIndex(img => img.inputId === inputId);
+        if (existingIndex >= 0) {
+          newImages[existingIndex] = { file, inputId };
+        } else {
+          newImages.push({ file, inputId });
+        }
+        return { ...prev, images: newImages };
+      });
+    }
+  };
+
+  const addImageInput = () => {
+    const newId = imageInputs.length > 0 ? Math.max(...imageInputs.map(i => i.id)) + 1 : 1;
+    setImageInputs([...imageInputs, { id: newId }]);
+  };
+
+  const removeImageInput = (inputId) => {
+    if (imageInputs.length > 1) {
+      setImageInputs(imageInputs.filter(input => input.id !== inputId));
+      setFormData(prev => ({
+        ...prev,
+        images: prev.images.filter(img => img.inputId !== inputId)
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -135,8 +162,8 @@ const AddProducts = () => {
         apiFormData.append('isActive', true);
         
         // Add images
-        formData.images.forEach((image, index) => {
-          apiFormData.append('productImages', image);
+        formData.images.forEach((imageObj) => {
+          apiFormData.append('productImages', imageObj.file);
         });
         
         const response = await productService.onboardProduct(apiFormData);
@@ -162,6 +189,7 @@ const AddProducts = () => {
       name: '', title: '', description: '', quantityId: '', price: '',
       discount: '', finalPrice: '', gst: '', categoryId: '', statusId: '', images: []
     });
+    setImageInputs([{ id: 1 }]);
     setEditingProduct(null);
     setShowPopup(false);
   };
@@ -284,41 +312,37 @@ const AddProducts = () => {
         //   background-color: #dc2626;
         // }
 
-        .popup-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: rgba(0, 0, 0, 0.5);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 1000;
-        }
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;   /* reduced */
+  z-index: 9999;
+}
 
-        .popup {
-          background: white;
-          border-radius: 12px;
-          padding: 32px;
-          width: 800px;
-          max-width: 95vw;
-          max-height: 90vh;
-          overflow-y: auto;
-        }
-
-        .popup-title {
-          font-size: 24px;
-          font-weight: 600;
-          color: #2d3748;
-          margin: 0 0 32px 0;
-          text-align: center;
-          border-bottom: 2px solid #e2e8f0;
-          padding-bottom: 16px;
-        }
+.popup {
+  background: #ffffff;
+  width: 650px;                 /* reduced width */
+  max-width: 95%;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 6px;           /* sharp corners */
+  padding: 24px;                /* reduced padding */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  animation: slideUp 0.2s ease-out;
+}
+.popup-title {
+  font-size: 20px;   /* smaller */
+  font-weight: 600;
+  margin-bottom: 18px;
+  text-align: left;  /* more professional */
+}
 
         .form-section {
-          margin-bottom: 32px;
+          margin-bottom: 18px;
         }
 
         .section-title {
@@ -330,19 +354,17 @@ const AddProducts = () => {
           border-bottom: 1px solid #e2e8f0;
         }
 
-        .form-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 24px;
-          margin-bottom: 20px;
-        }
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;  /* reduced */
+}
 
         .form-grid-three {
           display: grid;
           grid-template-columns: 1fr 1fr 1fr;
-          gap: 20px;
-          margin-bottom: 20px;
-        }
+          gap: 14px;
+=        }
 
         .form-group {
           margin-bottom: 24px;
@@ -352,33 +374,33 @@ const AddProducts = () => {
           grid-column: 1 / -1;
         }
 
-        .form-group label {
-          display: block;
-          font-size: 14px;
-          font-weight: 600;
-          color: #4a5568;
-          margin-bottom: 8px;
-        }
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;   /* smaller */
+  color: #495057;
+}
 
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-          width: 100%;
-          padding: 14px 16px;
-          border: 2px solid #e2e8f0;
-          border-radius: 8px;
-          font-size: 15px;
-          box-sizing: border-box;
-          transition: border-color 0.2s;
-        }
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 8px 12px;            /* smaller padding */
+  border: 1px solid #ced4da;    /* bootstrap border */
+  border-radius: 4px;           /* sharp */
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
 
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-          outline: none;
-          border-color: #10b981;
-          box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #0d6efd;  /* bootstrap blue */
+  box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+}
 
         .form-group textarea {
           height: 80px;
@@ -430,8 +452,8 @@ const AddProducts = () => {
           background-color: #f3f4f6;
           color: #6b7280;
           border: 2px solid #e5e7eb;
-          padding: 12px 32px;
-          border-radius: 8px;
+          padding: 8px 18px;
+          border-radius: 4px;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.2s;
@@ -446,8 +468,8 @@ const AddProducts = () => {
           background-color: #10b981;
           color: white;
           border: 2px solid #10b981;
-          padding: 12px 32px;
-          border-radius: 8px;
+          padding: 8px 18px;
+          border-radius: 4px;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.2s;
@@ -489,6 +511,22 @@ const AddProducts = () => {
           border-color: #ef4444;
           box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
         }
+
+        @keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
       `}</style>
 
       <div className="page-container">
@@ -689,22 +727,72 @@ const AddProducts = () => {
                 {/* Images Section */}
                 <div className="form-section">
                   <h3 className="section-title">Product Images *</h3>
-                  <div className="form-group">
-                    <div className="file-input" onClick={() => document.getElementById('images').click()}>
-                      <input
-                        type="file"
-                        id="images"
-                        multiple
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        required={!editingProduct}
-                      />
-                      <p className="file-input-text">📁 Click to upload images or drag and drop</p>
-                      {formData.images.length > 0 && (
-                        <p className="file-count">{formData.images.length} file(s) selected</p>
-                      )}
+                  {imageInputs.map((input, index) => (
+                    <div key={input.id} className="form-group" style={{ marginBottom: '16px' }}>
+                      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                        <div style={{ flex: 1 }}>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileChange(e, input.id)}
+                            style={{
+                              width: '100%',
+                              padding: '12px',
+                              border: '2px solid #e2e8f0',
+                              borderRadius: '8px'
+                            }}
+                            required={index === 0 && !editingProduct}
+                          />
+                        </div>
+                        {index === imageInputs.length - 1 ? (
+                          <button
+                            type="button"
+                            onClick={addImageInput}
+                            style={{
+                              width: '40px',
+                              height: '40px',
+                              borderRadius: '50%',
+                              border: 'none',
+                              background: '#10b981',
+                              color: 'white',
+                              fontSize: '20px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}
+                          >
+                            +
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => removeImageInput(input.id)}
+                            style={{
+                              width: '40px',
+                              height: '40px',
+                              borderRadius: '50%',
+                              border: 'none',
+                              background: '#ef4444',
+                              color: 'white',
+                              fontSize: '20px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}
+                          >
+                            −
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  ))}
+                  {formData.images.length > 0 && (
+                    <p style={{ color: '#10b981', fontWeight: '600', marginTop: '8px' }}>
+                      {formData.images.length} image(s) selected
+                    </p>
+                  )}
                 </div>
 
                 <div className="popup-actions">

@@ -1,14 +1,36 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductCard from '../../../components/ProductCard/ProductCard';
-import productsData from '../../../data/products.json';
 
-const AgentRiceAndGrains = () => {
+const AgentRiceAndGrains = ({ filters = { searchQuery: '', selectedCategories: [], minPrice: '', maxPrice: '' }, products = [], loading = false }) => {
   const [visibleCount, setVisibleCount] = useState(6);
-  const products = productsData.products;
   const navigate = useNavigate();
 
-  const loadMore = () => setVisibleCount(prev => Math.min(prev + 6, products.length));
+  // Filter products based on applied filters
+  const filteredProducts = useMemo(() => {
+    return products.filter(product => {
+      if (filters.searchQuery && filters.searchQuery.trim() !== '') {
+        const query = filters.searchQuery.toLowerCase();
+        const matchesSearch = 
+          (product.title && product.title.toLowerCase().includes(query)) ||
+          (product.name && product.name.toLowerCase().includes(query)) ||
+          (product.categoryName && product.categoryName.toLowerCase().includes(query));
+        if (!matchesSearch) return false;
+      }
+
+      if (filters.selectedCategories && filters.selectedCategories.length > 0) {
+        if (!filters.selectedCategories.includes(product.categoryName)) return false;
+      }
+
+      const productPrice = parseFloat(product.price);
+      if (filters.minPrice && filters.minPrice !== '' && productPrice < parseFloat(filters.minPrice)) return false;
+      if (filters.maxPrice && filters.maxPrice !== '' && productPrice > parseFloat(filters.maxPrice)) return false;
+
+      return true;
+    });
+  }, [products, filters]);
+
+  const loadMore = () => setVisibleCount(prev => Math.min(prev + 6, filteredProducts.length));
   const showLess = () => setVisibleCount(6);
 
 
@@ -42,13 +64,24 @@ const AgentRiceAndGrains = () => {
             color: '#000000'
           }}
         >
-          {products.length} Products Found
+          {loading ? 'Loading...' : `${filteredProducts.length} Products Found`}
         </h5>
       </div>
 
       {/* Product Grid */}
-      <div className="row g-4 justify-content-center">
-        {products.slice(0, visibleCount).map(product => (
+      {loading ? (
+        <div className="text-center py-5">
+          <div className="spinner-border text-success" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : filteredProducts.length === 0 ? (
+        <div className="text-center py-5">
+          <p className="text-muted">No products found matching your filters</p>
+        </div>
+      ) : (
+        <div className="row g-4">
+        {filteredProducts.slice(0, visibleCount).map(product => (
           <div key={product.id} className="col-12 col-sm-6 col-lg-4">
             <div 
               className="agent-product-card-wrapper" 
@@ -60,10 +93,11 @@ const AgentRiceAndGrains = () => {
           </div>
         ))}
       </div>
+      )}
 
       {/* Load More / Show Less Button */}
       <div className="text-center mt-5">
-        {visibleCount < products.length ? (
+        {visibleCount < filteredProducts.length ? (
           <button 
             className="btn load-more-btn"
             onClick={loadMore}

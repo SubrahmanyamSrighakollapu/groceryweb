@@ -13,7 +13,7 @@ import Icon4 from '../../assets/AgentDashboard/Sidebar/Icon4.png';
 import Icon5 from '../../assets/AgentDashboard/Sidebar/Icon5.png';
 import Icon6 from '../../assets/AgentDashboard/Sidebar/Icon6.png';
 
-const AgentSidebar = () => {
+const AgentSidebar = ({ onClose }) => {
   const location = useLocation();
   const [openDropdowns, setOpenDropdowns] = useState({});
 
@@ -145,6 +145,7 @@ const AgentSidebar = () => {
                     <Link
                       key={subIndex}
                       to={subItem.path}
+                      onClick={onClose}
                       style={{
                         ...sidebarStyles.subItem,
                         ...(isActive(subItem.path) ? sidebarStyles.activeItem : {})
@@ -170,6 +171,7 @@ const AgentSidebar = () => {
           ) : (
             <Link 
               to={item.path}
+              onClick={onClose}
               style={{
                 ...sidebarStyles.item,
                 ...(isActive(item.path) ? sidebarStyles.activeItem : {})

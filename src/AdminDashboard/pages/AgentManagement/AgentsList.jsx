@@ -137,7 +137,11 @@ const AgentsList = () => {
     try {
       setLoading(true);
       const newStatus = selectedAgent.isActive === 1 ? false : true;
-      const response = await agentService.updateAgentStatus(selectedAgent.userId, { status: newStatus });
+      const payload = {
+        userId: selectedAgent.userId,
+        isActive: newStatus
+      };
+      const response = await agentService.updateAgentStatus(payload);
       
       if (response.status === 1) {
         const action = selectedAgent.isActive === 1 ? 'deactivated' : 'activated';

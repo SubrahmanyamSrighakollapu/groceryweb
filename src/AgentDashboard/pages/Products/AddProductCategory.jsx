@@ -289,50 +289,66 @@ const AddProductCategory = () => {
         // .delete-btn:hover {
         //   background-color: #dc2626;
         // }
-        .popup-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: rgba(0, 0, 0, 0.5);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 1000;
-        }
-        .popup {
-          background: white;
-          border-radius: 12px;
-          padding: 32px;
-          width: 500px;
-          max-width: 90vw;
-        }
-        .popup-title {
-          font-size: 20px;
-          font-weight: 600;
-          color: #2d3748;
-          margin: 0 0 24px 0;
-        }
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  z-index: 9999;
+}
+
+.popup {
+  background: #ffffff;
+  width: 650px;
+  max-width: 95%;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 6px;
+  padding: 24px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  animation: slideUp 0.2s ease-out;
+}
+
+.popup-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  text-align: left;
+}
         .form-group {
           margin-bottom: 20px;
         }
-        .form-group label {
-          display: block;
-          font-size: 14px;
-          font-weight: 600;
-          color: #4a5568;
-          margin-bottom: 8px;
-        }
-        .form-group input,
-        .form-group textarea {
-          width: 100%;
-          padding: 12px 16px;
-          border: 1px solid #e2e8f0;
-          border-radius: 8px;
-          font-size: 15px;
-          box-sizing: border-box;
-        }
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #495057;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+}
         .form-group textarea {
           height: 80px;
           resize: vertical;
@@ -382,27 +398,50 @@ const AddProductCategory = () => {
         }
         .popup-actions {
           display: flex;
-          gap: 12px;
-          justify-content: flex-end;
-          margin-top: 24px;
+          gap: 16px;
+          justify-content: center;
+          margin-top: 40px;
+          padding-top: 24px;
+          border-top: 1px solid #e2e8f0;
         }
+
         .btn-cancel {
-          background-color: #e2e8f0;
-          color: #4a5568;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 8px;
+          background-color: #f3f4f6;
+          color: #6b7280;
+          border: 2px solid #e5e7eb;
+          padding: 8px 18px;
+          border-radius: 4px;
           font-weight: 600;
           cursor: pointer;
+          transition: all 0.2s;
         }
+
+        .btn-cancel:hover {
+          background-color: #e5e7eb;
+          transform: translateY(-1px);
+        }
+
         .btn-submit {
           background-color: #10b981;
           color: white;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 8px;
+          border: 2px solid #10b981;
+          padding: 8px 18px;
+          border-radius: 4px;
           font-weight: 600;
           cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .btn-submit:hover {
+          background-color: #059669;
+          border-color: #059669;
+          transform: translateY(-1px);
+        }
+
+        .btn-submit:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
         }
         .delete-popup {
           background: white;
@@ -459,6 +498,22 @@ const AddProductCategory = () => {
         textarea:focus:invalid {
           border-color: #ef4444;
           box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
         }
       `}</style>
 

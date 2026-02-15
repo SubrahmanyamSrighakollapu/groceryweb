@@ -116,83 +116,125 @@ const RegisterBankForm = () => {
     toast.info('Form cancelled');
   };
   return (
-    <div className="card shadow-sm p-4 rounded-3">
+    <div style={styles.card}>
       <form onSubmit={handleSubmit}>
-        <Input 
-          label="Settlement Account Type" 
-          type="select" 
-          options={accountTypes}
-          name="accountType"
-          value={formData.accountType}
-          onChange={handleInputChange}
-          required
-        />
-        <Input 
-          label="Contact No." 
-          name="contactNo"
-          value={formData.contactNo}
-          onChange={handleInputChange}
-          placeholder="Enter contact number"
-          required
-        />
-        <Input 
-          label="A/C Holder Name" 
-          name="accountHolderName"
-          value={formData.accountHolderName}
-          onChange={handleInputChange}
-          placeholder="Enter account holder name"
-          required
-        />
-        <Input 
-          label="Bank A/C No." 
-          name="bankAccountNo"
-          value={formData.bankAccountNo}
-          onChange={handleInputChange}
-          placeholder="Enter bank account number"
-          required
-        />
-        <Input 
-          label="Confirm Bank A/C No." 
-          name="confirmBankAccountNo"
-          value={formData.confirmBankAccountNo}
-          onChange={handleInputChange}
-          placeholder="Confirm bank account number"
-          required
-        />
-        <Input 
-          label="Bank Name" 
-          type="select" 
-          placeholder="Search Bank Name" 
-          options={bankNames}
-          name="bankName"
-          value={formData.bankName}
-          onChange={handleInputChange}
-          required
-        />
-        <Input 
-          label="IFSC Code" 
-          name="ifscCode"
-          value={formData.ifscCode}
-          onChange={handleInputChange}
-          placeholder="Enter IFSC code"
-          required
-        />
-        <Input 
-          label="PAN Number" 
-          name="panNo"
-          value={formData.panNo}
-          onChange={handleInputChange}
-          placeholder="Enter PAN number"
-          required
-        />
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Settlement Account Type</label>
+          <select 
+            style={styles.input}
+            name="accountType"
+            value={formData.accountType}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Select Account Type</option>
+            {accountTypes.map((type) => (
+              <option key={type.statusId} value={type.statusId}>
+                {type.statusValue}
+              </option>
+            ))}
+          </select>
+        </div>
+        
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Contact No.</label>
+          <input 
+            style={styles.input}
+            name="contactNo"
+            value={formData.contactNo}
+            onChange={handleInputChange}
+            placeholder="Enter contact number"
+            required
+          />
+        </div>
+        
+        <div style={styles.formGroup}>
+          <label style={styles.label}>A/C Holder Name</label>
+          <input 
+            style={styles.input}
+            name="accountHolderName"
+            value={formData.accountHolderName}
+            onChange={handleInputChange}
+            placeholder="Enter account holder name"
+            required
+          />
+        </div>
+        
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Bank A/C No.</label>
+          <input 
+            style={styles.input}
+            name="bankAccountNo"
+            value={formData.bankAccountNo}
+            onChange={handleInputChange}
+            placeholder="Enter bank account number"
+            required
+          />
+        </div>
+        
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Confirm Bank A/C No.</label>
+          <input 
+            style={styles.input}
+            name="confirmBankAccountNo"
+            value={formData.confirmBankAccountNo}
+            onChange={handleInputChange}
+            placeholder="Confirm bank account number"
+            required
+          />
+        </div>
+        
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Bank Name</label>
+          <select 
+            style={styles.input}
+            name="bankName"
+            value={formData.bankName}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Search Bank Name</option>
+            {bankNames.map((bank) => (
+              <option key={bank.statusId} value={bank.statusId}>
+                {bank.statusValue}
+              </option>
+            ))}
+          </select>
+        </div>
+        
+        <div style={styles.formGroup}>
+          <label style={styles.label}>IFSC Code</label>
+          <input 
+            style={styles.input}
+            name="ifscCode"
+            value={formData.ifscCode}
+            onChange={handleInputChange}
+            placeholder="Enter IFSC code"
+            required
+          />
+        </div>
+        
+        <div style={styles.formGroup}>
+          <label style={styles.label}>PAN Number</label>
+          <input 
+            style={styles.input}
+            name="panNo"
+            value={formData.panNo}
+            onChange={handleInputChange}
+            placeholder="Enter PAN number"
+            required
+          />
+        </div>
 
-        <div className="d-flex justify-content-between align-items-center mt-4">
-          <button type="button" style={styles.outlineBtn} onClick={handleCancel}>Cancel</button>
-          <button type="submit" style={styles.registerBtn}>
-            Register <br /> Beneficiary
+        <div style={styles.buttonRow}>
+          <button type="button" style={styles.cancelBtn} onClick={handleCancel}>
+            Cancel
           </button>
-          <button type="button" style={styles.outlineBtn} onClick={handleVerifyBeneficiary}>
-            Verify <br /> Beneficiary
+          <button type="submit" style={styles.submitBtn}>
+            Register Beneficiary
+          </button>
+          <button type="button" style={styles.verifyBtn} onClick={handleVerifyBeneficiary}>
+            Verify Beneficiary
           </button>
         </div>
       </form>
@@ -200,55 +242,69 @@ const RegisterBankForm = () => {
   );
 };
 
-const Input = ({ label, type = "input", placeholder = "Select", options = [], name, value, onChange, required = false }) => (
-  <div className="mb-3">
-    <label className="form-label">{label}</label>
-    {type === "select" ? (
-      <select 
-        className="form-select"
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-      >
-        <option value="">{placeholder}</option>
-        {options.map((option) => (
-          <option key={option.statusId} value={option.statusId}>
-            {option.statusValue}
-          </option>
-        ))}
-      </select>
-    ) : (
-      <input 
-        className="form-control"
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        required={required}
-      />
-    )}
-  </div>
-);
-
 const styles = {
-  outlineBtn: {
-    width: "148px",
-    height: "49px",
-    borderRadius: "8px",
-    border: "1px solid #565656",
-    backgroundColor: "#F5F5F5",
-    fontWeight: "500",
+  card: {
+    background: 'white',
+    borderRadius: '12px',
+    padding: '24px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)'
   },
-  registerBtn: {
-    width: "148px",
-    height: "49px",
-    borderRadius: "8px",
-    border: "none",
-    backgroundColor: "#4BAF47",
-    color: "#ffffff",
-    fontWeight: "500",
+  formGroup: {
+    marginBottom: '16px'
   },
+  label: {
+    display: 'block',
+    fontSize: '13px',
+    fontWeight: '600',
+    marginBottom: '6px',
+    color: '#495057'
+  },
+  input: {
+    width: '100%',
+    padding: '10px 12px',
+    border: '1px solid #e2e8f0',
+    borderRadius: '8px',
+    fontSize: '14px',
+    transition: 'all 0.2s',
+    outline: 'none'
+  },
+  buttonRow: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '16px',
+    marginTop: '24px',
+    paddingTop: '24px',
+    borderTop: '1px solid #e2e8f0'
+  },
+  cancelBtn: {
+    padding: '10px 24px',
+    borderRadius: '8px',
+    border: '1px solid #e2e8f0',
+    background: 'white',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.2s'
+  },
+  submitBtn: {
+    padding: '10px 24px',
+    borderRadius: '8px',
+    border: 'none',
+    background: '#10b981',
+    color: 'white',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.2s'
+  },
+  verifyBtn: {
+    padding: '10px 24px',
+    borderRadius: '8px',
+    border: '1px solid #10b981',
+    background: 'white',
+    color: '#10b981',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.2s'
+  }
 };
 
 export default RegisterBankForm;

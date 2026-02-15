@@ -89,6 +89,80 @@ const productService = {
       console.error('Error approving/rejecting product:', error);
       throw error;
     }
+  },
+
+  // Add to wishlist
+  addToWishlist: async (productId) => {
+    try {
+      const response = await api.post('/products/namageAddToWishList', {
+        cartId: 0,
+        productId,
+        noOfQuantity: 0
+      });
+      return response;
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+      throw error;
+    }
+  },
+
+  // Get wishlist items
+  getWishlistItems: async () => {
+    try {
+      const response = await api.get('/products/getUserProductsInWishList');
+      return response;
+    } catch (error) {
+      console.error('Error fetching wishlist:', error);
+      throw error;
+    }
+  },
+
+  // Get product by ID
+  getProductById: async (productId) => {
+    try {
+      const response = await api.get(`/products/getProductInfoById/${productId}`);
+      return response;
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      throw error;
+    }
+  },
+
+  // Add to cart
+  addToCart: async (productId, quantity) => {
+    try {
+      const response = await api.post('/products/namageAddToCart', {
+        cartId: 0,
+        productId,
+        noOfQuantity: quantity
+      });
+      return response;
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      throw error;
+    }
+  },
+
+  // Get cart items
+  getCartItems: async () => {
+    try {
+      const response = await api.get('/products/getUserCartProducts');
+      return response;
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+      throw error;
+    }
+  },
+
+  // Remove from cart
+  removeFromCart: async (cartId) => {
+    try {
+      const response = await api.get(`/products/removeProductFromCart/${cartId}`);
+      return response;
+    } catch (error) {
+      console.error('Error removing from cart:', error);
+      throw error;
+    }
   }
 };
 
