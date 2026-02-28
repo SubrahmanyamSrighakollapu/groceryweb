@@ -1,5 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import colors from "../styles/colors";
 
 import ContactImg from "../assets/contact/Contact_img.png";
 import BackImg from "../assets/contact/back_img.png";
@@ -19,7 +20,7 @@ const ContactUs = () => {
       >
         <div
           className="d-flex flex-column justify-content-center align-items-center h-100"
-          style={{ background: "rgba(0,0,0,0.45)" }}
+          style={{ background: colors.overlay }}
         >
           <small className="text-uppercase">Home / Contact</small>
           <h1 className="fw-bold">Contact</h1>
@@ -31,7 +32,7 @@ const ContactUs = () => {
           <div className="col-md-4">
             <div
               className="p-4 text-white rounded text-center h-100 d-flex flex-column justify-content-center"
-              style={{ background: "#4CAF50", minHeight: "200px" }}
+              style={{ background: colors.primary, minHeight: "200px" }}
             >
               <h4 className="fw-bold mb-3" style={{ fontSize: "1.5rem", letterSpacing: "0.5px", color: "black" }}>About</h4>
               <p className="mb-0" style={{ 
@@ -49,7 +50,7 @@ const ContactUs = () => {
           <div className="col-md-4">
             <div
               className="p-4 text-white rounded text-center h-100 d-flex flex-column justify-content-center"
-              style={{ background: "#C5D63C", minHeight: "200px" }}
+              style={{ background: colors.tertiary, minHeight: "200px" }}
             >
               <h4 className="fw-bold mb-3" style={{ fontSize: "1.5rem", letterSpacing: "0.5px", color: "black" }}>Contact</h4>
               <div className="d-flex flex-column gap-2">
@@ -68,7 +69,7 @@ const ContactUs = () => {
           <div className="col-md-4">
             <div
               className="p-4 text-white rounded text-center h-100 d-flex flex-column justify-content-center"
-              style={{ background: "#F2C94C", minHeight: "200px" }}
+              style={{ background: colors.tertiaryAlt, minHeight: "200px" }}
             >
               <h4 className="fw-bold mb-3" style={{ fontSize: "1.5rem", letterSpacing: "0.5px", color: "black" }}>Address</h4>
               <p className="mb-0" style={{ 

@@ -63,7 +63,7 @@ const AgentSidebar = ({ onClose }) => {
       color: 'inherit'
     },
     activeItem: {
-      backgroundColor: '#4BAF4747',
+      backgroundColor: '#EC5B1347',
       fontWeight: '600'
     },
     icon: {

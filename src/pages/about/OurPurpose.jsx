@@ -3,6 +3,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import icon1 from '../../assets/about/Icon1.png';
 import icon2 from '../../assets/about/Icon2.png';
+import colors from '../../styles/colors';
 
 const OurPurpose = () => {
   const purposes = [
@@ -21,10 +22,10 @@ const OurPurpose = () => {
   return (
     <section className="w-100 position-relative mt-5 text-center" style={{
       padding: '4rem 8rem',
-      backgroundColor: '#F8F7F0CC'
+      backgroundColor: colors.secondary
     }}>
       <h2 className="mb-5" style={{
-        color: '#1F1E17',
+        color: colors.textPrimary,
         fontWeight: '700',
         fontSize: '2.5rem',
         letterSpacing: '1px'
@@ -41,7 +42,7 @@ const OurPurpose = () => {
             width: '35.0625rem',
             maxWidth: '100%',
             height: '20.8125rem',
-            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+            boxShadow: `0px 2px 4px ${colors.shadow}`,
             boxSizing: 'border-box'
           }}>
             <div className="icon-bg mb-4">
@@ -53,7 +54,7 @@ const OurPurpose = () => {
             </div>
 
             <h3 className="card-title mb-3" style={{
-              color: '#1F1E17',
+              color: colors.textPrimary,
               fontWeight: '600',
               fontSize: '1.5rem',
               marginBottom: '1rem'
@@ -62,7 +63,7 @@ const OurPurpose = () => {
             </h3>
 
             <p className="card-text" style={{
-              color: '#555',
+              color: colors.textTertiary,
               fontSize: '1rem',
               lineHeight: '1.7',
               textAlign: 'left'

@@ -199,7 +199,7 @@ const OtpVerification = () => {
                 <span 
                   onClick={handleResend} 
                   style={{ 
-                    color: '#0A6806', 
+                    color: '#EC5B13', 
                     cursor: 'pointer', 
                     fontWeight: 600 
                   }}

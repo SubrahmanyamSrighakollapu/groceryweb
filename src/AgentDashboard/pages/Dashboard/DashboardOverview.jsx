@@ -12,7 +12,7 @@ const DashboardOverview = () => {
       id: 1,
       orderId: "Order#2416",
       status: "Out For Delivery",
-      statusColor: "#4BAF47",
+      statusColor: "#EC5B13",
       location: "Hyderabad",
       time: "Est: Today",
       timeColor: "#565656"
@@ -36,7 +36,7 @@ const DashboardOverview = () => {
       amount: "80,000",
       status: "Received",
       statusBg: "#B2FBAF5E",
-      statusColor: "#4BAF47"
+      statusColor: "#EC5B13"
     },
     {
       id: 2,
@@ -79,8 +79,8 @@ const DashboardOverview = () => {
     {
       id: 1,
       icon: Icon9,
-      bg: "#4BAF4733",
-      border: "1px solid #0A6806",
+      bg: "#EC5B1333",
+      border: "1px solid #EC5B13",
       text: "Farmer Credit"
     },
     {

@@ -108,7 +108,7 @@ const Navbar = () => {
                   style={{
                     width: '11.3125rem',
                     height: '2.6875rem',
-                    background: '#0A6806',
+                    background: '#EC5B13',
                     fontFamily: 'Manrope, sans-serif',
                     fontSize: '1rem',
                     borderRadius: '0.25rem',
@@ -146,7 +146,7 @@ const Navbar = () => {
                       style={{
                         top: '-2px',
                         left: '12px',
-                        background: '#4BAF47',
+                        background: '#EC5B13',
                         color: 'white',
                         borderRadius: '50%',
                         width: '20px',
@@ -181,7 +181,7 @@ const Navbar = () => {
                       style={{
                         top: '-8px',
                         left: '12px',
-                        background: '#4BAF47',
+                        background: '#EC5B13',
                         color: 'white',
                         borderRadius: '50%',
                         width: '20px',
@@ -238,7 +238,7 @@ const Navbar = () => {
                 style={{
                   fontFamily: 'Manrope, sans-serif',
                   fontSize: '1.25rem',
-                  color: isActive(item.path) ? '#4BAF47' : 'white',
+                  color: isActive(item.path) ? '#EC5B13' : 'white',
                   fontWeight: isActive(item.path) ? 800 : 600
                 }}
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -252,7 +252,7 @@ const Navbar = () => {
                 fontFamily: 'Manrope, sans-serif',
                 fontSize: '1.25rem',
                 fontWeight: 500,
-                color: '#4BAF47',
+                color: '#EC5B13',
                 cursor: 'pointer'
               }}
               onClick={() => {
@@ -279,7 +279,7 @@ const Navbar = () => {
           height: 2px;
           bottom: 0;
           left: 50%;
-          background-color: #4BAF47;
+          background-color: #EC5B13;
           transition: all 0.3s ease;
           transform: translateX(-50%);
         }

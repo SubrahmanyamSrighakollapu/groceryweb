@@ -149,7 +149,7 @@ const AgentNavbar = () => {
                   style={{
                     width: '3.625rem',
                     height: '3.625rem',
-                    backgroundColor: '#4BAF47',
+                    backgroundColor: '#EC5B13',
                     borderRadius: '50%',
                     opacity: 1,
                     display: 'flex',
@@ -213,7 +213,7 @@ const AgentNavbar = () => {
                         style={{
                           width: '60px',
                           height: '60px',
-                          backgroundColor: '#4BAF47',
+                          backgroundColor: '#EC5B13',
                           borderRadius: '50%',
                           display: 'flex',
                           alignItems: 'center',
@@ -248,7 +248,7 @@ const AgentNavbar = () => {
                       style={{
                         width: '100%',
                         padding: '10px',
-                        background: '#4BAF47',
+                        background: '#EC5B13',
                         color: 'white',
                         border: 'none',
                         borderRadius: '8px',

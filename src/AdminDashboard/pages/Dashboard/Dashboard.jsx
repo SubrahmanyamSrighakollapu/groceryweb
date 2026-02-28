@@ -6,7 +6,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   // Data objects for easy maintenance
   const overviewData = [
-    { title: 'Total Orders', value: '2345', subtitle: 'Customer Request', borderColor: '#0A6806' },
+    { title: 'Total Orders', value: '2345', subtitle: 'Customer Request', borderColor: '#EC5B13' },
     { title: 'Active Agents', value: '24', subtitle: 'Active', borderColor: '#AA871B' },
     { title: 'Active Farmers', value: '17', subtitle: 'Active deliveries', borderColor: '#3B82F6' },
     { title: 'Gross Trade value', value: '₹ 80,000', subtitle: 'Pending release', borderColor: '#A855F7' },
@@ -24,7 +24,7 @@ const Dashboard = () => {
     { label: 'Pending Assignment', count: 14, color: '#FFB732' },
     { label: 'In Procurement', count: 23, color: '#324DFF' },
     { label: 'In Transit', count: 36, color: '#CC32FF' },
-    { label: 'Delivered', count: 89, color: '#0A6806' },
+    { label: 'Delivered', count: 89, color: '#EC5B13' },
     { label: 'Disputes raised', count: 89, color: '#FF3232' },  
   ];
 

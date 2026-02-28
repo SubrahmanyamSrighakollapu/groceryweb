@@ -155,7 +155,7 @@ const ProductCard = ({ product, isAgentView = false }) => {
           className="btn add-to-cart-btn mt-auto"
           onClick={handleAddToCart}
           style={{
-            background: '#4BAF47',
+            background: '#EC5B13',
             color: 'white',
             fontWeight: '600',
             borderRadius: '8px',
@@ -186,8 +186,8 @@ const ProductCard = ({ product, isAgentView = false }) => {
 
         .in-stock {
           background: #B4FFC780;
-          border: 0.4px solid #4BAF47;
-          color: #0A6806;
+          border: 0.4px solid #EC5B13;
+          color: #EC5B13;
         }
 
         .out-stock {

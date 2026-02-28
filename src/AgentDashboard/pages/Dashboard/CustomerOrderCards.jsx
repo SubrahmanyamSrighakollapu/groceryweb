@@ -57,7 +57,7 @@ const CustomerOrdersCards = () => {
                   <thead>
                     <tr style={{ backgroundColor: '#FAFCF8', display: 'flex' }}>
                       {card.headers.map((header, idx) => (
-                        <th key={idx} className="text-dark-green-22 table-header-cell " style={{color:'#0A6806'}}>
+                        <th key={idx} className="text-dark-green-22 table-header-cell " style={{color:'#EC5B13'}}>
                           {header}
                         </th>
                       ))}
@@ -74,7 +74,7 @@ const CustomerOrdersCards = () => {
                             className={key === 'action' ? 'table-cell' : 'table-cell text-gray-20'}
                           >
                             {key === 'action' ? (
-                              <span className="text-light-green-20" style={{ cursor: 'pointer', color:'#4BAF47' }}>
+                              <span className="text-light-green-20" style={{ cursor: 'pointer', color:'#EC5B13' }}>
                                 {order[key]}
                               </span>
                             ) : key === 'orderId' && typeof order[key] === 'object' ? (

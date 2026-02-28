@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import cardImg from '../../assets/MainPage/QualityProducts/CardImg.jpg';
+import cardImg from '../../assets/groceryweb/grocery.png';
 import icon1 from '../../assets/MainPage/QualityProducts/Icon1.png';
 import icon2 from '../../assets/MainPage/QualityProducts/Icon2.png';
 import DiscoverMoreButton from '../../components/DiscoverMoreButton';

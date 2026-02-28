@@ -34,10 +34,10 @@ const Dashboard = () => {
   // Stats Cards
   const statsCards = [
     {
-      borderColor: '#0A6806',
+      borderColor: '#EC5B13',
       title: 'New Orders',
       icon: Icon1,
-      iconBg: '#4BAF473B',
+      iconBg: '#EC5B133B',
       number: '15',
       subtitle: 'Customer Request'
     },
@@ -83,9 +83,9 @@ const Dashboard = () => {
 
   // Order Lifecycle
   const orderLifecycle = [
-    { icon: Icon4, bg: '#4BAF47', border: 'none', title: 'Customer Order' },
-    { icon: null, bg: '#4BAF47', border: 'none', title: 'Agent purchase' },
-    { icon: Icon5, bg: '#4BAF476B', border: '1px solid #4BAF47', title: 'In Transit' },
+    { icon: Icon4, bg: '#EC5B13', border: 'none', title: 'Customer Order' },
+    { icon: null, bg: '#EC5B13', border: 'none', title: 'Agent purchase' },
+    { icon: Icon5, bg: '#EC5B136B', border: '1px solid #EC5B13', title: 'In Transit' },
     { icon: Icon2, bg: '#E8E8E8', border: '1px solid #B3B3B3', title: 'Delivery' },
     { icon: Icon1, bg: '#E8E8E8', border: '1px solid #B3B3B3', title: 'Farmer payment' },
     { icon: Icon6, bg: '#E8E8E8', border: '1px solid #B3B3B3', title: 'Closed' }
