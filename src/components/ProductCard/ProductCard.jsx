@@ -185,7 +185,7 @@ const ProductCard = ({ product, isAgentView = false }) => {
         }
 
         .in-stock {
-          background: #B4FFC780;
+          background: #f8bc9e
           border: 0.4px solid #EC5B13;
           color: #EC5B13;
         }
@@ -197,7 +197,7 @@ const ProductCard = ({ product, isAgentView = false }) => {
         }
 
         .add-to-cart-btn:hover {
-          background: #3d9639 !important;
+          background: #EC5B13 !important;
         }
       `}</style>
     </div>

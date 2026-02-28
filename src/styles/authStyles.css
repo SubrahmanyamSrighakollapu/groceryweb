@@ -62,7 +62,7 @@ body {
   width: 5.5rem;
   height: 5.5rem;
   background: #FFFFFF;
-  border: 2px solid #8EA198;
+  border: 2px solid #f39d71;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -89,7 +89,7 @@ body {
   display: block;
   background: #FFFFFF;
   border-radius: 50%;
-  border: 2px solid #8EA198;
+  border: 2px solid #f39d71;
   box-shadow: 0 6px 18px rgba(0,0,0,0.12);
 }
 
@@ -186,7 +186,7 @@ body {
 
 .input-field {
   flex: 1;
-  background: rgba(75, 175, 71, 0.42);
+  background: #fad1bd;
   border: none;
   outline: none;
   padding: 0 1rem;
@@ -206,8 +206,8 @@ body {
 .input-field[name="emailOrUsername"]:-webkit-autofill:hover,
 .input-field[name="emailOrUsername"]:-webkit-autofill:focus,
 .input-field[name="emailOrUsername"]:-internal-autofill-selected {
-  -webkit-box-shadow: 0 0 0px 1000px rgba(75, 175, 71, 0.42) inset !important;
-  box-shadow: 0 0 0px 1000px rgba(75, 175, 71, 0.42) inset !important;
+  -webkit-box-shadow: 0 0 0px 1000px #EC5B13 inset !important;
+  box-shadow: 0 0 0px 1000px #EC5B13 inset !important;
   -webkit-text-fill-color: #000000 !important;
   background-clip: content-box;
 }
@@ -243,14 +243,14 @@ body {
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(10, 104, 6, 0.3);
+  box-shadow: 0 4px 12px #EC5B13;
   margin-top: 0.8rem;
 }
 
 .auth-button:hover {
-  background: #085a04;
+  background: #EC5B13;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(10, 104, 6, 0.4);
+  box-shadow: 0 6px 16px #EC5B13;
 }
 
 .auth-button:active {
@@ -292,7 +292,7 @@ body {
 .otp-box {
   width: 3rem;
   height: 3rem;
-  border: 0.2px solid #055D69;
+  border: 0.2px solid #EC5B13;
   border-radius: 0.5rem;
   text-align: center;
   font-size: 1.5rem;
@@ -307,7 +307,7 @@ body {
 .otp-box:focus {
   border-color: #EC5B13;
   border-width: 2px;
-  box-shadow: 0 0 8px rgba(10, 104, 6, 0.3);
+  box-shadow: 0 0 8px #EC5B13;
 }
 
 .timer-text {
@@ -345,8 +345,8 @@ body {
   background: #E8F5E9;
   border-radius: 50%;
   z-index: 110;
-  border: 2px solid rgba(10,104,6,0.12);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  border: 2px solid #EC5B13;
+  box-shadow: 0 6px 18px #EC5B13;
   padding: 0.25rem;
 }
 

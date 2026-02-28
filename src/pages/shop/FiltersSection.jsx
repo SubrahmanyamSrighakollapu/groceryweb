@@ -332,7 +332,7 @@ const FiltersSection = ({ filters = { searchQuery: '', selectedCategories: [], m
         }
 
         .apply-filters-btn:hover {
-          background: #3d9639 !important;
+          background: #EC5B13 !important;
         }
 
         @media (max-width: 992px) {
