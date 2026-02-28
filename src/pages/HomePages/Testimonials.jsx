@@ -53,6 +53,7 @@ const Testimonials = () => {
               color: '#555555',
               fontSize: '1.25rem',
               fontWeight: 500,
+              textAlign:"center"
             }}
           >
             Real stories from the retail community

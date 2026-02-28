@@ -58,6 +58,7 @@ const ShopByCategory = () => {
               fontSize: '1.25rem',
               fontWeight: 500,
               marginBottom: '1rem',
+              textAlign:"center"
             }}
           >
             Restock your shelves with our curated categories
@@ -69,7 +70,7 @@ const ShopByCategory = () => {
           {categories.map((cat, index) => (
             <div key={index} className="col-lg-4 col-md-6">
               <div
-                className="position-relative rounded-4 overflow-hidden shadow-sm h-100 d-flex flex-column"
+                className="position-relative rounded-2 overflow-hidden shadow-sm h-100 d-flex flex-column"
                 style={{
                   backgroundColor: '#ffffff',
                   transition: 'all 0.3s ease',
@@ -113,6 +114,7 @@ const ShopByCategory = () => {
                     className="mb-3"
                     style={{
                       fontSize: '1rem',
+                      color:"#fff",
                       opacity: 0.9,
                     }}
                   >
@@ -124,7 +126,7 @@ const ShopByCategory = () => {
                     className="btn btn-sm px-4 py-2 fw-semibold text-white border border-white border-2"
                     style={{
                       backgroundColor: '#EC5609',
-                      borderRadius: '50px',
+                      borderRadius: '5px',
                       fontSize: '0.95rem',
                       transition: 'all 0.3s ease',
                     }}

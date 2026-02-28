@@ -1,34 +1,40 @@
-// src/components/ThreeSimpleSteps.jsx
+// src/components/OnboardingProcess.jsx
 
 import React from 'react';
 
-const ThreeSimpleSteps = () => {
-  const steps = [
-    {
-      number: '01',
-      title: 'Register Your Store',
-      description:
-        'Complete the digital verification with your GST or business permit.',
-    },
-    {
-      number: '02',
-      title: 'Add Items to Cart',
-      description:
-        'Browse thousands of products at live wholesale prices and build your order.',
-    },
-    {
-      number: '03',
-      title: 'Receive Delivery',
-      description:
-        'Get your stock delivered to your store doorstep within 24 hours.',
-    },
-  ];
+const steps = [
+  {
+    number: '01',
+    title: 'Submit Application',
+    description:
+      'Fill out the partnership form with your brand details'
+  },
+  {
+    number: '02',
+    title: 'Initial Meeting',
+    description:
+      'Our team reviews and schedules a consultation call'
+  },
+  {
+    number: '03',
+    title: 'Onboarding',
+    description:
+      'Product listing, pricing, and logistics setup'
+  },
+  {
+    number: '04',
+    title: 'Go Live',
+    description:
+      'Your products reach 20,000+ retailers instantly'
+  },
+];
 
+const OnboardingProcess = () => {
   return (
     <section
-      className="py-5 py-lg-5"
+      className="py-5 py-lg-6"
       style={{
-        backgroundColor: '#F7EEEA', // consistent light peach/beige from previous sections
+        backgroundColor: '#F7EEEA',
         fontFamily: 'Manrope, sans-serif',
       }}
     >
@@ -43,25 +49,25 @@ const ThreeSimpleSteps = () => {
               marginBottom: '0.75rem',
             }}
           >
-            Start Growing in 3 Simple Steps
+            Simple Onboarding Process
           </h2>
+
           <p
+            className="fs-5 fw-medium mx-auto"
             style={{
               color: '#555555',
-              fontSize: '1.25rem',
-              fontWeight: 500,
               maxWidth: '720px',
-              margin: '0 auto',
+              lineHeight: '1.6',
             }}
           >
-            Getting set up as a wholesale partner is fast and entirely digital
+            From application to distribution in less than 2 weeks
           </p>
         </div>
 
         {/* Steps Row */}
         <div className="row g-4 g-lg-5 justify-content-center align-items-stretch">
           {steps.map((step, index) => (
-            <div key={index} className="col-lg-4 col-md-6">
+            <div key={index} className="col-lg-3 col-md-6">
               <div
                 className="h-100 d-flex flex-column align-items-center text-center p-4 p-lg-5 rounded-4"
                 style={{
@@ -79,18 +85,17 @@ const ThreeSimpleSteps = () => {
                   e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.06)';
                 }}
               >
-                {/* Circle Number */}
+                {/* Orange Number Circle */}
                 <div
-                  className="d-flex align-items-center justify-content-center rounded-circle mb-4"
+                  className="d-flex align-items-center justify-content-center rounded-circle mb-4 flex-shrink-0"
                   style={{
                     width: '110px',
                     height: '110px',
                     backgroundColor: '#EC5609',
                     color: '#ffffff',
-                    fontSize: '2.5rem',
+                    fontSize: '2.8rem',
                     fontWeight: 700,
                     lineHeight: 1,
-                    flexShrink: 0,
                   }}
                 >
                   {step.number}
@@ -101,7 +106,8 @@ const ThreeSimpleSteps = () => {
                   className="fw-bold mb-3"
                   style={{
                     color: '#24231D',
-                    fontSize: '1.75rem',
+                    fontSize: '1.55rem',
+                    minHeight: '50px',
                   }}
                 >
                   {step.title}
@@ -122,37 +128,9 @@ const ThreeSimpleSteps = () => {
             </div>
           ))}
         </div>
-
-        {/* CTA Button */}
-        <div className="text-center mt-5 mt-lg-5 pt-3">
-          <a
-            href="/register" // ← update to your actual registration route
-            className="btn btn-lg px-5 py-3 fw-semibold text-white"
-            style={{
-              backgroundColor: '#EC5609',
-              borderRadius: '5px',
-              fontSize: '1.25rem',
-              padding: '1rem 3.5rem',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 8px 25px rgba(236,86,9,0.25)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#d14c08';
-              e.currentTarget.style.transform = 'translateY(-3px)';
-              e.currentTarget.style.boxShadow = '0 15px 35px rgba(236,86,9,0.35)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#EC5609';
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 8px 25px rgba(236,86,9,0.25)';
-            }}
-          >
-            Get Started Today
-          </a>
-        </div>
       </div>
     </section>
   );
 };
 
-export default ThreeSimpleSteps;
+export default OnboardingProcess;

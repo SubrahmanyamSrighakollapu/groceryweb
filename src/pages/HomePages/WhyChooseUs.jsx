@@ -7,25 +7,25 @@ import { FaTruckFast, FaChartLine, FaBoxOpen, FaMobileScreen } from 'react-icons
 const WhyChooseUs = () => {
   const features = [
     {
-      icon: <FaTruckFast size={42} color="#EC5609" />,
+      icon: <FaTruckFast size={38} color="#EC5609" />,
       title: 'Fast Delivery',
       description:
         'Guaranteed 24-hour turnaround for all orders in metro cities. Never run out of stock.',
     },
     {
-      icon: <FaChartLine size={42} color="#EC5609" />,
+      icon: <FaChartLine size={38} color="#EC5609" />,
       title: 'Better Margins',
       description:
         'Eliminate middlemen. Get direct-from-brand wholesale prices to increase your profits.',
     },
     {
-      icon: <FaBoxOpen size={42} color="#EC5609" />,
+      icon: <FaBoxOpen size={38} color="#EC5609" />,
       title: '5000+ SKUs',
       description:
         'Access a wide range of categories including Staples, Snacks, and Personal Care brands.',
     },
     {
-      icon: <FaMobileScreen size={42} color="#EC5609" />,
+      icon: <FaMobileScreen size={38} color="#EC5609" />,
       title: 'Easy Ordering',
       description:
         'Our mobile-first platform lets you place orders in seconds, even while serving customers.',
@@ -68,7 +68,7 @@ const WhyChooseUs = () => {
           {features.map((feature, index) => (
             <div key={index} className="col-lg-3 col-md-6">
               <div
-                className="h-100 text-center p-4 rounded-4 shadow-sm transition-all"
+                className="h-100 text-center p-4 rounded-2 shadow-sm transition-all"
                 style={{
                   backgroundColor: '#ffffff',
                   border: '1px solid #f0e0d8',
