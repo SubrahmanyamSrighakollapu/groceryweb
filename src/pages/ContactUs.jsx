@@ -126,7 +126,7 @@ const ContactUs = () => {
                 <div>
                   <small className="text-muted d-block">EMAIL</small>
                   <span style={{ color: '#EC5609', fontWeight: 600 }}>
-                    email to be added
+                    digimart.com
                   </span>
                 </div>
               </div>

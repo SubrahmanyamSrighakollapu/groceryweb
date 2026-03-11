@@ -58,6 +58,7 @@ const OnboardingProcess = () => {
               color: '#555555',
               maxWidth: '720px',
               lineHeight: '1.6',
+              textAlign:'center'
             }}
           >
             From application to distribution in less than 2 weeks

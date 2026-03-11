@@ -101,7 +101,7 @@ const Footer = () => {
                             </div>
                             <div className="d-flex align-items-center gap-2 mb-2">
                                 <img src={mail} alt="" style={{ width: '0.9375rem', height: '0.9375rem' }} />
-                                <span style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500 }}>email to be added</span>
+                                <span style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500 }}>digimart.com</span>
                             </div>
                             <div className="d-flex align-items-center gap-2 mb-3">
                                 <img src={locationIcon} alt="" style={{ width: '0.9375rem', height: '0.9375rem' }} />

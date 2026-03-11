@@ -63,6 +63,7 @@ const WhyBrandUs = () => {
               color: '#555555',
               maxWidth: '720px',
               lineHeight: '1.6',
+              textAlign:'center'
             }}
           >
             Reach more retailers, faster, with data-driven distribution
