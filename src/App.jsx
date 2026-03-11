@@ -86,10 +86,10 @@ function App() {
         <RouteGuard>
           <Routes>
           {/* Public/auth routes without any Layout (no navbar) */}
-          <Route path="/login" element={<Login />} />
+          {/* <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/otp-verification" element={<OtpVerification />} />
-          <Route path="/verified-success" element={<VerifiedSuccess />} />
+          <Route path="/verified-success" element={<VerifiedSuccess />} /> */}
           <Route path="/" element={<Navigate to="/home" replace />} />
 
           {/* AGRICULTURE WEBSITE routes wrapped with Layout (agriculture navbar) */}
@@ -109,7 +109,7 @@ function App() {
           </Route>
 
           {/* AGENT DASHBOARD routes wrapped with AgentLayout (agent navbar + sidebar) */}
-          <Route path="/agent" element={<AgentLayout />}>
+          {/* <Route path="/agent" element={<AgentLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="buy-from-farmers" element={<BuyFromFarmers />} />
             <Route path="agent-item-details/:id" element={<AgentItemDetails />} />
@@ -126,15 +126,15 @@ function App() {
             <Route path="payment-invoice" element={<PaymentInvoice />} />
             <Route path="wallet-request" element={<WalletRequest />} />
             <Route path="products/add-category" element={<AddProductCategory />} />
-            <Route path="products/add-product" element={<AddProducts />} />
+            <Route path="products/add-product" element={<AddProducts />} /> */}
 
             {/* <Route path="place-orders" element={<PlaceOrders />} /> */}
             {/* <Route path="vendor-payments" element={<VendorPayments />} /> */}
             {/* <Route path="settlements" element={<Settlements />} /> */}
             {/* <Route path="reports" element={<Reports />} /> */}
-          </Route>
+          {/* </Route> */}
           {/* ADMIN DASHBOARD routes wrapped with AdminLayout */}
-            <Route path="/admin" element={<AdminLayout />}>
+            {/* <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="products" element={<AgentProducts />} />
             <Route path="reports/hold-transactions" element={<HoldTransactions />} />
@@ -194,7 +194,7 @@ function App() {
             <Route path="hold-funds" element={<HoldFunds />} />
             <Route path="add-wallet" element={<AddWallet />} />
             <Route path="confirm-wallet-credit" element={<ConfirmWalletCredit />} />
-          </Route>
+          </Route> */}
           </Routes>
         </RouteGuard>
         

@@ -116,7 +116,7 @@ const Navbar = () => {
                   }}
                   onMouseEnter={(e) => e.target.style.opacity = '0.9'}
                   onMouseLeave={(e) => e.target.style.opacity = '1'}
-                  onClick={() => navigate('/login')}
+                  // onClick={() => navigate('/login')}
                 >
                   Join Our Network
                 </button>

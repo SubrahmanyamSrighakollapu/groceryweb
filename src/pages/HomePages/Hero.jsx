@@ -2,6 +2,7 @@
 
 import React from 'react';
 import heroRightImage from '../../assets/groceryweb/grocery.png';  // ← your right-side produce image
+import { color } from 'chart.js/helpers';
 
 const Hero = () => {
   return (
@@ -93,13 +94,13 @@ const Hero = () => {
               <div
                 className="position-absolute bottom-0 end-0 m-3 m-md-4 p-3 p-md-4 text-white rounded-3"
                 style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.68)',
+                  backgroundColor: 'rgba(71, 70, 70, 0.68)',
                   maxWidth: '85%',              // responsive width
                   backdropFilter: 'blur(5px)',
                   fontFamily: 'Manrope, sans-serif',
                 }}
               >
-                <p className="mb-0 fw-medium" style={{ fontSize: '1.1rem' }}>
+                <p className="mb-0 fw-medium" style={{ fontSize: '1.1rem', color:'#fff' }}>
                   Daily inventory updates from top FMCG brands
                 </p>
               </div>
