@@ -21,7 +21,7 @@ const AdminNavbar = () => {
       <div className="container-fluid">
         <div className="row align-items-center py-2 px-3">
           <div className="col-4 col-sm-4 col-md-4 col-lg-3">
-            <img src={logo} alt="Total Needs" style={{ height: '6rem' }} />
+            <img src={logo} alt="Mdigimart" style={{ height: '6rem' }} />
           </div>
 
           <div className="col-8 col-sm-8 col-md-8 col-lg-9">

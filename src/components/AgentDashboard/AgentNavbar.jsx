@@ -46,7 +46,7 @@ const AgentNavbar = () => {
         <div className="row align-items-center py-2 px-3">
           {/* Left Side - Logo */}
           <div className="col-4 col-sm-4 col-md-4 col-lg-3">
-            <img src={logo} alt="Total Needs" style={{ height: '6rem' }} />
+            <img src={logo} alt="Mdigimart" style={{ height: '6rem' }} />
           </div>
 
           {/* Right Side - Icons and Wallet */}

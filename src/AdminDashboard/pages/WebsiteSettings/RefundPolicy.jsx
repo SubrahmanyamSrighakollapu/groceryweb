@@ -18,7 +18,7 @@ const refundData = [
     title: "Return Request Process",
     content: [
       "To request a return or replacement:",
-      "a. Contact our support team at info@totalneedsmarketing.com / +91 contact to be added within 48 hours of delivery.",
+      "a. Contact our support team at info@mdigimartmarketing.com / +91 contact to be added within 48 hours of delivery.",
       "b. Provide:",
       "• Order ID / Invoice Number",
       "• Photos or videos clearly showing the issue",

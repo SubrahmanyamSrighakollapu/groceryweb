@@ -11,9 +11,10 @@ import phone from '../assets/footer/Phone.png';
 import pinterest from '../assets/footer/pintrest.png';
 import send from '../assets/footer/send.png';
 import twitter from '../assets/footer/twitter.png';
+import logo from '../assets/digimart.jpg';
 
 const Footer = () => {
-    const quickLinks = ['About', 'Services', 'Agent Login', 'Contact'];
+    const quickLinks = ['About', 'Partners', 'Agent Login', 'Contact'];
     const newsItems = [
         { title: 'Bringing Food Production Back To Cities', date: 'July 5, 2022' },
         { title: 'The Future of Farming, Smart Irrigation Solutions', date: 'July 5, 2022' }
@@ -28,7 +29,7 @@ const Footer = () => {
 
                         {/* Column 1: Logo & Description */}
                         <div className="col-lg-3 col-md-6 col-12 mb-4 px-4">
-                            <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#FFFFFF', fontFamily: 'Manrope, sans-serif', marginBottom: '1rem' }}>Logo</div>
+                            <img src={logo} alt="DigiMart" style={{ height: '8rem', marginBottom: '1rem' }} />
                             <p className="mb-4" style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500, fontSize: '0.9375rem', lineHeight: '1.875rem' }}>
                                 Fresh, naturally grown produce without chemicals or harmful additives.
                             </p>
@@ -49,7 +50,7 @@ const Footer = () => {
                             <div className="d-flex flex-column gap-2">
                                 {quickLinks.map((link, index) => {
                                     const linkPath = link === 'About' ? '/about' : 
-                                                   link === 'Services' ? '/services' : 
+                                                   link === 'Partners' ? '/partners' : 
                                                    link === 'Agent Login' ? '/login' :
                                                    link === 'Contact' ? '/contact' : '#';
                                     
@@ -96,7 +97,7 @@ const Footer = () => {
 
                             <div className="d-flex align-items-center gap-2 mb-2">
                                 <img src={phone} alt="" style={{ width: '0.9375rem', height: '0.9375rem' }} />
-                                <span style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500 }}>contact to be added</span>
+                                <span style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500 }}>+91 9652283222</span>
                             </div>
                             <div className="d-flex align-items-center gap-2 mb-2">
                                 <img src={mail} alt="" style={{ width: '0.9375rem', height: '0.9375rem' }} />
@@ -104,7 +105,8 @@ const Footer = () => {
                             </div>
                             <div className="d-flex align-items-center gap-2 mb-3">
                                 <img src={locationIcon} alt="" style={{ width: '0.9375rem', height: '0.9375rem' }} />
-                                <span style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500 }}>address to be added</span>
+                                <span style={{ color: '#A5A49A', fontFamily: 'Manrope, sans-serif', fontWeight: 500 }}>BRIGHT SPARK INNOVATIONS PVT. LTD.*
+Door No: 12-8-42, 2nd Floor, Savithri Mallaiah Arcade, Lallaguda, Secunderabad, Hyderabad, Telangana-500017</span>
                             </div>
 
                             <div className="position-relative" style={{ marginTop: '1rem', maxWidth: '21rem' }}>

@@ -216,7 +216,7 @@ const SalesInvoice = () => {
                 Sales Agent<br />
                 123 Business Street<br />
                 New Delhi, 110001<br />
-                Phone: +91 98765 43210<br />
+                Phone: +91 9652283222<br />
                 Email: admin@store.com<br />
                 GST: GST123456789
               </div>
@@ -229,7 +229,7 @@ const SalesInvoice = () => {
                 Customer<br />
                 456 Agent Lane<br />
                 Mumbai, 400001<br />
-                Phone: +91 98765 11111<br />
+                Phone: +91 9652283222<br />
                 Email: john@agent.com<br />
                 GST: GST123456789
               </div>

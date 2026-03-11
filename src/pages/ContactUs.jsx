@@ -116,7 +116,7 @@ const ContactUs = () => {
                 <div>
                   <small className="text-muted d-block">PHONE</small>
                   <span style={{ color: '#EC5609', fontWeight: 600 }}>
-                    +91 95819 06060
+                    +91 9652283222
                   </span>
                 </div>
               </div>
