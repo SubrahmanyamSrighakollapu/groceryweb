@@ -9,7 +9,7 @@ import phone from '../assets/footer/Phone.png';
 import pinterest from '../assets/footer/pintrest.png';
 import send from '../assets/footer/send.png';
 import twitter from '../assets/footer/twitter.png';
-import logo from '../assets/digimart.jpeg';
+import logo from '../assets/digimart.png';
 
 const Footer = () => {
     const quickLinks = [
@@ -47,7 +47,7 @@ const Footer = () => {
 
                         {/* Col 1: Brand */}
                         <div className="col-lg-4 col-md-12">
-                            <img src={logo} alt="DigiMart" style={{ height: '4.5rem', marginBottom: '1rem', borderRadius: '0.5rem' }} />
+                            <img src={logo} alt="DigiMart" style={{ height: '8rem', marginBottom: '1rem', borderRadius: '0.5rem' }} />
                             <p style={{ color: '#fff', fontSize: '0.875rem', lineHeight: '1.6rem', maxWidth: '22rem' }}>
                                 Connecting farmers, agents, and consumers through ethical organic trade. Fresh, naturally grown produce — from soil to shelf.
                             </p>

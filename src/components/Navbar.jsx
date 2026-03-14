@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import navbarBg from '../assets/Navbar_bgImg.png';
-import logo from '../assets/digimart.jpeg';
+import logo from '../assets/digimart.png';
 import { useCart } from '../context/CartContext';
 
 const SearchIcon = () => (
@@ -72,7 +72,7 @@ const Navbar = () => {
             {/* Logo */}
             <div className="col-auto">
               <Link to="/" className="text-decoration-none">
-                <img src={logo} alt="DigiMart" style={{ height: '5rem', marginBottom: '1rem' }} />
+                <img src={logo} alt="DigiMart" style={{ height: '6rem', marginBottom: '1rem' }} />
               </Link>
             </div>
 
