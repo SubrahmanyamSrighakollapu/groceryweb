@@ -86,15 +86,13 @@ function App() {
         <RouteGuard>
           <Routes>
           {/* Public/auth routes without any Layout (no navbar) */}
-          {/* <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/otp-verification" element={<OtpVerification />} />
+          {/* <Route path="/otp-verification" element={<OtpVerification />} />
           <Route path="/verified-success" element={<VerifiedSuccess />} /> */}
-          <Route path="/" element={<Navigate to="/home" replace />} />
-
           {/* AGRICULTURE WEBSITE routes wrapped with Layout (agriculture navbar) */}
           <Route element={<Layout />}>
-            <Route path="/home" element={<MainPage />} />
+            <Route path="/" element={<MainPage />} />
             <Route path="/about" element={<About />} />
             <Route path="/partners" element={<Partners />} />
             <Route path="/shop" element={<Shop />} />

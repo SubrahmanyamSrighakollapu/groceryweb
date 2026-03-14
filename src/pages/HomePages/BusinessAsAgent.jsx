@@ -1,7 +1,8 @@
 // src/HomePages/BusinessAsAgent.jsx
 
+import { color } from 'chart.js/helpers';
 import agentIcon from '../../assets/groceryweb/tick1.png';
-import agentImg from '../../assets/groceryweb/grocery.png';
+import agentImg from '../../assets/MainPage/grow_your_business_image.png';
 import colors from '../../styles/colors';
 
 const BusinessAsAgent = () => {
@@ -19,7 +20,7 @@ const BusinessAsAgent = () => {
                     {/* Left: Content */}
                     <div className="col-lg-6">
                         <div className="agent-left">
-                            <h2>Grow Your Business with Wholesale Groceries</h2>
+                            <h2 style={{color:'#EC5609', fontSize:'1.5rem', fontWeight:'700'}}>Grow Your Business with Wholesale Groceries</h2>
                             <p>Partner with a reliable wholesale grocery supplier and expand your retail or distribution business with consistent quality, competitive pricing, and dependable delivery.</p>
 
                             <div className="features-list mt-3">

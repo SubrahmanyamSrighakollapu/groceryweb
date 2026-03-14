@@ -42,7 +42,7 @@ const Testimonials = () => {
             className="fw-bold"
             style={{
               color: '#EC5609',
-              fontSize: '2.5rem',
+              fontSize: '2rem',
               marginBottom: '0.75rem',
             }}
           >
@@ -51,7 +51,7 @@ const Testimonials = () => {
           <p
             style={{
               color: '#555555',
-              fontSize: '1.25rem',
+              fontSize: '1rem',
               fontWeight: 500,
               textAlign:"center"
             }}

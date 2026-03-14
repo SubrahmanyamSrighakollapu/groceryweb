@@ -49,8 +49,8 @@ const AgentRiceAndGrains = ({ filters = { searchQuery: '', selectedCategories: [
     <div className="rice-grain-section" style={{ width: '75%', padding: '0.75rem' }}>
       {/* Top Banner */}
       <div className="banner-card px-3 py-3 mb-3">
-        <h1 className="mb-1" style={{ fontSize: '25px', fontWeight: '600' }}>Wholesale Rice & Grains</h1>
-        <p className="green mb-0 col-10" style={{ fontSize: '18px', lineHeight: '1.4' }}>
+        <h1 className="mb-1" style={{ fontSize: '20px', fontWeight: '600' }}>Wholesale Rice & Grains</h1>
+        <p className="green mb-0 col-10" style={{ fontSize: '16px', lineHeight: '1.4' }}>
           Verified direct-from-farm sourcing for enterprise buyers. Bulk pricing available for orders over 10 tons.
         </p>
       </div>

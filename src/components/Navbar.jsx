@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import navbarBg from '../assets/Navbar_bgImg.png';
-import logo from '../assets/digimart.jpg';
+import logo from '../assets/digimart.jpeg';
 import { useCart } from '../context/CartContext';
 
 const SearchIcon = () => (
@@ -43,14 +43,14 @@ const Navbar = () => {
   const { cartItems } = useCart();
 
   const navItems = [
-    { name: 'Home', path: '/home' },
+    { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Partners', path: '/partners' },
     { name: 'Shop', path: '/shop' },
     { name: 'Contact', path: '/contact' },
   ];
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname === path;
   const cartCount = cartItems.length;
 
   return (
@@ -71,7 +71,7 @@ const Navbar = () => {
             
             {/* Logo */}
             <div className="col-auto">
-              <Link to="/home" className="text-decoration-none">
+              <Link to="/" className="text-decoration-none">
                 <img src={logo} alt="DigiMart" style={{ height: '5rem', marginBottom: '1rem' }} />
               </Link>
             </div>
@@ -117,7 +117,7 @@ const Navbar = () => {
                   }}
                   onMouseEnter={(e) => e.target.style.opacity = '0.9'}
                   onMouseLeave={(e) => e.target.style.opacity = '1'}
-                  // onClick={() => navigate('/login')}
+                  onClick={() => navigate('/login')}
                 >
                   Join Our Network
                 </button>

@@ -64,8 +64,8 @@ const RiceAndGrain = ({ filters }) => {
       <div 
         className="banner-card px-4 py5"
       >
-        <h2 className="mb-2">Wholesale Rice & Grains</h2>
-        <p className="green mb-0 col-8" >
+        <h2 className="mb-2 fs-3">Wholesale Rice & Grains</h2>
+        <p className="green mb-0 col-8 fs-5" >
           Verified direct-from-farm sourcing for enterprise buyers. Bulk pricing available for orders over 10 tons.
         </p>
       </div>

@@ -28,10 +28,10 @@ const OurPurpose = () => {
             >
               {/* Icon Circle */}
               <div
-                className="d-inline-flex align-items-center justify-content-center rounded-circle mb-4 mx-lg-0 mx-auto"
+                className="d-inline-flex align-items-center justify-content-center rounded-2 mb-4 mx-lg-0 mx-auto"
                 style={{
-                  width: '90px',
-                  height: '90px',
+                  width: '70px',
+                  height: '70px',
                   backgroundColor: '#EC5609',
                   color: '#ffffff',
                   fontSize: '2.5rem',
@@ -44,7 +44,7 @@ const OurPurpose = () => {
                 className="fw-bold mb-3"
                 style={{
                   color: '#24231D',
-                  fontSize: '2.25rem',
+                  fontSize: '2rem',
                 }}
               >
                 Our Mission
@@ -87,10 +87,10 @@ const OurPurpose = () => {
             >
               {/* Icon Circle */}
               <div
-                className="d-inline-flex align-items-center justify-content-center rounded-circle mb-4 mx-lg-0 mx-auto"
+                className="d-inline-flex align-items-center justify-content-center rounded-2 mb-4 mx-lg-0 mx-auto"
                 style={{
-                  width: '90px',
-                  height: '90px',
+                  width: '70px',
+                  height: '70px',
                   backgroundColor: '#EC5609',
                   color: '#ffffff',
                   fontSize: '2.5rem',
@@ -103,7 +103,7 @@ const OurPurpose = () => {
                 className="fw-bold mb-3"
                 style={{
                   color: '#24231D',
-                  fontSize: '2.25rem',
+                  fontSize: '2rem',
                 }}
               >
                 Our Vision
