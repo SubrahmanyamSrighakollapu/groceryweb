@@ -56,7 +56,7 @@ const refundData = [
 ];
 
 const RefundPolicy = () => {
-  const effectiveDate = "01-10-2025";
+  const effectiveDate = "01 Dec 2025";
 
   return (
     <>

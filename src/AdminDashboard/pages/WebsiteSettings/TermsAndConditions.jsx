@@ -6,7 +6,7 @@ const termsData = [
     number: "01",
     title: "General",
     content: [
-      "These Terms govern your use of our Website, mobile application, and all related services provided by mdigimartmarketing, an Indian company with its registered office at [Insert Address].",
+      "These Terms govern your use of our Website, mobile application, and all related services provided by mdigimartmarketing, an Indian company with its registered office at Door No: 12-8-42, 2nd Floor, Savithri Mallaiah Arcade, Lallaguda, Secunderabad, Hyderabad, Telangana - 500017.",
       "We reserve the right to update or modify these Terms at any time without prior notice. Your continued use of the Website implies acceptance of the updated Terms."
     ]
   },
@@ -47,7 +47,7 @@ const termsData = [
 ];
 
 const TermsAndConditions = () => {
-  const lastUpdated = "15 May 2025"; // ← you can make this dynamic later
+  const lastUpdated = "01 Dec 2025"; // ← you can make this dynamic later
 
   return (
     <>

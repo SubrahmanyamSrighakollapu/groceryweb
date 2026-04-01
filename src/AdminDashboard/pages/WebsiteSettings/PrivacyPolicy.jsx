@@ -47,7 +47,7 @@ const privacyData = [
 ];
 
 const PrivacyPolicy = () => {
-  const lastUpdated = "15 May 2025";
+  const lastUpdated = "01 Dec 2025";
 
   return (
     <>
